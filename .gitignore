@@ -1,0 +1,9 @@
+*.gem
+.bundle
+.sass-cache
+_site
+Gemfile.lock
+vendor/bundle/ruby/
+
+# macOS files
+.DS_Store

@@ -1,0 +1,34 @@
+remote_theme: b2a3e8/jekyll-theme-console
+#google_analytics: UA-NNNNNNNN-N
+
+header_pages:
+  - index.md
+  # - my-pages/C++.md
+  - my-pages/murmur.md
+  - my-pages/posts.md
+
+style: dark # dark (default), light, hacker, or nord
+listen_for_clients_preferred_style: true # false (default) or true
+math: true
+
+markdown: kramdown
+kramdown:
+  input: Kramdown
+  math_engine: mathjax
+  syntax_highlighter_opts:
+    disable: true
+
+footer: __EOF__
+
+plugins:
+  - jekyll-seo-tag
+
+collections:
+  rambling:
+    output: true
+    permalink: /:collection/:name
+
+defaults:
+  -
+    values:
+      layout: "home"
