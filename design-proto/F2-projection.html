@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>F2 — Chebyshev Projection · Kion Miyasaka</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+:root{
+  --bg:#060609;
+  --fg:#f4f5f9;
+  --soft:#b8bcc9;
+  --dim:#767a8a;
+  --mute:#464a59;
+  --hair:rgba(255,255,255,.09);
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --serif:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue",sans-serif;
+  --pad:clamp(24px,5.5vw,84px);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:#fff;color:#060609}
+html,body{
+  height:100%;background:var(--bg);color:var(--fg);
+  font-family:var(--sans);font-size:14px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+}
+
+/* Boot Loader */
+#boot{
+  position:fixed;inset:0;z-index:200;background:#040406;
+  display:flex;flex-direction:column;justify-content:center;padding:0 var(--pad);
+  font-family:var(--mono);
+  transition:opacity .7s var(--ease), transform .8s var(--ease), filter .7s var(--ease);
+}
+#boot.done{opacity:0;pointer-events:none;transform:scale(1.03);filter:blur(8px)}
+.boot-in{max-width:860px;width:100%;margin:0 auto}
+.boot-ascii{
+  font-size:clamp(5.2px,1.08vw,12.5px);line-height:1.08;color:#fff;white-space:pre;
+  margin-bottom:24px;text-shadow:0 0 24px rgba(255,255,255,.26);
+}
+.boot-log{
+  border-left:1.5px solid rgba(255,255,255,.7);padding-left:16px;min-height:100px;
+  font-size:12px;line-height:1.85;color:var(--dim);
+}
+.boot-log .cmd{color:#fff}
+.boot-log .ok{color:#adb2c4}
+.boot-skip{margin-top:20px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);cursor:pointer;display:inline-block}
+
+/* Manifold + SGD Canvas */
+#manifold{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.veil{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 90% 85% at 50% 48%, rgba(6,6,9,.28) 0%, rgba(6,6,9,.68) 65%, rgba(4,4,6,.94) 100%);
+}
+
+/* Nav */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px var(--pad);font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:600;cursor:pointer}
+.brand i{width:5px;height:5px;border-radius:50%;background:#fff}
+.brand span{color:var(--mute);font-weight:400}
+nav ul{list-style:none;display:flex;gap:clamp(16px,2.6vw,34px)}
+nav a, nav button{
+  background:none;border:none;font:inherit;letter-spacing:inherit;text-transform:inherit;
+  color:var(--dim);text-decoration:none;cursor:pointer;position:relative;transition:color .25s;
+}
+nav a:hover, nav button:hover, nav button.active{color:#fff}
+nav button.active::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:#fff}
+
+/* Dual Stage */
+.stage{position:relative;z-index:10;width:100%;height:100svh;overflow:hidden}
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:84px var(--pad) 48px;
+  opacity:0;pointer-events:none;transform:translateY(24px) scale(.985);filter:blur(7px);
+  transition:opacity .7s var(--ease), transform .8s var(--ease), filter .7s var(--ease);
+  overflow-y:auto;scrollbar-width:none;
+}
+.view::-webkit-scrollbar{display:none}
+.view.active{opacity:1;pointer-events:auto;transform:none;filter:none}
+.view.up{opacity:0;transform:translateY(-24px) scale(1.015);filter:blur(7px)}
+.inner{max-width:1120px;width:100%;margin:0 auto}
+
+/* VIEW 1: Orthogonal Projection Layout */
+.proj-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
+  gap:clamp(32px,5vw,76px);
+  align-items:center;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:16px;
+}
+.proj-left h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(34px,4.5vw,54px);line-height:1.06;letter-spacing:-.02em;
+  margin-bottom:16px;
+}
+.proj-left .eq{
+  font-size:18px;color:#fff;margin-bottom:24px;
+}
+.basis-list{display:flex;flex-direction:column}
+.basis-row{
+  display:grid;grid-template-columns:56px minmax(0,1fr) 46px;gap:14px;align-items:baseline;
+  padding:11px 0;border-top:1px solid var(--hair);
+  cursor:pointer;opacity:.56;transition:opacity .25s, padding-left .25s var(--ease);
+}
+.basis-row:last-child{border-bottom:1px solid var(--hair)}
+.basis-row:hover, .basis-row.active{opacity:1;padding-left:6px}
+.basis-row .bk{font-family:var(--mono);font-size:12px;color:#fff}
+.basis-row .bt{font-size:13.5px;color:#d6dae6}
+.basis-row .bt small{display:block;font-size:11.5px;color:var(--dim);margin-top:2px}
+.basis-row .bw{font-family:var(--mono);font-size:11px;color:var(--soft);text-align:right}
+
+.proj-right{display:flex;flex-direction:column;gap:12px}
+#spec-canvas{display:block;width:100%;height:clamp(260px,38vh,360px)}
+.spec-cap{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+  padding-top:10px;border-top:1px solid var(--hair);
+}
+
+.foot-bar{
+  margin-top:28px;padding-top:14px;border-top:1px solid var(--hair);
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--dim);
+}
+.portal{
+  display:inline-flex;align-items:center;gap:10px;background:none;border:none;
+  color:#fff;font:inherit;letter-spacing:inherit;text-transform:uppercase;cursor:pointer;
+}
+.portal span.ring{
+  width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.26);
+  display:inline-flex;align-items:center;justify-content:center;font-size:11px;
+  transition:background .25s, color .25s;
+}
+.portal:hover span.ring{background:#fff;color:#060609}
+
+/* VIEW 2: Workbench & Coordinates */
+.wb-head{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
+  padding-bottom:22px;border-bottom:1px solid var(--hair);margin-bottom:28px;
+}
+.wb-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4.4vw,48px)}
+.wb-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px)}
+.col-t{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);margin-bottom:14px}
+.row{
+  display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.045);align-items:baseline;
+}
+.row:last-child{border-bottom:none}
+.row .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.row .v{font-size:13.5px;color:#d8dce8}
+.links{display:flex;gap:20px;flex-wrap:wrap}
+.links a{color:var(--soft);text-decoration:none}
+.links a:hover{color:#fff}
+.links a.murmur{color:var(--mute);font-style:italic}
+
+@media(max-width:900px){
+  .proj-grid, .wb-cols{grid-template-columns:1fr}
+  .view{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+
+<div id="boot" title="Click to skip">
+  <div class="boot-in">
+<pre class="boot-ascii">███╗   ███╗██╗██╗   ██╗ █████╗ ███████╗ █████╗ ██╗  ██╗ █████╗
+████╗ ████║██║╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██║ ██╔╝██╔══██╗
+██╔████╔██║██║ ╚████╔╝ ███████║███████╗███████║█████╔╝ ███████║
+██║╚██╔╝██║██║  ╚██╔╝  ██╔══██║╚════██║██╔══██║██╔═██╗ ██╔══██║
+██║ ╚═╝ ██║██║   ██║   ██║  ██║███████║██║  ██║██║  ██╗██║  ██║
+╚═╝     ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝</pre>
+    <div class="boot-log" id="boot-log"></div>
+    <span class="boot-skip">click or press any key to skip &rarr;</span>
+  </div>
+</div>
+
+<canvas id="manifold"></canvas>
+<div class="veil"></div>
+
+<nav>
+  <a class="brand" id="go-home"><i></i>miyasaka <span>// f2 · projection</span></a>
+  <ul>
+    <li><button class="active" data-v="home">basis</button></li>
+    <li><button data-v="profile">workbench</button></li>
+    <li><a href="/posts">posts</a></li>
+  </ul>
+</nav>
+
+<main class="stage">
+  <!-- VIEW 1: CHEBYSHEV SERIES DECOMPOSITION OF SELF -->
+  <section class="view active" id="v-home">
+    <div class="inner">
+      <div class="proj-grid">
+        <div class="proj-left">
+          <div class="eyebrow">F2 &middot; Orthogonal Basis Decomposition</div>
+          <h1>Kion Miyasaka</h1>
+          <div class="eq"><span class="katex-m" data-tex="f(x) \approx \sum_{k=0}^{4} c_k\, T_k(x)">f(x) ≈ ∑ cₖ Tₖ(x)</span></div>
+
+          <div class="basis-list" id="basis-list">
+            <div class="basis-row active" data-k="0">
+              <span class="bk"><span class="katex-m" data-tex="T_0(x)">T₀</span></span>
+              <span class="bt">Systems &amp; C++20<small>Constant baseline: LLVM, CMake, zero-overhead abstractions</small></span>
+              <span class="bw">c&#8320; = 0.42</span>
+            </div>
+            <div class="basis-row" data-k="1">
+              <span class="bk"><span class="katex-m" data-tex="T_1(x)">T₁</span></span>
+              <span class="bt">Approximation Theory<small>Linear trend: Chebyshev nodes, Pad&eacute;, uniform bounds</small></span>
+              <span class="bw">c&#8321; = 0.31</span>
+            </div>
+            <div class="basis-row" data-k="2">
+              <span class="bk"><span class="katex-m" data-tex="T_2(x)">T₂</span></span>
+              <span class="bt">Optimization<small>Curvature: gradients, duality, stochastic descent</small></span>
+              <span class="bw">c&#8322; = 0.24</span>
+            </div>
+            <div class="basis-row" data-k="3">
+              <span class="bk"><span class="katex-m" data-tex="T_3(x)">T₃</span></span>
+              <span class="bt">Machine Learning<small>Higher harmonics: Python, MATLAB, Wolfram Mathematica</small></span>
+              <span class="bw">c&#8323; = 0.16</span>
+            </div>
+            <div class="basis-row" data-k="4">
+              <span class="bk"><span class="katex-m" data-tex="T_4(x)">T₄</span></span>
+              <span class="bt">Practice &amp; Rhythm<small>78.9M s uptime &middot; vim, fish, mechanical keyboards, osu!</small></span>
+              <span class="bw">c&#8324; = 0.11</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-right">
+          <canvas id="spec-canvas"></canvas>
+          <div class="spec-cap">
+            <span id="mode-cap">highlighting mode T&#8320;(x) inside composite f(x)</span>
+            <span>click bg to spawn SGD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot-bar">
+        <span>Nightly Build (v2026.06) &middot; declspec.cloud</span>
+        <button class="portal" id="btn-to-prof"><span>Workbench &amp; Links</span><span class="ring">&#8595;</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 2: WORKBENCH & COORDINATES -->
+  <section class="view" id="v-profile">
+    <div class="inner">
+      <div class="wb-head">
+        <h2>Workbench &amp; Coordinates</h2>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.14em">78,892,314.9 s practice uptime</span>
+      </div>
+      <div class="wb-cols">
+        <div>
+          <div class="col-t">Hardware</div>
+          <div class="row"><span class="k">PC</span><span class="v">Ryzen 7 7800X3D &amp; RTX 5070 Ti</span></div>
+          <div class="row"><span class="k">Laptop</span><span class="v">MacBook Pro 16-inch (2021)</span></div>
+          <div class="row"><span class="k">Keyboards</span><span class="v">ROG Falchion RX Low Profile / NuPhy Air60 HE / NIZ PLUM 84 Pro</span></div>
+          <div class="row"><span class="k">Mice</span><span class="v">Logitech G Pro Wireless 2 &amp; MX Vertical</span></div>
+          <div class="row"><span class="k">Router</span><span class="v">ASUS RT-AX86U Pro</span></div>
+        </div>
+        <div>
+          <div class="col-t">Environment &amp; Stack</div>
+          <div class="row"><span class="k">Editor</span><span class="v">vim &middot; Visual Studio &middot; VS Code</span></div>
+          <div class="row"><span class="k">Shell</span><span class="v">/opt/homebrew/bin/fish &middot; en_US.UTF-8</span></div>
+          <div class="row"><span class="k">Languages</span><span class="v">C++11 / C++20, Python, MATLAB</span></div>
+          <div class="row"><span class="k">Math</span><span class="v">Wolfram Mathematica, LaTeX</span></div>
+        </div>
+      </div>
+      <div class="foot-bar" style="margin-top:32px">
+        <div class="links">
+          <a href="https://osu.ppy.sh/users/7295233">osu!</a>
+          <a href="https://discord.com/users/747704522591436850">discord</a>
+          <a href="https://www.cnblogs.com/kion">cnblogs</a>
+          <a href="/posts">~/posts</a>
+          <a class="murmur" href="/murmur">__EOF__</a>
+        </div>
+        <button class="portal" id="btn-to-home"><span class="ring">&#8593;</span><span>Return to Basis</span></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* KaTeX */
+window.addEventListener('DOMContentLoaded', function(){
+  function go(){
+    if (!window.katex) return;
+    document.querySelectorAll('.katex-m').forEach(function(el){
+      try { katex.render(el.getAttribute('data-tex'), el, { throwOnError:false }); } catch(e){}
+    });
+  }
+  if (window.katex) go();
+  else { var n=0, iv=setInterval(function(){ if(window.katex||++n>40){clearInterval(iv);go();} }, 80); }
+});
+
+/* Compiler Boot */
+(function(){
+  var boot = document.getElementById('boot'), log = document.getElementById('boot-log');
+  if (location.search.indexOf('static') > -1){ boot.classList.add('done'); return; }
+  var lines = [
+    { cls:'cmd', text:'[guest@kkws ~]$ g++ -std=c++20 -O2 miyasaka.cpp -o miyasaka' },
+    { cls:'ok',  text:'[ 42%] Projecting onto Chebyshev basis T_0 .. T_4 ...' },
+    { cls:'ok',  text:'[ 88%] Initializing SGD manifold explorers ...' },
+    { cls:'ok',  text:'[100%] Built target miyasaka' },
+    { cls:'cmd', text:'[guest@kkws ~]$ ./miyasaka --decompose' }
+  ];
+  var done = false;
+  function finish(){ if (done) return; done = true; boot.classList.add('done'); }
+  boot.addEventListener('click', finish);
+  window.addEventListener('keydown', finish, { once:true });
+  var i = 0;
+  (function step(){
+    if (done) return;
+    if (i >= lines.length){ setTimeout(finish, 340); return; }
+    var d = document.createElement('div'); d.className = lines[i].cls; d.textContent = lines[i].text;
+    log.appendChild(d); i++; setTimeout(step, 210);
+  })();
+})();
+
+/* Manifold + SGD Background */
+(function(){
+  var cv = document.getElementById('manifold'), ctx = cv.getContext('2d');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
+  var wells = [
+    { bx:0.22, by:0.32, rx:0.06, ry:0.05, wx:0.15, wy:0.12, depth:1.15, sig:0.17 },
+    { bx:0.76, by:0.35, rx:0.05, ry:0.06, wx:-0.13, wy:0.17, depth:1.45, sig:0.18 },
+    { bx:0.48, by:0.76, rx:0.07, ry:0.05, wx:0.11, wy:-0.14, depth:1.05, sig:0.19 }
+  ];
+  var agents = [];
+  function spawn(nx, ny){
+    agents.push({
+      x: nx!==undefined?nx:(0.1+Math.random()*0.8),
+      y: ny!==undefined?ny:(0.1+Math.random()*0.8),
+      vx:0, vy:0, lr:0.0024, mom:0.88, noise:0.0018, age:0, maxAge:320, trail:[]
+    });
+    if (agents.length > 8) agents.shift();
+  }
+  for (var a=0;a<5;a++) spawn();
+
+  function wp(w, t){ return { x: w.bx + w.rx*Math.sin(w.wx*t), y: w.by + w.ry*Math.cos(w.wy*t) }; }
+  function loss(x, y, t){
+    var v = 1.6;
+    for (var i=0;i<wells.length;i++){
+      var p = wp(wells[i], t), dx = x-p.x, dy = y-p.y;
+      v -= wells[i].depth * Math.exp(-(dx*dx+dy*dy)/(2*wells[i].sig*wells[i].sig));
+    }
+    return v;
+  }
+  function grad(x, y, t){
+    var e = 0.002;
+    return { gx:(loss(x+e,y,t)-loss(x-e,y,t))/(2*e), gy:(loss(x,y+e,t)-loss(x,y-e,t))/(2*e) };
+  }
+  function resize(){ W=innerWidth; H=innerHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+  resize(); addEventListener('resize', resize);
+  addEventListener('click', function(e){
+    if (e.target.closest('button, a, .basis-row, #boot')) return;
+    spawn(e.clientX/W, e.clientY/H);
+  });
+
+  var COLS=52, ROWS=32, grid=new Float32Array((COLS+1)*(ROWS+1)), levels=[0.32,0.52,0.72,0.92,1.12,1.32];
+  function loop(now){
+    var t = now * 0.001;
+    ctx.clearRect(0,0,W,H);
+    for (var j=0;j<=ROWS;j++) for (var i=0;i<=COLS;i++) grid[j*(COLS+1)+i] = loss(i/COLS, j/ROWS, t);
+    var cw=W/COLS, ch=H/ROWS;
+    ctx.lineWidth=0.75;
+    for (var li=0;li<levels.length;li++){
+      var lv=levels[li];
+      ctx.strokeStyle='rgba(255,255,255,'+(0.04+(levels.length-li)*0.011).toFixed(3)+')';
+      ctx.beginPath();
+      for (var r=0;r<ROWS;r++) for (var c=0;c<COLS;c++){
+        var v0=grid[r*(COLS+1)+c], v1=grid[r*(COLS+1)+c+1], v2=grid[(r+1)*(COLS+1)+c+1], v3=grid[(r+1)*(COLS+1)+c];
+        var pts=[];
+        if((v0<lv)!==(v1<lv)) pts.push([(c+(lv-v0)/(v1-v0))*cw, r*ch]);
+        if((v1<lv)!==(v2<lv)) pts.push([(c+1)*cw, (r+(lv-v1)/(v2-v1))*ch]);
+        if((v2<lv)!==(v3<lv)) pts.push([(c+(lv-v3)/(v2-v3))*cw, (r+1)*ch]);
+        if((v3<lv)!==(v0<lv)) pts.push([c*cw, (r+(lv-v0)/(v3-v0))*ch]);
+        if(pts.length>=2){ ctx.moveTo(pts[0][0],pts[0][1]); ctx.lineTo(pts[1][0],pts[1][1]); }
+      }
+      ctx.stroke();
+    }
+    for (var ai=0;ai<agents.length;ai++){
+      var ag=agents[ai], g=grad(ag.x,ag.y,t);
+      ag.vx = ag.mom*ag.vx - ag.lr*g.gx + (Math.random()-0.5)*ag.noise;
+      ag.vy = ag.mom*ag.vy - ag.lr*g.gy + (Math.random()-0.5)*ag.noise;
+      ag.x = Math.max(0.03, Math.min(0.97, ag.x+ag.vx));
+      ag.y = Math.max(0.04, Math.min(0.96, ag.y+ag.vy));
+      ag.age++; ag.trail.push([ag.x*W, ag.y*H]);
+      if(ag.trail.length>40) ag.trail.shift();
+      if(ag.age>ag.maxAge){ ag.x=0.1+Math.random()*0.8; ag.y=0.1+Math.random()*0.8; ag.vx=ag.vy=0; ag.age=0; ag.trail=[]; }
+      for(var k=1;k<ag.trail.length;k++){
+        var f=k/ag.trail.length;
+        ctx.strokeStyle='rgba(255,255,255,'+(f*0.4).toFixed(3)+')';
+        ctx.lineWidth=0.6+f*0.85;
+        ctx.beginPath(); ctx.moveTo(ag.trail[k-1][0],ag.trail[k-1][1]); ctx.lineTo(ag.trail[k][0],ag.trail[k][1]); ctx.stroke();
+      }
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(ag.x*W, ag.y*H, 2.1, 0, Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  loop(performance.now());
+})();
+
+/* Chebyshev Spectral Synthesis Canvas */
+(function(){
+  var cv = document.getElementById('spec-canvas'), ctx = cv.getContext('2d');
+  var rows = [].slice.call(document.querySelectorAll('.basis-row'));
+  var cap = document.getElementById('mode-cap');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2), W=0, H=0;
+  var coeffs = [0.42, 0.31, 0.24, 0.16, 0.11];
+  var activeK = 0;
+
+  function T(k, x){
+    if(k===0) return 1; if(k===1) return x;
+    var a=1,b=x,c; for(var i=2;i<=k;i++){c=2*x*b-a;a=b;b=c;} return b;
+  }
+  function composite(x, phase){
+    var s = 0;
+    for(var k=0;k<coeffs.length;k++) s += coeffs[k] * T(k, x) * Math.cos(phase * (0.4 + k*0.18));
+    return s;
+  }
+  function resize(){
+    var r=cv.getBoundingClientRect();
+    W=Math.max(1,r.width); H=Math.max(1,r.height);
+    cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  rows.forEach(function(r, idx){
+    r.addEventListener('mouseenter', function(){
+      activeK = idx;
+      rows.forEach(function(x,i){ x.classList.toggle('active', i===idx); });
+      cap.textContent = 'highlighting mode T_' + idx + '(x) inside composite f(x)';
+    });
+  });
+  function px(x){ return 20 + (x+1)/2 * (W-40); }
+  function py(y){ return H*0.5 - y * (H*0.36); }
+
+  function paint(now){
+    if (!W || !H) return;
+    var ph = now * 0.00055;
+    ctx.clearRect(0,0,W,H);
+
+    // Zero axis
+    ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(px(-1), py(0)); ctx.lineTo(px(1), py(0)); ctx.stroke();
+
+    // Individual basis modes T_0..T_4
+    for(var k=0;k<coeffs.length;k++){
+      var isA = (k === activeK);
+      ctx.strokeStyle = isA ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.10)';
+      ctx.lineWidth = isA ? 1.6 : 0.8;
+      ctx.setLineDash(isA ? [4,4] : []);
+      ctx.beginPath();
+      for(var s=0;s<=260;s++){
+        var x = -1 + 2*s/260;
+        var y = coeffs[k] * T(k, x) * Math.cos(ph * (0.4 + k*0.18));
+        s===0 ? ctx.moveTo(px(x),py(y)) : ctx.lineTo(px(x),py(y));
+      }
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Composite curve f(x) = sum c_k T_k(x)
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2.0;
+    ctx.beginPath();
+    for(var s2=0;s2<=300;s2++){
+      var x2=-1+2*s2/300, y2=composite(x2, ph);
+      s2===0 ? ctx.moveTo(px(x2),py(y2)) : ctx.lineTo(px(x2),py(y2));
+    }
+    ctx.stroke();
+
+    requestAnimationFrame(paint);
+  }
+  resize(); addEventListener('resize', resize);
+  paint(performance.now());
+})();
+
+/* View Switcher */
+(function(){
+  var views = { home: document.getElementById('v-home'), profile: document.getElementById('v-profile') };
+  var btns = document.querySelectorAll('nav button[data-v]');
+  var cur='home', lock=0;
+  function go(t){
+    if(t===cur) return;
+    views[cur].classList.remove('active'); views[cur].classList.toggle('up', t==='profile');
+    views[t].classList.remove('up'); void views[t].offsetWidth; views[t].classList.add('active');
+    btns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-v')===t); });
+    cur=t;
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ go(b.getAttribute('data-v')); }); });
+  document.getElementById('go-home').addEventListener('click', function(){ go('home'); });
+  document.getElementById('btn-to-prof').addEventListener('click', function(){ go('profile'); });
+  document.getElementById('btn-to-home').addEventListener('click', function(){ go('home'); });
+  addEventListener('wheel', function(e){
+    var now=performance.now(); if(now-lock<850||Math.abs(e.deltaY)<28) return;
+    if(e.deltaY>0&&cur==='home'){lock=now;go('profile');}
+    else if(e.deltaY<0&&cur==='profile'&&views.profile.scrollTop<=2){lock=now;go('home');}
+  },{passive:true});
+})();
+</script>
+</body>
+</html>

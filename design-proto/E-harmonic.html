@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kion Miyasaka — kkws</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+:root{
+  --bg-deep:#060609;
+  --bg-mid:#0a0b10;
+  --fg:#f2f2f5;
+  --fg-soft:#b4b6c2;
+  --dim:#767988;
+  --mute:#454856;
+  --hair:rgba(255,255,255,.08);
+  --hair-hi:rgba(255,255,255,.22);
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --serif:"Iowan Old Style","Palatino Linotype","URW Palladio L",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue",sans-serif;
+  --pad:clamp(24px,5.5vw,84px);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:rgba(255,255,255,.92);color:#060609}
+html,body{
+  height:100%;
+  background:radial-gradient(ellipse 110% 90% at 50% 30%, #0d0f17 0%, var(--bg-deep) 72%, #030305 100%);
+  color:var(--fg);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ---------- Ambient Trigonometric Particle Field ---------- */
+#bg-field{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+  pointer-events:none;
+}
+.vignette{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:radial-gradient(ellipse 90% 85% at 50% 48%, transparent 45%, rgba(3,3,6,.76) 100%);
+}
+
+/* ---------- Minimal Floating Navigation ---------- */
+nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:24px var(--pad);
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  color:var(--fg);text-decoration:none;font-weight:600;
+  cursor:pointer;
+}
+.brand i{
+  width:5px;height:5px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 10px rgba(255,255,255,.65);
+  animation:pulse 3.2s ease-in-out infinite;
+}
+.brand span{color:var(--mute);font-weight:400;letter-spacing:.14em}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.28;transform:scale(.82)}}
+
+nav ul{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:clamp(18px,2.8vw,36px);
+}
+nav a, nav button.nav-link{
+  background:none;border:none;padding:0;
+  font:inherit;letter-spacing:inherit;text-transform:inherit;
+  color:var(--dim);
+  text-decoration:none;
+  cursor:pointer;
+  position:relative;
+  transition:color .28s var(--ease);
+}
+nav a:hover, nav button.nav-link:hover,
+nav button.nav-link.active{
+  color:var(--fg);
+}
+nav button.nav-link::after{
+  content:"";
+  position:absolute;left:0;right:0;bottom:-6px;height:1px;
+  background:var(--fg);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .38s var(--ease);
+}
+nav button.nav-link.active::after{
+  transform:scaleX(1);
+}
+
+/* ---------- Dual-View Spatial Stage ---------- */
+.viewport{
+  position:relative;
+  z-index:10;
+  width:100%;
+  height:100svh;
+  overflow:hidden;
+}
+
+.view{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:84px var(--pad) 56px;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(28px) scale(.985);
+  filter:blur(8px);
+  transition:
+    opacity .72s var(--ease),
+    transform .82s var(--ease),
+    filter .72s var(--ease);
+  overflow-y:auto;
+  scrollbar-width:none;
+}
+.view::-webkit-scrollbar{display:none}
+.view.active{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0) scale(1);
+  filter:blur(0);
+}
+.view.leaving-up{
+  opacity:0;
+  transform:translateY(-28px) scale(1.015);
+  filter:blur(8px);
+}
+
+.inner{
+  width:100%;
+  max-width:1120px;
+  margin:0 auto;
+}
+
+/* =====================================================================
+   VIEW 1: CHEBYSHEV INSTRUMENT (Open, Borderless, Gallery-Grade)
+   ===================================================================== */
+.telemetry-strip{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:20px;
+  flex-wrap:wrap;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--hair);
+  font-family:var(--mono);
+  font-size:11.5px;
+}
+.prompt-line{
+  display:flex;align-items:center;gap:8px;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.prompt-line .ps{color:var(--mute);user-select:none}
+.prompt-line .cmd{color:#cfd2dc}
+.prompt-line .caret{
+  display:inline-block;width:5px;height:12px;background:var(--fg);
+  vertical-align:-1px;animation:blink 1.1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+.metrics{
+  display:flex;align-items:center;gap:14px;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);
+  cursor:pointer;user-select:none;
+  transition:color .25s;
+}
+.metrics:hover{color:var(--fg)}
+.metrics b{color:var(--fg);font-weight:500}
+.metrics .sep{color:var(--mute)}
+.metrics .katex{font-size:1.08em;text-transform:none;letter-spacing:0}
+
+/* Unobstructed, floating canvas */
+.plot-wrap{
+  position:relative;
+  margin:10px 0 8px;
+}
+#chebplot{
+  display:block;
+  width:100%;
+  height:clamp(220px,30vh,300px);
+  cursor:crosshair;
+}
+.plot-hint{
+  position:absolute;
+  right:0;bottom:6px;
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--mute);
+  pointer-events:none;
+}
+
+/* Open 5-row C++20 <-> LaTeX coupling (no enclosing box) */
+.matrix-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);
+  padding:10px 0 8px;
+  border-top:1px solid var(--hair);
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--mute);
+}
+.matrix-head .r{padding-left:6px}
+
+.matrix{
+  display:flex;
+  flex-direction:column;
+}
+.pair{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);
+  align-items:center;
+  min-height:38px;
+  padding:4px 0;
+  border-top:1px solid rgba(255,255,255,.04);
+  cursor:pointer;
+  transition:background .25s var(--ease), opacity .25s var(--ease);
+  position:relative;
+}
+.pair::before{
+  content:"";
+  position:absolute;left:-14px;top:50%;
+  width:4px;height:4px;border-radius:50%;
+  background:#fff;
+  opacity:0;
+  transform:translateY(-50%) scale(.5);
+  transition:opacity .25s var(--ease), transform .25s var(--ease);
+}
+.pair.lit::before, .pair:hover::before{
+  opacity:1;
+  transform:translateY(-50%) scale(1);
+}
+.pair .cl{
+  font-family:var(--mono);
+  font-size:12px;
+  color:#727684;
+  white-space:pre;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:color .25s;
+}
+.pair .cl .kw{color:#a8adbc;font-weight:500}
+.pair .cl .ty{color:#9ca1b0}
+.pair .cl .nm{color:#c0c5d4}
+
+.pair .mid{
+  display:flex;align-items:center;justify-content:center;
+  height:100%;position:relative;
+}
+.pair .mid i{
+  width:14px;height:1px;
+  background:rgba(255,255,255,.14);
+  transition:width .28s var(--ease), background .28s var(--ease);
+}
+.pair.lit .mid i, .pair:hover .mid i{
+  width:24px;
+  background:rgba(255,255,255,.78);
+}
+
+.pair .ml{
+  padding-left:6px;
+  color:#858998;
+  font-size:15px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  transition:color .25s;
+}
+.pair .ml::-webkit-scrollbar{display:none}
+.pair .ml .katex{font-size:1.02em}
+
+.pair.lit .cl, .pair:hover .cl,
+.pair.lit .ml, .pair:hover .ml{
+  color:#ffffff;
+}
+.pair.lit .cl .kw, .pair.lit .cl .ty, .pair.lit .cl .nm,
+.pair:hover .cl .kw, .pair:hover .cl .ty, .pair:hover .cl .nm{
+  color:#ffffff;
+}
+
+/* Bottom caption + clever portal trigger to Profile */
+.stage-foot{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid var(--hair);
+}
+.thesis{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:15px;
+  color:var(--dim);
+  letter-spacing:.01em;
+}
+.thesis b{
+  font-style:normal;
+  font-weight:500;
+  color:var(--fg-soft);
+}
+
+.portal-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  background:none;
+  border:none;
+  padding:6px 0;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--fg-soft);
+  cursor:pointer;
+  transition:color .25s, gap .32s var(--ease);
+}
+.portal-btn:hover{
+  color:#fff;
+  gap:18px;
+}
+.portal-btn .arrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;height:28px;
+  border-radius:50%;
+  border:1px solid var(--hair-hi);
+  font-size:12px;
+  transition:border-color .25s, background .25s, color .25s, transform .35s var(--ease);
+}
+.portal-btn:hover .arrow{
+  border-color:#fff;
+  background:#fff;
+  color:#060609;
+  transform:translateY(2px);
+}
+
+/* =====================================================================
+   VIEW 2: PROFILE DOSSIER (Editorial, Human, Non-C++)
+   ===================================================================== */
+#view-profile{
+  justify-content:center;
+}
+.profile-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  flex-wrap:wrap;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--hair);
+}
+.profile-title h1{
+  font-family:var(--serif);
+  font-weight:400;
+  font-size:clamp(34px,5vw,56px);
+  line-height:1.06;
+  letter-spacing:-.015em;
+  color:#fff;
+}
+.profile-title .sub{
+  margin-top:10px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--dim);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.profile-title .sub .dot{
+  width:3px;height:3px;border-radius:50%;background:var(--mute);
+}
+.uptime-pill{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--dim);
+  text-align:right;
+}
+.uptime-pill b{
+  display:block;
+  font-size:15px;
+  font-weight:400;
+  color:var(--fg);
+  letter-spacing:.04em;
+  font-variant-numeric:tabular-nums;
+}
+
+.bio-lead{
+  margin:28px 0 34px;
+  max-width:680px;
+  font-family:var(--serif);
+  font-size:clamp(17px,1.9vw,21px);
+  line-height:1.62;
+  color:#d2d5e0;
+}
+.bio-lead em{
+  font-style:italic;
+  color:#fff;
+}
+
+.dossier-grid{
+  display:grid;
+  grid-template-columns:1.05fr 1fr;
+  gap:clamp(32px,5vw,72px);
+  align-items:start;
+}
+
+.col-label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--mute);
+  margin-bottom:16px;
+}
+
+.field-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.field-row{
+  display:grid;
+  grid-template-columns:108px minmax(0,1fr);
+  gap:14px;
+  align-items:baseline;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+.field-row:last-child{border-bottom:none}
+.field-row .k{
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+.field-row .v{
+  color:#d8dbe6;
+  font-size:13.5px;
+  line-height:1.55;
+}
+.field-row .v code{
+  font-family:var(--mono);
+  font-size:12px;
+  color:#b8bcc9;
+}
+
+.tag-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+}
+.tag-row span{
+  font-family:var(--mono);
+  font-size:11.5px;
+  color:#c2c6d4;
+}
+.tag-row span::before{
+  content:"· ";
+  color:var(--mute);
+}
+.tag-row span:first-child::before{content:""}
+
+.profile-foot{
+  margin-top:34px;
+  padding-top:18px;
+  border-top:1px solid var(--hair);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+}
+.links-group{
+  display:flex;
+  align-items:center;
+  gap:22px;
+  flex-wrap:wrap;
+}
+.links-group a{
+  color:var(--fg-soft);
+  text-decoration:none;
+  border-bottom:1px solid transparent;
+  padding-bottom:2px;
+  transition:color .22s, border-color .22s;
+}
+.links-group a:hover{
+  color:#fff;
+  border-bottom-color:rgba(255,255,255,.55);
+}
+.links-group a.murmur{
+  color:var(--mute);
+  font-style:italic;
+  letter-spacing:.1em;
+}
+.links-group a.murmur:hover{
+  color:var(--fg-soft);
+  border-bottom-color:var(--mute);
+}
+
+@media(max-width:860px){
+  .matrix-head{grid-template-columns:1fr;gap:4px}
+  .matrix-head .m,.matrix-head .r{display:none}
+  .pair{grid-template-columns:1fr;gap:4px;padding:8px 0}
+  .pair .mid{display:none}
+  .pair .ml{padding-left:0}
+  .dossier-grid{grid-template-columns:1fr;gap:28px}
+  .view{justify-content:flex-start;padding-top:88px;padding-bottom:44px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-field" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<nav>
+  <a class="brand" id="brand-home" href="#proof"><i></i>kion miyasaka <span>// kkws</span></a>
+  <ul>
+    <li><button class="nav-link active" data-view="stage">chebyshev</button></li>
+    <li><button class="nav-link" data-view="profile">whoami</button></li>
+    <li><a href="/posts">posts</a></li>
+  </ul>
+</nav>
+
+<main class="viewport">
+
+  <!-- ==================== VIEW 1: CHEBYSHEV STAGE ==================== -->
+  <section class="view active" id="view-stage" aria-label="Chebyshev Polynomial Instrument">
+    <div class="inner">
+
+      <div class="telemetry-strip">
+        <div class="prompt-line">
+          <span class="ps">[guest@kkws ~]$</span>
+          <span class="cmd" id="cmdline"></span><span class="caret"></span>
+        </div>
+        <div class="metrics" id="degbtn" title="Click to step degree n (3..24)">
+          <span>n = <b id="rN">8</b> <span style="color:var(--mute)">/ 24</span></span>
+          <span class="sep">&middot;</span>
+          <span>roots <b id="rR">8</b></span>
+          <span class="sep">&middot;</span>
+          <span>extrema <b id="rX">9</b></span>
+          <span class="sep">&middot;</span>
+          <span class="katex-expr" data-tex="\|T_n\|_\infty = 1">&#8214;T<sub>n</sub>&#8214;<sub>&infin;</sub> = 1</span>
+        </div>
+      </div>
+
+      <div class="plot-wrap">
+        <canvas id="chebplot"></canvas>
+        <div class="plot-hint" id="probe-readout">click curve to step n</div>
+      </div>
+
+      <div class="matrix-head">
+        <div>cheb.hpp &middot; C++20</div>
+        <div class="m"></div>
+        <div class="r">cheb.tex &middot; LaTeX</div>
+      </div>
+
+      <div class="matrix" id="matrix">
+        <div class="pair lit" data-p="0">
+          <div class="cl"><span class="ty">T</span> b0 = <span class="nm">1</span>, b1 = x;</div>
+          <div class="mid"><i></i></div>
+          <div class="ml"><span class="katex-expr" data-tex="T_0(x) = 1,\quad T_1(x) = x,\quad x \in [-1, 1]">T₀(x) = 1, T₁(x) = x, x ∈ [−1, 1]</span></div>
+        </div>
+
+        <div class="pair" data-p="1">
+          <div class="cl"><span class="kw">for</span> (<span class="kw">int</span> k = <span class="nm">2</span>; k &lt;= n; ++k) b = <span class="nm">2</span>*x*b1 - b0;</div>
+          <div class="mid"><i></i></div>
+          <div class="ml"><span class="katex-expr" data-tex="T_k(x) = 2x\,T_{k-1}(x) - T_{k-2}(x)">Tₖ(x) = 2x Tₖ₋₁(x) − Tₖ₋₂(x)</span></div>
+        </div>
+
+        <div class="pair" data-p="2">
+          <div class="cl"><span class="kw">auto</span> root = [](<span class="kw">int</span> k, <span class="kw">int</span> n){ <span class="kw">return</span> <span class="nm">cos</span>((<span class="nm">2</span>*k+<span class="nm">1</span>)*pi/(<span class="nm">2</span>*n)); };</div>
+          <div class="mid"><i></i></div>
+          <div class="ml"><span class="katex-expr" data-tex="x_k = \cos\!\left(\frac{(2k+1)\pi}{2n}\right) \implies T_n(x_k) = 0">xₖ = cos((2k+1)π / 2n) ⇒ Tₙ(xₖ) = 0</span></div>
+        </div>
+
+        <div class="pair" data-p="3">
+          <div class="cl"><span class="kw">auto</span> peak = [](<span class="kw">int</span> j, <span class="kw">int</span> n){ <span class="kw">return</span> <span class="nm">cos</span>(j * pi / n); };</div>
+          <div class="mid"><i></i></div>
+          <div class="ml"><span class="katex-expr" data-tex="\tilde{x}_j = \cos\!\left(\frac{j\pi}{n}\right) \implies T_n(\tilde{x}_j) = (-1)^j">x̃ⱼ = cos(jπ / n) ⇒ Tₙ(x̃ⱼ) = (−1)ʲ</span></div>
+        </div>
+
+        <div class="pair" data-p="4">
+          <div class="cl"><span class="kw">static_assert</span>(sup_norm&lt;T_n&gt; == <span class="nm">1.0</span>);</div>
+          <div class="mid"><i></i></div>
+          <div class="ml"><span class="katex-expr" data-tex="\|T_n\|_\infty = \max_{x \in [-1,1]} |T_n(x)| = 1">‖Tₙ‖∞ = max |Tₙ(x)| = 1</span></div>
+        </div>
+      </div>
+
+      <div class="stage-foot">
+        <p class="thesis"><b>Chebyshev polynomials</b> — recurrence, orthogonal nodes, and equioscillation on [&#8722;1, 1].</p>
+        <button class="portal-btn" id="to-profile" type="button">
+          <span>whoami</span>
+          <span class="arrow">&#8595;</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 2: PROFILE DOSSIER ==================== -->
+  <section class="view" id="view-profile" aria-label="Profile Dossier">
+    <div class="inner">
+
+      <header class="profile-head">
+        <div class="profile-title">
+          <h1>Kion Miyasaka</h1>
+          <div class="sub">
+            <span>Nightly Build &middot; v2026.06</span>
+            <span class="dot"></span>
+            <span>declspec.cloud</span>
+          </div>
+        </div>
+        <div class="uptime-pill">
+          <b id="uptime-val">78,892,314.9 s</b>
+          <span>practice uptime</span>
+        </div>
+      </header>
+
+      <p class="bio-lead">
+        Working where <em>numerical approximation</em>, <em>optimization</em>, and <em>systems engineering</em> meet.
+        Mostly interested in how continuous mathematics settles into finite precision — and in building quiet, fast tools that make the underlying structure legible.
+      </p>
+
+      <div class="dossier-grid">
+        <div>
+          <div class="col-label">01 &mdash; Focus &amp; Instruments</div>
+          <div class="field-list">
+            <div class="field-row">
+              <span class="k">Research</span>
+              <span class="v">Approximation theory &amp; methods, Optimization, Machine Learning</span>
+            </div>
+            <div class="field-row">
+              <span class="k">Languages</span>
+              <span class="v">C++11 / C++20, Python, MATLAB</span>
+            </div>
+            <div class="field-row">
+              <span class="k">Toolchain</span>
+              <span class="v">
+                <div class="tag-row">
+                  <span>LLVM</span><span>CMake</span><span>Wolfram Mathematica</span><span>LaTeX</span><span>Visual Studio</span><span>VS Code</span><span>macOS</span>
+                </div>
+              </span>
+            </div>
+            <div class="field-row">
+              <span class="k">Shell</span>
+              <span class="v"><code>vim</code> &middot; <code>/opt/homebrew/bin/fish</code> &middot; <code>en_US.UTF-8</code></span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="col-label">02 &mdash; Workbench</div>
+          <div class="field-list">
+            <div class="field-row">
+              <span class="k">Workstation</span>
+              <span class="v">Ryzen 7 7800X3D &amp; RTX 5070 Ti</span>
+            </div>
+            <div class="field-row">
+              <span class="k">Portable</span>
+              <span class="v">MacBook Pro 16-inch (2021)</span>
+            </div>
+            <div class="field-row">
+              <span class="k">Keyboards</span>
+              <span class="v">ROG Falchion RX Low Profile / NuPhy Air60 HE / NIZ PLUM 84 Pro</span>
+            </div>
+            <div class="field-row">
+              <span class="k">Pointing</span>
+              <span class="v">Logitech G Pro Wireless 2 &amp; MX Vertical</span>
+            </div>
+            <div class="field-row">
+              <span class="k">Network</span>
+              <span class="v">ASUS RT-AX86U Pro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="profile-foot">
+        <div class="links-group">
+          <a href="https://osu.ppy.sh/users/7295233">osu!</a>
+          <a href="https://discord.com/users/747704522591436850">discord</a>
+          <a href="https://www.cnblogs.com/kion">cnblogs</a>
+          <a href="/posts">~/posts</a>
+          <a class="murmur" href="/murmur" title="private field notes">__EOF__</a>
+        </div>
+        <button class="portal-btn" id="to-stage" type="button">
+          <span class="arrow">&#8593;</span>
+          <span>return to T<sub>n</sub>(x)</span>
+        </button>
+      </footer>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* =====================================================================
+   0. KaTeX Rendering (graceful fallback if offline)
+   ===================================================================== */
+window.addEventListener('DOMContentLoaded', function(){
+  function renderAllMath(){
+    if (!window.katex) return;
+    document.querySelectorAll('.katex-expr').forEach(function(el){
+      var tex = el.getAttribute('data-tex');
+      if (!tex) return;
+      try {
+        window.katex.render(tex, el, { throwOnError: false, displayMode: false });
+      } catch(e){}
+    });
+  }
+  if (window.katex) {
+    renderAllMath();
+  } else {
+    var tries = 0;
+    var iv = setInterval(function(){
+      if (window.katex || ++tries > 40){
+        clearInterval(iv);
+        renderAllMath();
+      }
+    }, 80);
+  }
+});
+
+/* =====================================================================
+   1. Ambient Trigonometric Particle Field + Clever Mouse Interaction
+      - Each point moves on a randomized coupled sinusoidal/Lissajous orbit.
+      - Cursor acts as a harmonic resonance lens: nearby points brighten,
+        gently phase-shift, and form delicate hairline chords.
+      - Clicking emits an expanding sinusoidal phase wave across the field.
+   ===================================================================== */
+(function(){
+  var STATIC = location.search.indexOf('static') > -1;
+  var cv = document.getElementById('bg-field');
+  var ctx = cv.getContext('2d');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0;
+
+  var mouse = { x: -9999, y: -9999, vx: 0, vy: 0, active: false };
+  var ripples = [];
+  var viewDriftTarget = 0;
+  var viewDrift = 0;
+
+  var COUNT = 105;
+  var pts = [];
+
+  function initPoints(){
+    pts = [];
+    for (var i = 0; i < COUNT; i++){
+      var z = 0.35 + Math.random() * 0.65; // depth layer
+      pts.push({
+        bx: Math.random(),          // normalized anchor x
+        by: Math.random(),          // normalized anchor y
+        ax: (14 + Math.random() * 44) * z, // x harmonic amplitude
+        ay: (14 + Math.random() * 44) * z, // y harmonic amplitude
+        wx: (0.18 + Math.random() * 0.42) * (Math.random() < .5 ? 1 : -1),
+        wy: (0.18 + Math.random() * 0.42) * (Math.random() < .5 ? 1 : -1),
+        phx: Math.random() * Math.PI * 2,
+        phy: Math.random() * Math.PI * 2,
+        z: z,
+        r: 0.75 + z * 1.15,
+        ox: 0, oy: 0, // spring-damped mouse offset
+        x: 0, y: 0
+      });
+    }
+  }
+
+  function resize(){
+    W = window.innerWidth;
+    H = window.innerHeight;
+    cv.width = Math.round(W * DPR);
+    cv.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  window.addEventListener('mousemove', function(e){
+    mouse.vx = e.clientX - mouse.x;
+    mouse.vy = e.clientY - mouse.y;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', function(){
+    mouse.active = false;
+  });
+
+  window.addEventListener('click', function(e){
+    if (e.target.closest('button, a, canvas#chebplot, .pair, .metrics')) return;
+    ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+    if (ripples.length > 4) ripples.shift();
+  });
+
+  window.__triggerFieldPulse = function(dir){
+    viewDriftTarget = dir > 0 ? -48 : 0;
+    ripples.push({ x: W * 0.5, y: H * 0.5, t: performance.now() });
+    if (ripples.length > 4) ripples.shift();
+  };
+
+  function frame(now){
+    var t = now * 0.001;
+    viewDrift += (viewDriftTarget - viewDrift) * 0.06;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Update & draw ripples (subtle harmonic wave rings)
+    for (var ri = ripples.length - 1; ri >= 0; ri--){
+      var rp = ripples[ri];
+      var age = (now - rp.t) * 0.001;
+      if (age > 2.4){ ripples.splice(ri, 1); continue; }
+      var rad = age * 280;
+      var alpha = (1 - age / 2.4) * 0.09;
+      ctx.strokeStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, rad, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    var RES_R = 185;
+    var LINK_R = 115;
+
+    for (var i = 0; i < pts.length; i++){
+      var p = pts[i];
+      // Base trigonometric Lissajous motion
+      var tx = p.bx * W + p.ax * Math.sin(p.wx * t + p.phx);
+      var ty = p.by * H + p.ay * Math.cos(p.wy * t + p.phy) + viewDrift * p.z;
+
+      // Subtle ripple phase perturbation
+      for (var rj = 0; rj < ripples.length; rj++){
+        var rpp = ripples[rj];
+        var rage = (now - rpp.t) * 0.001;
+        var rrad = rage * 280;
+        var rdx = tx - rpp.x, rdy = ty - rpp.y;
+        var rdist = Math.hypot(rdx, rdy) || 1;
+        var band = Math.exp(-Math.pow((rdist - rrad) / 48, 2));
+        var wave = Math.sin((rdist - rrad) * 0.06) * band * (1 - rage / 2.4) * 14;
+        tx += (rdx / rdist) * wave;
+        ty += (rdy / rdist) * wave;
+      }
+
+      // Clever mouse interaction: gentle harmonic swirl + attraction near cursor
+      var targetOx = 0, targetOy = 0;
+      var boost = 0;
+      if (mouse.active){
+        var dx = mouse.x - tx;
+        var dy = mouse.y - ty;
+        var dist = Math.hypot(dx, dy);
+        if (dist < RES_R && dist > 1){
+          var f = Math.sin((1 - dist / RES_R) * Math.PI * 0.5);
+          boost = f;
+          // Tangential harmonic swirl + soft inward pull
+          var pull = f * 16 * p.z;
+          var swirl = f * 12 * p.z * Math.sin(t * 1.4 + p.phx);
+          targetOx = (dx / dist) * pull - (dy / dist) * swirl;
+          targetOy = (dy / dist) * pull + (dx / dist) * swirl;
+        }
+      }
+
+      p.ox += (targetOx - p.ox) * 0.08;
+      p.oy += (targetOy - p.oy) * 0.08;
+      p.x = tx + p.ox;
+      p.y = ty + p.oy;
+      p.boost = boost;
+    }
+
+    // Draw subtle resonant chords near cursor & between close neighbors
+    ctx.lineWidth = 0.7;
+    for (var a = 0; a < pts.length; a++){
+      var pa = pts[a];
+      if (mouse.active && pa.boost > 0.08){
+        ctx.strokeStyle = 'rgba(255,255,255,' + (pa.boost * 0.16).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+      }
+      for (var b = a + 1; b < pts.length; b++){
+        var pb = pts[b];
+        var ddx = pa.x - pb.x;
+        var ddy = pa.y - pb.y;
+        if (Math.abs(ddx) > LINK_R || Math.abs(ddy) > LINK_R) continue;
+        var d = Math.hypot(ddx, ddy);
+        if (d < LINK_R){
+          var nearBoost = Math.max(pa.boost, pb.boost);
+          var la = (1 - d / LINK_R) * (0.045 + nearBoost * 0.14);
+          ctx.strokeStyle = 'rgba(255,255,255,' + la.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.moveTo(pa.x, pa.y);
+          ctx.lineTo(pb.x, pb.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw points
+    for (var k = 0; k < pts.length; k++){
+      var pk = pts[k];
+      var alpha = (0.14 + pk.z * 0.24) + pk.boost * 0.52;
+      var rad = pk.r + pk.boost * 1.1;
+      ctx.fillStyle = 'rgba(255,255,255,' + Math.min(0.95, alpha).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.arc(pk.x, pk.y, rad, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    if (!STATIC) requestAnimationFrame(frame);
+  }
+
+  resize();
+  initPoints();
+  window.addEventListener('resize', resize);
+  frame(performance.now());
+})();
+
+/* =====================================================================
+   2. Clever Spatial View Transition (Chebyshev Stage <-> Profile Dossier)
+      - Triggered by nav, portal buttons, mouse wheel, or Tab key.
+   ===================================================================== */
+(function(){
+  var views = {
+    stage: document.getElementById('view-stage'),
+    profile: document.getElementById('view-profile')
+  };
+  var navBtns = document.querySelectorAll('button.nav-link');
+  var current = 'stage';
+  var wheelLock = 0;
+
+  function switchTo(target){
+    if (target === current || !views[target]) return;
+    var prev = views[current];
+    var next = views[target];
+
+    prev.classList.remove('active');
+    if (target === 'profile') prev.classList.add('leaving-up');
+    else prev.classList.remove('leaving-up');
+
+    next.classList.remove('leaving-up');
+    // Force reflow for clean entrance
+    void next.offsetWidth;
+    next.classList.add('active');
+
+    navBtns.forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-view') === target);
+    });
+
+    current = target;
+    if (window.__triggerFieldPulse){
+      window.__triggerFieldPulse(target === 'profile' ? 1 : -1);
+    }
+    try {
+      history.replaceState(null, '', target === 'profile' ? '#who' : '#proof');
+    } catch(e){}
+  }
+
+  navBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      switchTo(btn.getAttribute('data-view'));
+    });
+  });
+
+  document.getElementById('brand-home').addEventListener('click', function(e){
+    e.preventDefault();
+    switchTo('stage');
+  });
+  document.getElementById('to-profile').addEventListener('click', function(){ switchTo('profile'); });
+  document.getElementById('to-stage').addEventListener('click', function(){ switchTo('stage'); });
+
+  // Smooth wheel gesture transition between the two spaces
+  window.addEventListener('wheel', function(e){
+    var now = performance.now();
+    if (now - wheelLock < 900) return;
+    if (Math.abs(e.deltaY) < 28) return;
+
+    var activeEl = views[current];
+    if (e.deltaY > 0 && current === 'stage'){
+      var atBottom = activeEl.scrollTop + activeEl.clientHeight >= activeEl.scrollHeight - 4;
+      if (atBottom){
+        wheelLock = now;
+        switchTo('profile');
+      }
+    } else if (e.deltaY < 0 && current === 'profile'){
+      if (activeEl.scrollTop <= 2){
+        wheelLock = now;
+        switchTo('stage');
+      }
+    }
+  }, { passive: true });
+
+  // Keyboard shortcut: Escape returns to stage
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && current === 'profile') switchTo('stage');
+  });
+
+  if (location.hash === '#who') switchTo('profile');
+
+  // Subtle live practice-uptime ticker on Profile view
+  var uptimeEl = document.getElementById('uptime-val');
+  var baseUptime = 78892314.9;
+  var startMs = performance.now();
+  if (location.search.indexOf('static') === -1){
+    setInterval(function(){
+      var val = baseUptime + (performance.now() - startMs) * 0.001;
+      uptimeEl.textContent = val.toLocaleString('en-US', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) + ' s';
+    }, 100);
+  }
+})();
+
+/* =====================================================================
+   3. Floating Chebyshev Polynomial Instrument + Interactive Hover Probe
+   ===================================================================== */
+(function(){
+  var STATIC = location.search.indexOf('static') > -1;
+  var cmdEl  = document.getElementById('cmdline');
+  var rN     = document.getElementById('rN');
+  var rX     = document.getElementById('rX');
+  var rR     = document.getElementById('rR');
+  var degBtn = document.getElementById('degbtn');
+  var readout = document.getElementById('probe-readout');
+  var pairs  = [].slice.call(document.querySelectorAll('.pair'));
+
+  var degree = 8;
+  var MAXN   = 24;
+  var activeRow = 0;
+  var hoveredRow = false;
+  var booted = STATIC;
+  var degStart = performance.now();
+
+  var hoverX = null; // user mouse probe along [-1, 1]
+
+  function cmdText(n){
+    return 'g++ -std=c++20 -O2 cheb.cpp -o cheb && ./cheb --degree ' + n;
+  }
+
+  if (STATIC){
+    cmdEl.textContent = cmdText(degree);
+  } else {
+    var full = cmdText(degree), idx = 0;
+    (function typeStep(){
+      if (idx <= full.length){
+        cmdEl.textContent = full.slice(0, idx);
+        idx += 2;
+        setTimeout(typeStep, 16);
+      } else {
+        cmdEl.textContent = full;
+        booted = true;
+      }
+    })();
+  }
+
+  function setRow(idx){
+    activeRow = idx;
+    pairs.forEach(function(el, i){
+      el.classList.toggle('lit', i === idx);
+    });
+  }
+
+  function setDegree(n){
+    degree = n;
+    degStart = performance.now();
+    rN.textContent = n;
+    rX.textContent = n + 1;
+    rR.textContent = n;
+    if (booted) cmdEl.textContent = cmdText(n);
+  }
+
+  pairs.forEach(function(el, idx){
+    el.addEventListener('mouseenter', function(){ hoveredRow = true; setRow(idx); });
+    el.addEventListener('mouseleave', function(){ hoveredRow = false; });
+    el.addEventListener('click', function(){ hoveredRow = true; setRow(idx); });
+  });
+
+  var cv = document.getElementById('chebplot');
+  var ctx = cv.getContext('2d');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0, t0 = performance.now();
+
+  function resize(){
+    var r = cv.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width));
+    H = Math.max(1, Math.round(r.height));
+    cv.width = Math.round(W * DPR);
+    cv.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  var PADL = 36, PADR = 16, PADT = 22, PADB = 26;
+  function px(x){ return PADL + (x + 1) / 2 * (W - PADL - PADR); }
+  function py(y){ return PADT + (1.08 - y) / 2.16 * (H - PADT - PADB); }
+  function invPx(sx){ return ((sx - PADL) / (W - PADL - PADR)) * 2 - 1; }
+
+  function T(k, x){
+    if (k === 0) return 1;
+    if (k === 1) return x;
+    var a = 1, b = x, c;
+    for (var i = 2; i <= k; i++){ c = 2 * x * b - a; a = b; b = c; }
+    return b;
+  }
+
+  cv.addEventListener('mousemove', function(e){
+    var r = cv.getBoundingClientRect();
+    var x = invPx(e.clientX - r.left);
+    if (x >= -1 && x <= 1){
+      hoverX = x;
+      var y = T(degree, x);
+      readout.textContent = 'x = ' + (x >= 0 ? '+' : '') + x.toFixed(3) + '   T_' + degree + '(x) = ' + (y >= 0 ? '+' : '') + y.toFixed(3);
+    }
+  });
+  cv.addEventListener('mouseleave', function(){
+    hoverX = null;
+    readout.textContent = 'click curve to step n';
+  });
+
+  function paint(now){
+    if (!W || !H) return;
+    var n = degree;
+    var reveal = STATIC ? 1 : Math.min(1, (now - degStart) / 520);
+    ctx.clearRect(0, 0, W, H);
+
+    // Coordinate axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px(-1), py(0)); ctx.lineTo(px(1), py(0));
+    ctx.moveTo(px(0), py(-1)); ctx.lineTo(px(0), py(1));
+    ctx.stroke();
+
+    // ±1 minimax envelope rails
+    var envBright = (activeRow === 4 || activeRow === 3);
+    ctx.setLineDash([2, 6]);
+    ctx.strokeStyle = envBright ? 'rgba(255,255,255,0.42)' : 'rgba(255,255,255,0.16)';
+    ctx.lineWidth = envBright ? 1.15 : 1;
+    ctx.beginPath();
+    ctx.moveTo(px(-1), py(1));  ctx.lineTo(px(1), py(1));
+    ctx.moveTo(px(-1), py(-1)); ctx.lineTo(px(1), py(-1));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    if (activeRow === 4){
+      ctx.fillStyle = 'rgba(255,255,255,0.03)';
+      ctx.fillRect(px(-1), py(1), px(1) - px(-1), py(-1) - py(1));
+    }
+
+    // Minimal axis ticks
+    ctx.font = '9.5px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.32)';
+    ctx.textAlign = 'right';
+    ctx.fillText('+1', px(-1) - 10, py(1) + 3);
+    ctx.fillText('0',  px(-1) - 10, py(0) + 3);
+    ctx.fillText('\u22121', px(-1) - 10, py(-1) + 3);
+    ctx.textAlign = 'center';
+    ctx.fillText('\u22121', px(-1), py(-1) + 17);
+    ctx.fillText('0',       px(0),  py(-1) + 17);
+    ctx.fillText('+1',      px(1),  py(-1) + 17);
+
+    // Chebyshev family curves T_0 .. T_n
+    var steps = 640;
+    for (var k = 0; k <= n; k++){
+      var isCur   = (k === n);
+      var isBasis = (activeRow === 0 && (k === 0 || k === 1));
+      var isRec   = (activeRow === 1 && (k === n - 1 || k === n - 2));
+
+      var alpha = isCur ? 0.96 : (0.025 + 0.085 * (k / n));
+      var lw    = isCur ? 1.65 : 0.7;
+
+      if (isBasis){ alpha = 0.78; lw = 1.3; }
+      else if (isRec){ alpha = 0.52; lw = 1.15; }
+
+      ctx.strokeStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+      ctx.lineWidth = lw;
+      ctx.beginPath();
+      var endStep = isCur ? Math.max(2, Math.round(steps * reveal)) : steps;
+      for (var s = 0; s <= endStep; s++){
+        var x = -1 + 2 * s / steps;
+        var y = T(k, x);
+        s === 0 ? ctx.moveTo(px(x), py(y)) : ctx.lineTo(px(x), py(y));
+      }
+      ctx.stroke();
+    }
+
+    // Roots on y = 0
+    var showRoots = (activeRow === 2);
+    for (var r = 0; r < n; r++){
+      var xr = Math.cos((2*r + 1) * Math.PI / (2*n));
+      if ((xr + 1) / 2 > reveal) continue;
+      if (showRoots){
+        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(px(xr), py(-1)); ctx.lineTo(px(xr), py(1));
+        ctx.stroke();
+
+        ctx.strokeStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(px(xr), py(0), 4.2, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.fillStyle = showRoots ? '#fff' : 'rgba(255,255,255,0.6)';
+      ctx.beginPath();
+      ctx.arc(px(xr), py(0), showRoots ? 2.1 : 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Extrema at |y| = 1
+    var showPeaks = (activeRow === 3 || activeRow === 4);
+    for (var j = 0; j <= n; j++){
+      var xe = Math.cos(j * Math.PI / n);
+      if ((xe + 1) / 2 > reveal) continue;
+      var ye = (j % 2 === 0) ? 1 : -1;
+      if (showPeaks){
+        ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(px(xe), py(0)); ctx.lineTo(px(xe), py(ye));
+        ctx.stroke();
+
+        ctx.strokeStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(px(xe), py(ye), 4.2, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(px(xe), py(ye), showPeaks ? 2.1 : 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Evaluation probe (follows mouse hover when over canvas, otherwise glides smoothly)
+    if (!STATIC && reveal >= 1){
+      var xProbe = (hoverX !== null) ? hoverX : Math.cos((now - t0) * 0.0008);
+      var yProbe = T(n, xProbe);
+
+      ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(px(xProbe), py(0));
+      ctx.lineTo(px(xProbe), py(yProbe));
+      ctx.stroke();
+
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(px(xProbe), py(yProbe), hoverX !== null ? 3.4 : 2.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function stepDegree(){
+    var next = (degree % MAXN) + 1;
+    if (next < 3) next = 3;
+    setDegree(next);
+  }
+  cv.addEventListener('click', stepDegree);
+  degBtn.addEventListener('click', stepDegree);
+
+  if (!STATIC){
+    setInterval(function(){
+      if (!booted || hoveredRow) return;
+      var nextRow = (activeRow + 1) % pairs.length;
+      if (nextRow === 0) stepDegree();
+      setRow(nextRow);
+    }, 2200);
+  }
+
+  function loop(now){
+    paint(now);
+    if (!STATIC) requestAnimationFrame(loop);
+  }
+
+  resize();
+  window.addEventListener('resize', function(){ resize(); paint(performance.now()); });
+  setDegree(8);
+  setRow(0);
+  loop(performance.now());
+})();
+</script>
+</body>
+</html>

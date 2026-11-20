@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G2 — Nocturne · Kion Miyasaka</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+:root{
+  --bg:#0C0D10;
+  --fg:#ECE9E1;
+  --soft:#A3A098;
+  --dim:#64625D;
+  --hair:rgba(236,233,225,.09);
+  --accent:#8BA892;
+  --ink-rgb:236,233,225;
+  --serif:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue",sans-serif;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
+  --pad:clamp(28px,6.5vw,96px);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+[data-theme="light"]{
+  --bg:#F4F2EC;
+  --fg:#181816;
+  --soft:#585650;
+  --dim:#8C8981;
+  --hair:rgba(24,24,22,.10);
+  --accent:#3B5E47;
+  --ink-rgb:24,24,22;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:var(--fg);color:var(--bg)}
+html,body{
+  height:100%;background:var(--bg);color:var(--fg);
+  font-family:var(--sans);font-size:15px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;overflow:hidden;
+  transition:background .5s var(--ease), color .5s var(--ease);
+}
+
+/* Unified Minimal Boot */
+#boot{
+  position:fixed;inset:0;z-index:200;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;padding:0 var(--pad);
+  transition:opacity .75s var(--ease), filter .75s var(--ease);
+}
+#boot.done{opacity:0;pointer-events:none;filter:blur(6px)}
+.boot-in{max-width:480px;width:100%;text-align:left}
+.boot-t{font-family:var(--mono);font-size:12px;letter-spacing:.45em;text-transform:uppercase;margin-bottom:18px}
+.boot-l{font-family:var(--mono);font-size:11.5px;line-height:2;color:var(--dim);min-height:66px}
+.boot-l .w{color:var(--fg)}
+
+/* Manifold + SGD Canvas */
+#manifold{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+
+/* Top Nav */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:28px var(--pad);
+}
+.brand{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--fg);text-decoration:none;cursor:pointer;
+}
+.nav-r{display:flex;align-items:center;gap:clamp(18px,3vw,34px)}
+.nav-r button, .nav-r a{
+  background:none;border:none;font-family:var(--sans);font-size:13px;
+  color:var(--dim);text-decoration:none;cursor:pointer;transition:color .25s;
+}
+.nav-r button:hover, .nav-r a:hover, .nav-r button.active{color:var(--fg)}
+.dot-btn{
+  width:22px;height:22px;border-radius:50%;border:1px solid var(--hair);
+  display:inline-flex;align-items:center;justify-content:center;font-size:10px;
+}
+
+/* Stage */
+.stage{position:relative;z-index:10;width:100%;height:100svh;overflow:hidden}
+.view{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:96px var(--pad) 56px;
+  opacity:0;pointer-events:none;transform:translateY(16px);
+  transition:opacity .65s var(--ease), transform .75s var(--ease);
+  overflow-y:auto;scrollbar-width:none;
+}
+.view::-webkit-scrollbar{display:none}
+.view.active{opacity:1;pointer-events:auto;transform:none}
+.inner{max-width:1040px;width:100%;margin:0 auto}
+
+/* Asymmetric Quiet Dusk Layout */
+.split{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:clamp(40px,7vw,110px);
+  align-items:end;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:22px;
+}
+.split h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(40px,5.6vw,68px);line-height:1.05;letter-spacing:-.025em;
+  margin-bottom:22px;
+}
+.split h1 em{font-style:italic;color:var(--soft)}
+.lede{
+  font-size:16px;line-height:1.8;color:var(--soft);max-width:440px;
+}
+
+.right-col{
+  border-top:1px solid var(--hair);
+  padding-top:20px;
+}
+.right-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:14px;display:flex;justify-content:space-between;
+}
+#cheb{display:block;width:100%;height:76px;cursor:pointer;margin-bottom:16px}
+.mini-list{
+  display:flex;flex-direction:column;gap:10px;
+  padding-top:14px;border-top:1px solid var(--hair);
+}
+.mini-item{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:13.5px;color:var(--soft);cursor:pointer;
+  transition:color .25s, transform .25s var(--ease);
+}
+.mini-item:hover{color:var(--fg);transform:translateX(4px)}
+.mini-item span:last-child{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+
+.foot-note{
+  margin-top:52px;padding-top:18px;border-top:1px solid var(--hair);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+  font-size:12.5px;color:var(--dim);
+}
+.foot-note .katex{font-size:1.04em;color:var(--soft)}
+
+/* About / Philosophy / Now unified prose layout */
+.prose-wrap{max-width:640px}
+.prose-wrap h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,44px);
+  line-height:1.12;margin-bottom:26px;
+}
+.prose-wrap p{
+  font-size:15.5px;line-height:1.85;color:var(--soft);margin-bottom:20px;
+}
+.prose-wrap p em{font-family:var(--serif);font-style:italic;color:var(--fg);font-size:16.5px}
+.prose-wrap p strong{color:var(--fg);font-weight:500}
+
+.link-row{
+  margin-top:34px;padding-top:18px;border-top:1px solid var(--hair);
+  display:flex;gap:24px;flex-wrap:wrap;font-size:13px;
+}
+.link-row a, .link-row button{
+  background:none;border:none;font:inherit;color:var(--soft);text-decoration:none;cursor:pointer;
+  transition:color .2s;
+}
+.link-row a:hover, .link-row button:hover{color:var(--fg)}
+.link-row a.murmur{color:var(--dim);font-style:italic;font-family:var(--serif)}
+
+@media(max-width:860px){
+  .split{grid-template-columns:1fr;gap:36px}
+  .view{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+
+<div id="boot" title="Click to enter">
+  <div class="boot-in">
+    <div class="boot-t">Miyasaka</div>
+    <div class="boot-l" id="boot-l"></div>
+  </div>
+</div>
+
+<canvas id="manifold"></canvas>
+
+<nav>
+  <a class="brand" data-v="home">Miyasaka</a>
+  <div class="nav-r">
+    <button class="active" data-v="home">Home</button>
+    <button data-v="about">About</button>
+    <button data-v="philosophy">Philosophy</button>
+    <button data-v="now">Now</button>
+    <a href="/posts">Notes</a>
+    <button class="dot-btn" id="theme-btn" title="Light / Dark">&#9680;</button>
+  </div>
+</nav>
+
+<main class="stage">
+  <!-- HOME -->
+  <section class="view active" id="v-home">
+    <div class="inner">
+      <div class="split">
+        <div>
+          <div class="eyebrow">Kion Miyasaka &middot; Personal Space</div>
+          <h1>Thinking,<br><em>becoming.</em></h1>
+          <p class="lede">
+            An independent space spanning mathematics, systems, financial markets, and philosophy &mdash; built to think clearly and keep moving.
+          </p>
+        </div>
+
+        <div class="right-col">
+          <div class="right-label">
+            <span>Chebyshev study</span>
+            <span id="deg-lbl">T&#8327;(x)</span>
+          </div>
+          <canvas id="cheb" title="Click to step n"></canvas>
+          <div class="mini-list">
+            <div class="mini-item" data-v="about"><span>About &amp; ways of thinking</span><span>01 &rarr;</span></div>
+            <div class="mini-item" data-v="philosophy"><span>Philosophy &middot; Werden</span><span>02 &rarr;</span></div>
+            <div class="mini-item" data-v="now"><span>Currently exploring</span><span>03 &rarr;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="foot-note">
+        <span class="katex-m" data-tex="\|T_n\|_\infty = 1 \quad\cdot\quad \text{Not a destination, but a process of becoming.}">‖Tₙ‖∞ = 1 · Not a destination, but a process of becoming.</span>
+        <span>click anywhere to drop a descent point</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="view" id="v-about">
+    <div class="inner prose-wrap">
+      <div class="eyebrow">01 &middot; About</div>
+      <h2>Curious, analytical, unfinished.</h2>
+      <p>I prefer understanding how a system is built over merely using it. Whether studying <strong>stochastic processes</strong>, designing <strong>software and AI agents</strong>, or watching <strong>financial markets</strong>, I start from first principles and look for the underlying structure.</p>
+      <p>I don&rsquo;t see these interests as separate careers or labels. Mathematics brings rigor; computer science brings craft; markets test ideas against reality; philosophy keeps the questions honest.</p>
+      <p>Away from the desk, I care about quiet travel &mdash; especially walking through Kyoto and Tokyo &mdash; small hardware experiments, and the spaces we inhabit digitally.</p>
+      <div class="link-row">
+        <a href="https://osu.ppy.sh/users/7295233">osu!</a>
+        <a href="https://discord.com/users/747704522591436850">discord</a>
+        <a href="https://www.cnblogs.com/kion">cnblogs</a>
+        <a href="/posts">notes</a>
+        <a class="murmur" href="/murmur">murmur</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="view" id="v-philosophy">
+    <div class="inner prose-wrap">
+      <div class="eyebrow">02 &middot; Philosophy</div>
+      <h2><em>Selbst&uuml;berwindung</em> &amp; independence.</h2>
+      <p>Friedrich Nietzsche&rsquo;s writing has quietly shaped how I think about judgment and growth &mdash; not as slogans, but as a discipline of questioning inherited values and refusing intellectual inertia.</p>
+      <p>Ideas like <em>Werden</em> (becoming) and <em>Amor Fati</em> remind me that clarity is never finished. To re-examine one&rsquo;s own assumptions is simply part of being awake.</p>
+      <div class="link-row">
+        <button data-v="now">What I&rsquo;m reading &amp; building now &rarr;</button>
+        <button data-v="home">&larr; Home</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOW -->
+  <section class="view" id="v-now">
+    <div class="inner prose-wrap">
+      <div class="eyebrow">03 &middot; Now</div>
+      <h2>In progress.</h2>
+      <p><strong>Learning</strong> &mdash; Approximation theory, stochastic differential equations, and statistical learning.</p>
+      <p><strong>Building</strong> &mdash; Agent workflows, personal software, and small home-automation setups.</p>
+      <p><strong>Reading</strong> &mdash; Philosophy notebooks, market microstructure, and essays on craft.</p>
+      <div class="link-row">
+        <button data-v="home">&larr; Return Home</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* KaTeX */
+window.addEventListener('DOMContentLoaded', function(){
+  function go(){
+    if (!window.katex) return;
+    document.querySelectorAll('.katex-m').forEach(function(el){
+      try { katex.render(el.getAttribute('data-tex'), el, { throwOnError:false }); } catch(e){}
+    });
+  }
+  if (window.katex) go();
+  else { var n=0, iv=setInterval(function(){ if(window.katex||++n>40){clearInterval(iv);go();} }, 80); }
+});
+
+/* Theme */
+document.getElementById('theme-btn').addEventListener('click', function(){
+  var cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+});
+
+/* Boot */
+(function(){
+  var boot = document.getElementById('boot'), log = document.getElementById('boot-l');
+  if (location.search.indexOf('static') > -1){ boot.classList.add('done'); return; }
+  var lines = [
+    { c:'w', t:'g++ -std=c++20 -O2 miyasaka.cpp -o miyasaka' },
+    { c:'',  t:'[100%] built target miyasaka' },
+    { c:'w', t:'./miyasaka' }
+  ];
+  var done = false;
+  function finish(){ if (done) return; done = true; boot.classList.add('done'); }
+  boot.addEventListener('click', finish);
+  window.addEventListener('keydown', finish, { once:true });
+  var i = 0;
+  (function step(){
+    if (done) return;
+    if (i >= lines.length){ setTimeout(finish, 320); return; }
+    var d = document.createElement('div'); d.className = lines[i].c; d.textContent = lines[i].t;
+    log.appendChild(d); i++; setTimeout(step, 220);
+  })();
+})();
+
+/* Manifold + SGD */
+(function(){
+  var cv = document.getElementById('manifold'), ctx = cv.getContext('2d');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2), W=0, H=0;
+  var wells = [
+    { bx:0.74, by:0.32, rx:0.05, ry:0.05, wx:0.10, wy:0.08, depth:1.35, sig:0.20 },
+    { bx:0.24, by:0.72, rx:0.05, ry:0.04, wx:-0.08, wy:0.11, depth:1.10, sig:0.21 }
+  ];
+  var agents = [];
+  function spawn(nx, ny){
+    agents.push({
+      x:nx!==undefined?nx:(0.15+Math.random()*0.7),
+      y:ny!==undefined?ny:(0.15+Math.random()*0.7),
+      vx:0, vy:0, lr:0.0018, mom:0.90, noise:0.001, age:0, maxAge:440, trail:[]
+    });
+    if (agents.length > 5) agents.shift();
+  }
+  for (var a=0;a<3;a++) spawn();
+  function wp(w,t){ return { x:w.bx+w.rx*Math.sin(w.wx*t), y:w.by+w.ry*Math.cos(w.wy*t) }; }
+  function loss(x,y,t){
+    var v=1.6;
+    for(var i=0;i<wells.length;i++){ var p=wp(wells[i],t), dx=x-p.x, dy=y-p.y; v-=wells[i].depth*Math.exp(-(dx*dx+dy*dy)/(2*wells[i].sig*wells[i].sig)); }
+    return v;
+  }
+  function grad(x,y,t){ var e=0.002; return { gx:(loss(x+e,y,t)-loss(x-e,y,t))/(2*e), gy:(loss(x,y+e,t)-loss(x,y-e,t))/(2*e) }; }
+  function resize(){ W=innerWidth; H=innerHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+  resize(); addEventListener('resize', resize);
+  addEventListener('click', function(e){
+    if(e.target.closest('button, a, canvas#cheb, .mini-item, #boot')) return;
+    spawn(e.clientX/W, e.clientY/H);
+  });
+
+  var COLS=48, ROWS=30, grid=new Float32Array((COLS+1)*(ROWS+1)), levels=[0.42,0.68,0.94,1.20,1.40];
+  function loop(now){
+    var t=now*0.001;
+    var rgb=getComputedStyle(document.documentElement).getPropertyValue('--ink-rgb').trim()||'236,233,225';
+    ctx.clearRect(0,0,W,H);
+    for(var j=0;j<=ROWS;j++) for(var i=0;i<=COLS;i++) grid[j*(COLS+1)+i]=loss(i/COLS,j/ROWS,t);
+    var cw=W/COLS, ch=H/ROWS; ctx.lineWidth=0.75;
+    for(var li=0;li<levels.length;li++){
+      var lv=levels[li];
+      ctx.strokeStyle='rgba('+rgb+','+(0.03+(levels.length-li)*0.008).toFixed(3)+')';
+      ctx.beginPath();
+      for(var r=0;r<ROWS;r++) for(var c=0;c<COLS;c++){
+        var v0=grid[r*(COLS+1)+c], v1=grid[r*(COLS+1)+c+1], v2=grid[(r+1)*(COLS+1)+c+1], v3=grid[(r+1)*(COLS+1)+c];
+        var pts=[];
+        if((v0<lv)!==(v1<lv)) pts.push([(c+(lv-v0)/(v1-v0))*cw, r*ch]);
+        if((v1<lv)!==(v2<lv)) pts.push([(c+1)*cw, (r+(lv-v1)/(v2-v1))*ch]);
+        if((v2<lv)!==(v3<lv)) pts.push([(c+(lv-v3)/(v2-v3))*cw, (r+1)*ch]);
+        if((v3<lv)!==(v0<lv)) pts.push([c*cw, (r+(lv-v0)/(v3-v0))*ch]);
+        if(pts.length>=2){ ctx.moveTo(pts[0][0],pts[0][1]); ctx.lineTo(pts[1][0],pts[1][1]); }
+      }
+      ctx.stroke();
+    }
+    for(var ai=0;ai<agents.length;ai++){
+      var ag=agents[ai], g=grad(ag.x,ag.y,t);
+      ag.vx=ag.mom*ag.vx - ag.lr*g.gx + (Math.random()-0.5)*ag.noise;
+      ag.vy=ag.mom*ag.vy - ag.lr*g.gy + (Math.random()-0.5)*ag.noise;
+      ag.x=Math.max(0.03,Math.min(0.97,ag.x+ag.vx));
+      ag.y=Math.max(0.04,Math.min(0.96,ag.y+ag.vy));
+      ag.age++; ag.trail.push([ag.x*W, ag.y*H]);
+      if(ag.trail.length>50) ag.trail.shift();
+      if(ag.age>ag.maxAge){ ag.x=0.1+Math.random()*0.8; ag.y=0.1+Math.random()*0.8; ag.vx=ag.vy=0; ag.age=0; ag.trail=[]; }
+      for(var k=1;k<ag.trail.length;k++){
+        var f=k/ag.trail.length;
+        ctx.strokeStyle='rgba('+rgb+','+(f*0.20).toFixed(3)+')';
+        ctx.lineWidth=0.6+f*0.75;
+        ctx.beginPath(); ctx.moveTo(ag.trail[k-1][0],ag.trail[k-1][1]); ctx.lineTo(ag.trail[k][0],ag.trail[k][1]); ctx.stroke();
+      }
+      ctx.fillStyle='rgba('+rgb+',0.42)';
+      ctx.beginPath(); ctx.arc(ag.x*W, ag.y*H, 1.9, 0, Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  loop(performance.now());
+})();
+
+/* Chebyshev Wave */
+(function(){
+  var cv=document.getElementById('cheb'), ctx=cv.getContext('2d'), lbl=document.getElementById('deg-lbl');
+  var DPR=Math.min(window.devicePixelRatio||1,2), W=0, H=0, n=7;
+  function T(k,x){ if(k===0)return 1; if(k===1)return x; var a=1,b=x,c; for(var i=2;i<=k;i++){c=2*x*b-a;a=b;b=c;} return b; }
+  function resize(){ var r=cv.getBoundingClientRect(); W=Math.max(1,r.width); H=Math.max(1,r.height); cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+  function paint(now){
+    if(!W||!H) return;
+    var rgb=getComputedStyle(document.documentElement).getPropertyValue('--ink-rgb').trim()||'236,233,225';
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba('+rgb+',0.10)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
+    ctx.strokeStyle='rgba('+rgb+',0.80)'; ctx.lineWidth=1.35;
+    ctx.beginPath();
+    for(var s=0;s<=320;s++){
+      var x=-1+2*s/320, y=T(n,x);
+      s===0?ctx.moveTo(s/320*W, H/2-y*(H*0.40)):ctx.lineTo(s/320*W, H/2-y*(H*0.40));
+    }
+    ctx.stroke();
+    var xp=Math.cos(now*0.0005), yp=T(n,xp);
+    ctx.fillStyle='rgba('+rgb+',0.9)';
+    ctx.beginPath(); ctx.arc((xp+1)/2*W, H/2-yp*(H*0.40), 2.5, 0, Math.PI*2); ctx.fill();
+    requestAnimationFrame(paint);
+  }
+  cv.addEventListener('click', function(){ n = n >= 15 ? 3 : n + 2; lbl.textContent = 'T_' + n + '(x)'; });
+  resize(); addEventListener('resize', resize); paint(performance.now());
+})();
+
+/* View Switcher */
+(function(){
+  var views={ home:document.getElementById('v-home'), about:document.getElementById('v-about'), philosophy:document.getElementById('v-philosophy'), now:document.getElementById('v-now') };
+  var navBtns=document.querySelectorAll('nav button[data-v]');
+  function go(t){
+    if(!views[t]) return;
+    Object.keys(views).forEach(function(k){ views[k].classList.toggle('active', k===t); });
+    navBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-v')===t); });
+  }
+  document.querySelectorAll('[data-v]').forEach(function(el){
+    el.addEventListener('click', function(){ go(el.getAttribute('data-v')); });
+  });
+})();
+</script>
+</body>
+</html>
