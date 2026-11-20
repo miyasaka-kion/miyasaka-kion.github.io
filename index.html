@@ -3,26 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>H5 · Pixel — Kion Miyasaka</title>
+<title>Engelbert Miyasaka</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600&family=Silkscreen:wght@400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <style>
 
 :root{
-  --bg:#F2EFE8; --fg:#181714; --soft:#58554E; --dim:#8E8A80;
-  --hair:rgba(24,23,20,.14); --accent:#B84A32;
-  --pixel:"Pixelify Sans",ui-monospace,monospace;
-  --pixel-sm:"Silkscreen",ui-monospace,monospace;
-  --sans:"JetBrains Mono",ui-monospace,monospace;
-  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --bg:#F5F2EB; --fg:#181715; --soft:#5A564E; --dim:#918C83;
+  --hair:rgba(24,23,21,.09); --accent:#944533;
+  --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --sans:"DM Sans",-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   --pad:clamp(28px,6.5vw,96px); --ease:cubic-bezier(.22,1,.36,1);
 }
 [data-theme="dark"]{
-  --bg:#0B0C0E; --fg:#ECE9DF; --soft:#9A978E; --dim:#5B5953;
-  --hair:rgba(236,233,223,.12); --accent:#D4745E;
+  --bg:#0B0B0D; --fg:#EFECE4; --soft:#9F9B92; --dim:#5E5B55;
+  --hair:rgba(239,236,228,.085); --accent:#C8836B;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -107,38 +106,86 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:
   .view{justify-content:flex-start}
 }
 
-/* Subtle pixel-dot architectural texture instead of organic grain */
-.grain{
-  opacity:.18;
-  background-image:radial-gradient(rgba(var(--ink-rgb),.22) 1px, transparent 1px);
-  background-size:20px 20px;
+.ambient-glow{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 75% 65% at 50% 42%, transparent 25%, rgba(0,0,0,.44) 100%)}
+[data-theme="light"] .ambient-glow{background:none}
+.boot-name{font-family:var(--serif);font-size:22px;letter-spacing:.34em;text-transform:uppercase;font-weight:300;margin-bottom:18px}
+.brand{font-family:var(--mono);font-size:11.5px;font-weight:400;letter-spacing:.16em;color:var(--soft);text-decoration:none;cursor:pointer;transition:color .25s}
+.brand:hover{color:var(--fg)}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.eyebrow em{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:.05em;font-size:16px;color:var(--accent)}
+h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80px);line-height:.98;letter-spacing:-.025em;margin-bottom:14px}
+.subtitle{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(19px,2.1vw,24px);color:var(--soft);line-height:1.35;max-width:690px}
+.philo-de{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(26px,3.2vw,36px);line-height:1.28;color:var(--fg);margin-bottom:10px}
+.philo-sub{font-size:13.5px;color:var(--soft);max-width:560px}
+.pillar{font-family:var(--serif);font-size:16.5px;color:var(--dim);cursor:pointer;transition:color .25s}
+.pillar:hover,.pillar.active{color:var(--fg)}
+.essay-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(34px,4.8vw,52px);line-height:1.08}
+.essay p em,.quiet-links .murmur{font-family:var(--serif);font-style:italic;color:var(--fg);font-size:17px}
+.contact-bar{display:flex;gap:22px;flex-wrap:wrap;padding:0 0 22px;margin-bottom:24px;border-bottom:1px solid var(--hair);font-family:var(--mono);font-size:11.5px;letter-spacing:.08em}
+.contact-bar a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:border-color .25s,color .25s}
+.contact-bar a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.essay-zh{margin-top:24px;padding-top:22px;border-top:1px solid var(--hair)}
+.essay-zh p{font-size:14.5px;line-height:1.95;color:var(--soft);margin-bottom:14px}
+.quiet-links .murmur{color:var(--dim);background:none;border:none;cursor:pointer;padding:0;transition:color .2s}
+.quiet-links .murmur:hover{color:var(--fg)}
+.view.scroll-top{justify-content:flex-start;padding-top:108px;padding-bottom:84px}
+.murmur-body h3{font-family:var(--serif);font-weight:400;font-size:24px;color:var(--fg);margin:32px 0 14px}
+.murmur-body .m-date{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin:28px 0 14px;display:block}
+.murmur-body p{font-size:14.5px;line-height:1.95;color:var(--soft);margin-bottom:16px}
+.murmur-body blockquote{border-left:1.5px solid var(--accent);padding-left:16px;margin:20px 0;color:var(--fg);font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.8}
+.murmur-body ul{list-style:none;margin:12px 0 20px;padding-left:0}
+.murmur-body li{font-size:14px;color:var(--soft);padding:3px 0}
+.murmur-body li::before{content:"· ";color:var(--accent)}
+.murmur-body hr{border:none;border-top:1px solid var(--hair);margin:38px 0}
+.now-row .v{font-family:var(--serif);font-size:21px;color:var(--fg);line-height:1.42}
+.lately-sub{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--soft);margin-top:8px}
+.lately-trio{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;
+  padding:24px 0 28px;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
 }
-.ambient-glow{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 78% 70% at 50% 45%, transparent 30%, rgba(0,0,0,.55) 100%)}
-[data-theme="light"] .ambient-glow{display:none}
-.boot-name{font-family:var(--pixel);font-size:24px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:18px}
-.brand{font-family:var(--pixel);font-size:19px;font-weight:500;letter-spacing:.06em;color:var(--fg);text-decoration:none;cursor:pointer}
-.brand span{font-family:var(--pixel-sm);font-size:9px;letter-spacing:.14em;color:var(--accent);margin-left:10px;text-transform:uppercase}
-.nav-r button,.nav-r a{font-family:var(--pixel-sm);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-.theme-btn{border-radius:2px}
-.eyebrow{font-family:var(--pixel-sm);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
-.eyebrow em{font-style:normal;color:var(--accent)}
-h1.title{font-family:var(--pixel);font-weight:500;font-size:clamp(42px,6vw,72px);line-height:1.0;letter-spacing:.01em;margin-bottom:14px}
-.subtitle{font-family:var(--mono);font-size:clamp(13px,1.4vw,15px);color:var(--soft);line-height:1.62;max-width:680px}
-.exhibit-strip{border-top:1px dashed var(--hair)}
-.ex-foot{border-top:1px dashed var(--hair)}
-.ex-legend i{border-radius:0;width:5px;height:5px}
-.philo-de{font-family:var(--pixel);font-size:clamp(22px,2.8vw,32px);line-height:1.35;color:var(--fg);margin-bottom:10px}
-.philo-sub{font-family:var(--mono);font-size:12.5px;color:var(--soft);max-width:560px}
-.pillar{font-family:var(--pixel-sm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);cursor:pointer;transition:color .2s}
-.pillar:hover,.pillar.active{color:var(--accent)}
-.essay-head h2{font-family:var(--pixel);font-weight:500;font-size:clamp(30px,4vw,44px);line-height:1.12}
-.essay p{font-family:var(--mono);font-size:13.5px;line-height:1.88}
-.essay p em{font-style:normal;color:var(--accent)}
-.quiet-links a.murmur{color:var(--dim);font-family:var(--pixel-sm);font-size:10px}
-.now-row .k{font-family:var(--pixel-sm);font-size:9.5px}
-.now-row .v{font-family:var(--pixel);font-size:19px;color:var(--fg);line-height:1.4}
-.now-row .v small{font-family:var(--mono);font-size:12px}
-.next-fab svg{stroke-linecap:square;stroke-linejoin:miter}
+.trio-item .tk{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:8px}
+.trio-item .tv{font-family:var(--serif);font-size:19px;font-weight:300;line-height:1.38;color:var(--fg)}
+.log-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;
+  margin:44px 0 24px;
+}
+.log-head .lh-k{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.log-head .lh-note{font-size:13.5px;color:var(--soft)}
+.chron{display:flex;flex-direction:column;gap:26px}
+.chron-yr{
+  display:grid;grid-template-columns:76px minmax(0,1fr);gap:24px;align-items:start;
+}
+.chron-yr .yr{
+  font-family:var(--serif);font-weight:300;font-size:26px;line-height:1.15;
+  color:var(--dim);letter-spacing:-.01em;padding-top:2px;
+}
+.chron-entries{
+  border-left:1px solid var(--hair);padding-left:24px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.ce{
+  display:grid;grid-template-columns:86px minmax(0,1fr);gap:14px;align-items:baseline;
+}
+.ce .mo{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim);font-variant-numeric:tabular-nums}
+.ce .tx{font-size:14px;line-height:1.72;color:var(--soft)}
+@media(max-width:720px){
+  .lately-trio{grid-template-columns:1fr;gap:18px}
+  .chron-yr{grid-template-columns:1fr;gap:8px}
+  .chron-entries{padding-left:16px}
+  .ce{grid-template-columns:74px minmax(0,1fr);gap:10px}
+}
+.notes-list{margin-top:22px;border-top:1px solid var(--hair)}
+.note-item{
+  display:grid;grid-template-columns:86px minmax(0,1fr) 22px;gap:16px;align-items:baseline;
+  padding:14px 0;border-bottom:1px solid var(--hair);
+  color:var(--fg);text-decoration:none;
+  transition:padding-left .28s var(--ease), color .25s;
+}
+.note-item:hover{padding-left:6px}
+.note-item .cat{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.note-item .nt{font-family:var(--serif);font-size:19.5px;color:var(--fg);line-height:1.35}
+.note-item .ar{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right;transition:color .25s}
+.note-item:hover .ar{color:var(--accent)}
 
 
 /* Rock-solid zero-shift vertical rhythm across all 9 exhibits */
@@ -186,12 +233,12 @@ h1.title{font-family:var(--pixel);font-weight:500;font-size:clamp(42px,6vw,72px)
 
 
 <nav>
-  <a class="brand" data-v="home">Miyasaka <span>Pixel</span></a>
+  <a class="brand" data-v="home">declspec.cloud</a>
   <div class="nav-r">
     <button class="active" data-v="home">Index</button>
     <button data-v="about">About</button>
     <button data-v="now">Now</button>
-    <a href="/posts">Notes</a>
+    <button data-v="notes">Notes</button>
     <button class="theme-btn" id="theme-btn" title="Light / Dark">&#9680;</button>
   </div>
 </nav>
@@ -204,7 +251,7 @@ h1.title{font-family:var(--pixel);font-weight:500;font-size:clamp(42px,6vw,72px)
   <section class="view active" id="v-home">
     <div class="inner">
       <div class="eyebrow"><span id="scene-kicker">01 / 09 &middot; <em>Memory Pool</em></span></div>
-      <h1 class="title">Kion Miyasaka</h1>
+      <h1 class="title">Engelbert Miyasaka</h1>
       <p class="subtitle" id="subtitle">Real femboys manage their own memory.</p>
 
       <div class="exhibit-strip" id="exhibit-strip">
@@ -225,10 +272,10 @@ h1.title{font-family:var(--pixel);font-weight:500;font-size:clamp(42px,6vw,72px)
 
       <div class="page-foot">
         <div class="pillars" id="pillars">
-          <span class="pillar active" data-t="">Mathematics</span>
-          <span class="pillar" data-t="">Systems</span>
-          <span class="pillar" data-t="">Markets</span>
-          <span class="pillar" data-t="">Philosophy</span>
+          <span class="pillar active" data-scene="1">Mathematics</span>
+          <span class="pillar" data-scene="0">Systems</span>
+          <span class="pillar" data-scene="6">Markets</span>
+          <span class="pillar" data-scene="4">Philosophy</span>
         </div>
         <p class="pillar-note" id="pillar-note"></p>
         <span id="interact-hint"></span>
@@ -238,58 +285,226 @@ h1.title{font-family:var(--pixel);font-weight:500;font-size:clamp(42px,6vw,72px)
   </section>
 
   <!-- ABOUT -->
-  <section class="view" id="v-about">
+  <section class="view scroll-top" id="v-about">
     <div class="inner prose-inner">
       <div class="essay-head">
-        <div class="eyebrow">About &middot; <em>Selbst&uuml;berwindung</em></div>
-        <h2>Thinking from first principles.</h2>
+        <div class="eyebrow">About &middot; <em>Engelbert Miyasaka</em></div>
+        <h2> About me </h2>
+      </div>
+      <div class="contact-bar">
+        <a href="https://vrchat.com/home/user/usr_c6654462-1f57-4691-90ad-1efc15a9608c" target="_blank" rel="noopener">VRChat &#8599;</a>
+        <a href="https://discord.com/users/747704522591436850" target="_blank" rel="noopener">Discord &#8599;</a>
+        <a href="https://osu.ppy.sh/users/7295233" target="_blank" rel="noopener">osu! &#8599;</a>
+        <a href="https://www.cnblogs.com/kion" target="_blank" rel="noopener">cnblogs &#8599;</a>
       </div>
       <div class="essay">
-        <p>I am drawn to how things work beneath the surface &mdash; how a mathematical structure holds together, how a software system behaves under real constraints, and how complex markets reflect collective uncertainty.</p>
-        <p>Rather than confining myself to a single label, I move between <strong>mathematics</strong>, <strong>computer science</strong>, <strong>artificial intelligence</strong>, <strong>finance</strong>, and <strong>philosophy</strong>. The questions at the borders between these fields are usually the most interesting ones.</p>
-        <p>In spirit, I value independent judgment, calm curiosity, and continual re-examination of what I think I know &mdash; what Nietzsche called <em>Werden</em>: always in the middle of becoming. Outside of work, I enjoy wandering through Kyoto and Tokyo, tinkering with small hardware and personal tools, and spending quiet evenings in digital spaces.</p>
+        <p>I love <strong>Chiffon</strong> and <strong>Plum</strong> &mdash; come hang out with me sometime! I can be a little grumpy or awkward sometimes, I promise I don&rsquo;t mean it though.</p>
+        <p>I&rsquo;m learning English and Japanese right now, so I&rsquo;d super love to chat and make friends with people from everywhere!</p>
+      </div>
+      <div class="essay-zh">
+        <p>我喜欢 <strong>Chiffon</strong> 和 <strong>Plum</strong>，希望大家多找我来玩。可能性格不是很好，但真的不是故意的。</p>
+        <p>我有在学习英语和日语，希望能和各国的朋友友好交流。</p>
       </div>
       <div class="quiet-links">
         <div class="grp">
-          <a href="https://osu.ppy.sh/users/7295233">osu!</a>
-          <a href="https://discord.com/users/747704522591436850">discord</a>
-          <a href="https://www.cnblogs.com/kion">cnblogs</a>
-          <a href="/posts">notes</a>
-          <a class="murmur" href="/murmur">murmur</a>
+          <button class="text-link" data-v="notes">notes</button>
+          <button class="murmur" data-v="murmur">murmur</button>
         </div>
-        <button class="text-link" data-v="now">What I&rsquo;m exploring now &rarr;</button>
+        <button class="text-link" data-v="now">Lately &rarr;</button>
       </div>
     </div>
   </section>
 
   <!-- NOW -->
-  <section class="view" id="v-now">
+  <section class="view scroll-top" id="v-now">
     <div class="inner prose-inner">
       <div class="essay-head">
-        <div class="eyebrow">Now &middot; <em>Amor Fati</em></div>
-        <h2>Currently in motion.</h2>
+        <div class="eyebrow">Now &middot; <em>2026</em></div>
+        <h2>Lately.</h2>
+        <p class="lately-sub">Picking up a few things in my spare time.</p>
       </div>
-      <div class="now-list">
-        <div class="now-row">
-          <span class="k">Learning</span>
-          <div class="v">Stochastic processes &amp; approximation theory<small>Understanding how randomness and uniform bounds shape real models.</small></div>
+
+      <div class="lately-trio">
+        <div class="trio-item">
+          <span class="tk">Code</span>
+          <div class="tv">C++, AI agents, and small tools.</div>
         </div>
-        <div class="now-row">
-          <span class="k">Building</span>
-          <div class="v">Agent architectures &amp; small personal tools<small>Quiet software, home automation, and systems that stay out of the way.</small></div>
+        <div class="trio-item">
+          <span class="tk">Reading</span>
+          <div class="tv">Casually reading Nietzsche.</div>
         </div>
-        <div class="now-row">
-          <span class="k">Reading</span>
-          <div class="v">Nietzsche &amp; notes on value and perspective<small>Reading slowly, questioning cleanly, keeping a private archive.</small></div>
-        </div>
-        <div class="now-row">
-          <span class="k">Exploring</span>
-          <div class="v">Market microstructure, digital identity, and quiet cities<small>Between quantitative observation and everyday wandering.</small></div>
+        <div class="trio-item">
+          <span class="tk">Markets</span>
+          <div class="tv">Learning how investing works.</div>
         </div>
       </div>
+
+      <div class="log-head">
+        <span class="lh-k">Chronology</span>
+        <span class="lh-note">Curious about anything? Just ask &mdash; here&rsquo;s the short version.</span>
+      </div>
+
+      <div class="chron">
+        <div class="chron-yr">
+          <div class="yr">2026</div>
+          <div class="chron-entries">
+            <div class="ce"><span class="mo">Sep &mdash;</span><span class="tx">Admitted to graduate programs at Kyoto University and the University of Tokyo; deciding on the next chapter.</span></div>
+            <div class="ce"><span class="mo">Jul &ndash; Aug</span><span class="tx">Traveled to Japan for graduate entrance exams across Informatics, Mathematical Informatics, Mathematics, and Data Science.</span></div>
+            <div class="ce"><span class="mo">May &ndash; Jul</span><span class="tx">Applied to graduate programs at UTokyo and Kyoto University.</span></div>
+            <div class="ce"><span class="mo">Apr &ndash; May</span><span class="tx">Stepped back to rethink academic direction, prepped for TOEFL, and started Japanese grad school applications.</span></div>
+            <div class="ce"><span class="mo">Apr</span><span class="tx">Joined finance, speedran it, resigned.</span></div>
+          </div>
+        </div>
+
+        <div class="chron-yr">
+          <div class="yr">2025</div>
+          <div class="chron-entries">
+            <div class="ce"><span class="mo">Jul &ndash; Mar &rsquo;26</span><span class="tx">Job hunting.</span></div>
+          </div>
+        </div>
+
+        <div class="chron-yr">
+          <div class="yr">2024</div>
+          <div class="chron-entries">
+            <div class="ce"><span class="mo">Dec</span><span class="tx">Took the JLPT N1 and passed.</span></div>
+            <div class="ce"><span class="mo">Sep &ndash; Nov &rsquo;25</span><span class="tx">HKU, Computer Science.</span></div>
+            <div class="ce"><span class="mo">Jul &ndash; Aug</span><span class="tx">Traveled through Egypt, Turkey, Georgia, and beyond.</span></div>
+          </div>
+        </div>
+
+        <div class="chron-yr">
+          <div class="yr">2020</div>
+          <div class="chron-entries">
+            <div class="ce"><span class="mo">Sep &ndash; Jul &rsquo;24</span><span class="tx">&#9633;&#9633; University, Applied Mathematics.</span></div>
+          </div>
+        </div>
+
+        <div class="chron-yr">
+          <div class="yr" style="font-size:19px;font-style:italic">Earlier</div>
+          <div class="chron-entries">
+            <div class="ce"><span class="mo">&mdash;</span><span class="tx">Tragic childhood.</span></div>
+          </div>
+        </div>
+      </div>
+
       <div class="quiet-links">
         <span class="meta-stamp">Updated 2026</span>
         <button class="text-link" data-v="home">&larr; Return to Index</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="view scroll-top" id="v-notes">
+    <div class="inner prose-inner">
+      <div class="essay-head">
+        <div class="eyebrow">Notes &middot; <em>Archive</em></div>
+        <h2>Fragments &amp; study notes.</h2>
+      </div>
+      <div class="essay">
+        <p style="margin-bottom:8px">Too lazy to blog regularly &mdash; most older writing lives on <a href="https://www.cnblogs.com/kion" target="_blank" rel="noopener" style="color:var(--fg);text-decoration:none;border-bottom:1px solid var(--hair)">cnblogs</a>. Study notes mirrored here:</p>
+      </div>
+      <div class="notes-list">
+        <a class="note-item" href="notes/fast-inverse-square-root.html">
+          <span class="cat">math / dev</span>
+          <span class="nt">Fast Inverse Square Root (0x5f3759df)</span>
+          <span class="ar">&rarr;</span>
+        </a>
+        <a class="note-item" href="notes/approx-ch7.html">
+          <span class="cat">approx</span>
+          <span class="nt">Approximation Theory &amp; Method &mdash; ch. 7</span>
+          <span class="ar">&rarr;</span>
+        </a>
+        <a class="note-item" href="notes/approx-part1.html">
+          <span class="cat">approx</span>
+          <span class="nt">Approximation Theory &amp; Method &mdash; part 1</span>
+          <span class="ar">&rarr;</span>
+        </a>
+        <a class="note-item" href="notes/approx-part2.html">
+          <span class="cat">approx</span>
+          <span class="nt">Approximation Theory &amp; Method &mdash; part 2</span>
+          <span class="ar">&rarr;</span>
+        </a>
+        <a class="note-item" href="notes/approx-part3.html">
+          <span class="cat">approx</span>
+          <span class="nt">Approximation Theory &amp; Method &mdash; part 3</span>
+          <span class="ar">&rarr;</span>
+        </a>
+        <a class="note-item" href="notes/cpp-notes.html">
+          <span class="cat">c++</span>
+          <span class="nt">C++ Notes</span>
+          <span class="ar">&rarr;</span>
+        </a>
+        <a class="note-item" href="notes/cpp-template.html">
+          <span class="cat">c++</span>
+          <span class="nt">C++ Template</span>
+          <span class="ar">&rarr;</span>
+        </a>
+      </div>
+      <div class="quiet-links">
+        <a href="https://www.cnblogs.com/kion" target="_blank" rel="noopener">Full archive on cnblogs &#8599;</a>
+        <button class="text-link" data-v="home">&larr; Return to Index</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MURMUR -->
+  <section class="view scroll-top" id="v-murmur">
+    <div class="inner prose-inner">
+      <div class="essay-head">
+        <div class="eyebrow">Murmur &middot; <em>Private Log</em></div>
+        <h2>你好，我是 Miyasaka。</h2>
+      </div>
+      <div class="murmur-body">
+        <span class="m-date">15th Jun, 2026</span>
+        <p>和 GPT 老师聊了很多。我知道我的表达可能很幼稚，原谅我。我会努力学习的。</p>
+
+        <h3>意义</h3>
+        <p>我总是想到什么就马上去做什么，但是做到一半又开始动摇，开始怀疑自己最开始的动机。</p>
+        <p>我从我的第一份工作中逃离了。我觉得我的选择是正确的，至少到现在仍然这么觉得。可能我太理想主义了，我觉得我没有办法骗自己，在接触具体业务之前，我就发现这整个业界都是一个巨大的谎言。我觉得我自己很蠢，不仅因为别人说我天真，连我自己都觉得我很天真——天真到，即使偷看了标准答案之后仍然会按照自己的想法填空的那种天真，就算讨厌自己这种天真的样子也要坚持下去的那种天真。</p>
+        <p>不过可能这个世界就是一个巨大的谎言，去哪里都无法避开，去哪里都得不到真实。这就是这个世界本来的样子。也许我太极端了，什么东西都想得到一个确定性，得到一个真实的结果，10 分至少 7 分的结果。但是这个世界往往都是告诉我，真正的现实，就是 3 分，4 分，没有再好的了。我开始感到愤怒，感到失望，就好像是爬山，爬了十几年，不说到山顶吧，至少到了一个普遍意义上被认为是还不错的高度，发现等待我的是垃圾场而不是景色。这比没有任何景色还要糟糕，我觉得这是一场彻头彻尾的诈骗。澄清一下，我当然不会鄙夷其他的登山者，说什么明明是个垃圾场，他们还愿意在这个地方待下去。对于处境不同的人，是垃圾场，是停车场，还是景色，这完全取决于个人主观判断，只不过我觉得是垃圾场罢了，不需要在意我一个人的观点。我尊重每一个努力的人，我与他们有过些许交谈，我理解他们，我也敬佩他们，我还羡慕他们。</p>
+        <p>「（大家认为的）成功」&ne;「满足」——这应该是我「信仰」的第二次崩塌。第一次崩塌还是在很多年前，我用实践学会了一个道理，那就是努力是无法弥补天赋差距的，因为这两者的差距不在一个数量级上。「努力」和「成功」都无法说服我了，那我还追求什么？这个问题一路问下去，问到地基，最终也只会发现根证书这种东西根本不存在。</p>
+        <p>GPT 老师说，我太执着于意义了，太执着于得到一个确定的保证，但是人生就是确定性很低的东西。没有什么东西是可以保证或是被保证的。</p>
+        <blockquote>人之所以成为人，是因为知道自己会死。</blockquote>
+        <p>读书干嘛？反正会死。赚钱干嘛？反正会死。研究干嘛？反正会死。动物不会想：「我为什么活着？」猫不会，鸟不会，蚂蚁不会。他们直接活。但是人不行。</p>
+        <blockquote>人类承受不了没有意义。</blockquote>
+
+        <h3>他人的看法</h3>
+        <p>在最近的生活中，我总被问到近况问题。我有点厌烦，我不知道如何解释。如果我只说「不喜欢工作」，好像又没说到点上，这个问题没有这么浅。</p>
+        <p>GPT 老师说：「朋友不需要理解全部的你。」建议这样说：「工作内容和我想象的差别太大了。我发现自己很难长期做不感兴趣的事情。」</p>
+        <p>我觉得还是不太对。我要说：「我在对抗虚无主义，通过自主选择构建价值体系」，堵住他们的嘴。</p>
+        <p>我很在意别人怎么看待我，尽管在我这里他们大部分没有审判我的资格。我也不会在意他们的说法。说是这样，但被说多了往心里去是难免的。一部分人，有时包括我自己，有时候提问不是抱着寻找答案的目的来的。他们是抱着结论来的。</p>
+        <p>「我早就知道了，这件事情本来就是这样的，你不知道是你的问题，是你天真；而我，我早就适应了，你不适应，你是异类。」</p>
+        <p>而没有思考过，某些东西，根源上它正不正确。我很乐意接受基于事实的审判（具有客观标准），但是我不接受基于价值的审判。你可以不理解，但别指导。我知道我的存在可能本身就让你们不舒服，但是请不要指导我，我只认可来自我认可的人的指导。把我理解为冲动，不成熟，理想主义，矫情，那是你的事情。我在你们定义我之前，我就是我。</p>
+
+        <h3>审判</h3>
+        <p>「你好像一直在用一种非常残酷的标准评价自己。」</p>
+        <blockquote>我只是不是吃不了苦？<br>我是不是只是逃避现实？<br>我是不是只是把普通人的烦恼包装成哲学问题？<br>我是不是会再次失败？<br>我是不是矫情？……</blockquote>
+        <p>当朋友说：「你想太多了」，我会无法接受。不是因为他说错了，而是他说对了。我对别人是观察者，对自己是被告。我需要做自己的观察者，而不是被告席。</p>
+
+        <h3>支点</h3>
+        <ul>
+          <li>我可以诚实地活着。</li>
+          <li>我可以不断理解世界。</li>
+          <li>我可以自己做选择。</li>
+        </ul>
+
+        <h3>补习</h3>
+        <ul>
+          <li>Man&rsquo;s Search for Meaning &mdash; 选择自己的态度</li>
+          <li>The Brothers Karamazov &mdash; 信仰与自由意志</li>
+          <li>The Magic Mountain</li>
+          <li>The Unbearable Lightness of Being</li>
+        </ul>
+
+        <hr>
+        <span class="m-date">11th Mar, 2026</span>
+        <p>毕竟不是那么正经的页面，所以我就抱着试着做一下的心态做了一下，就不用这么绷着太正式了。你会注意到我没有留下太多的联系方式，这样可以增加一些喜欢做坏事的人的成本。</p>
+        <p>我是一个分享欲为 0 的人，并不是很乐意把自己的东西到处写——但是我还是觉得我应该跳脱自己的舒适圈，在公共区域，留下点什么痕迹。毕竟不主动分享的话是没有人会了解自己的。</p>
+      </div>
+      <div class="quiet-links">
+        <button class="text-link" data-v="about">&larr; Back to About</button>
+        <button class="text-link" data-v="home">Return to Index</button>
       </div>
     </div>
   </section>
@@ -298,11 +513,11 @@ h1.title{font-family:var(--pixel);font-weight:500;font-size:clamp(42px,6vw,72px)
 /* =====================================================================
    0. Shared Helpers, Cached Palette (Zero Per-Frame Style Recalc!), Boot
    ===================================================================== */
-var PAL = { ink: '236,233,223', acc: '212,116,94' };
+var PAL = { ink: '239,236,228', acc: '200,131,107' };
 function syncPalette(){
   var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-  PAL.ink = isLight ? '24,23,20' : '236,233,223';
-  PAL.acc = isLight ? '184,74,50' : '212,116,94';
+  PAL.ink = isLight ? '24,23,21' : '239,236,228';
+  PAL.acc = isLight ? '148,69,51' : '200,131,107';
 }
 syncPalette();
 function getPalette(){ return PAL; }
@@ -328,7 +543,7 @@ document.getElementById('theme-btn').addEventListener('click', function(){
   var boot = document.getElementById('boot');
   var box  = document.getElementById('boot-lines');
   var fill = document.getElementById('boot-fill');
-  if (location.search.indexOf('static') > -1){ boot.classList.add('done'); return; }
+  if (location.search.indexOf('static') > -1 || location.hash){ boot.classList.add('done'); return; }
   var lines = [
     { cls:'hi', text:'g++ -std=c++20 -O2 miyasaka.cpp -o miyasaka' },
     { cls:'',   text:'[100%] built target miyasaka' },
@@ -1542,26 +1757,35 @@ window.addEventListener('DOMContentLoaded', function(){
    ===================================================================== */
 (function(){
   var pillars = document.querySelectorAll('.pillar');
-  var note = document.getElementById('pillar-note');
   pillars.forEach(function(p){
-    p.addEventListener('mouseenter', function(){
+    p.addEventListener('click', function(){
       pillars.forEach(function(x){ x.classList.remove('active'); });
       p.classList.add('active');
-      note.textContent = p.getAttribute('data-t');
+      var idx = parseInt(p.getAttribute('data-scene'), 10);
+      if (!isNaN(idx)) switchScene(idx);
     });
   });
 
-  var views = { home:document.getElementById('v-home'), about:document.getElementById('v-about'), now:document.getElementById('v-now') };
+  var views = {
+    home: document.getElementById('v-home'),
+    about: document.getElementById('v-about'),
+    now: document.getElementById('v-now'),
+    notes: document.getElementById('v-notes'),
+    murmur: document.getElementById('v-murmur')
+  };
   var navBtns = document.querySelectorAll('nav button[data-v]');
   function go(t){
     if (!views[t]) return;
     Object.keys(views).forEach(function(k){ views[k].classList.toggle('active', k===t); });
     navBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-v')===t); });
     nextFab.classList.toggle('hidden', t !== 'home');
+    views[t].scrollTop = 0;
   }
   document.querySelectorAll('[data-v]').forEach(function(el){
     el.addEventListener('click', function(){ go(el.getAttribute('data-v')); });
   });
+  var initHash = location.hash.replace('#', '');
+  if (initHash && views[initHash]) go(initHash);
 })();
 </script>
 </body>
