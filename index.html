@@ -42,10 +42,10 @@ html,body{
 #boot{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:0 var(--pad);transition:opacity .75s var(--ease), filter .75s var(--ease)}
 #boot.done{opacity:0;pointer-events:none;filter:blur(6px)}
 .boot-box{max-width:460px;width:100%}
-.boot-lines{font-family:var(--mono);font-size:11px;line-height:2.1;color:var(--dim);border-left:1px solid var(--hair);padding-left:16px;min-height:68px}
+.boot-lines{font-family:var(--mono);font-size:11px;line-height:2.05;color:var(--dim);border-left:1px solid var(--hair);padding-left:16px;min-height:160px}
 .boot-lines .hi{color:var(--fg)}
 .boot-bar{margin-top:20px;height:1px;background:var(--hair);overflow:hidden}
-.boot-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .95s var(--ease)}
+.boot-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .28s var(--ease)}
 nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:28px var(--pad)}
 .nav-r{display:flex;align-items:center;gap:clamp(18px,3vw,36px)}
 .nav-r button,.nav-r a{background:none;border:none;font-family:var(--sans);font-size:12.5px;letter-spacing:.04em;color:var(--dim);text-decoration:none;cursor:pointer;transition:color .25s}
@@ -545,21 +545,28 @@ document.getElementById('theme-btn').addEventListener('click', function(){
   var fill = document.getElementById('boot-fill');
   if (location.search.indexOf('static') > -1 || location.hash){ boot.classList.add('done'); return; }
   var lines = [
-    { cls:'hi', text:'g++ -std=c++20 -O2 miyasaka.cpp -o miyasaka' },
-    { cls:'',   text:'[100%] built target miyasaka' },
-    { cls:'hi', text:'./miyasaka' }
+    { cls:'hi', pct:12,  delay:260, text:'g++ -std=c++20 -O3 -march=native miyasaka.cpp -o miyasaka' },
+    { cls:'',   pct:28,  delay:220, text:'[ 18%] Compiling mem/slab_pool.hpp ...' },
+    { cls:'',   pct:46,  delay:220, text:'[ 42%] Compiling math/chebyshev_svd_lp.hpp ...' },
+    { cls:'',   pct:68,  delay:230, text:'[ 69%] Compiling quant/ito_garch.hpp ...' },
+    { cls:'',   pct:86,  delay:220, text:'[ 88%] Linking shader/rsqrt_0x5f3759df.o ...' },
+    { cls:'',   pct:100, delay:260, text:'[100%] Built target miyasaka' },
+    { cls:'hi', pct:100, delay:460, text:'./miyasaka --werden' }
   ];
   var done = false;
   function finish(){ if (done) return; done = true; boot.classList.add('done'); }
   boot.addEventListener('click', finish);
   window.addEventListener('keydown', finish, { once:true });
-  setTimeout(function(){ fill.style.width = '100%'; }, 80);
   var i = 0;
   (function step(){
     if (done) return;
-    if (i >= lines.length){ setTimeout(finish, 320); return; }
-    var d = document.createElement('div'); d.className = lines[i].cls; d.textContent = lines[i].text;
-    box.appendChild(d); i++; setTimeout(step, 210);
+    if (i >= lines.length){ setTimeout(finish, 460); return; }
+    var item = lines[i];
+    var d = document.createElement('div'); d.className = item.cls; d.textContent = item.text;
+    box.appendChild(d);
+    fill.style.width = item.pct + '%';
+    i++;
+    setTimeout(step, item.delay);
   })();
 })();
 
