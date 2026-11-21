@@ -528,7 +528,7 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
       <div class="essay-head">
         <div class="eyebrow">Now &middot; <em>2026</em></div>
         <h2>Lately.</h2>
-        <p class="lately-sub">Picking up a few things in my spare time.</p>
+        <p class="lately-sub">A brief snapshot of what I&rsquo;m currently spending time on.</p>
       </div>
 
       <div class="lately-trio">
@@ -538,28 +538,27 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
         </div>
         <div class="trio-item">
           <span class="tk">Reading</span>
-          <div class="tv">Casually reading Nietzsche.</div>
+          <div class="tv">Probability, optimization, and Russian literature.</div>
         </div>
         <div class="trio-item">
           <span class="tk">Markets</span>
-          <div class="tv">Learning how investing works.</div>
+          <div class="tv">Quantitative models and market microstructure.</div>
         </div>
       </div>
 
       <div class="log-head">
-        <span class="lh-k">Chronology</span>
-        <span class="lh-note">Curious about anything? Just ask &mdash; here&rsquo;s the short version.</span>
+        <span class="lh-k">Timeline</span>
       </div>
 
       <div class="chron">
         <div class="chron-yr">
           <div class="yr">2026</div>
           <div class="chron-entries">
-            <div class="ce"><span class="mo">Sep &mdash;</span><span class="tx">Admitted to graduate programs at Kyoto University and the University of Tokyo; deciding on the next chapter.</span></div>
+            <div class="ce"><span class="mo">Sep &mdash;</span><span class="tx">Admitted to graduate programs at Kyoto University and the University of Tokyo.</span></div>
             <div class="ce"><span class="mo">Jul &ndash; Aug</span><span class="tx">Traveled to Japan for graduate entrance exams across Informatics, Mathematical Informatics, Mathematics, and Data Science.</span></div>
             <div class="ce"><span class="mo">May &ndash; Jul</span><span class="tx">Applied to graduate programs at UTokyo and Kyoto University.</span></div>
             <div class="ce"><span class="mo">Apr &ndash; May</span><span class="tx">Stepped back to rethink academic direction, prepped for TOEFL, and started Japanese grad school applications.</span></div>
-            <div class="ce"><span class="mo">Apr</span><span class="tx">Joined finance, speedran it, resigned.</span></div>
+            <div class="ce"><span class="mo">Apr</span><span class="tx">Brief stint in finance; decided to return to academia.</span></div>
           </div>
         </div>
 
@@ -582,14 +581,7 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
         <div class="chron-yr">
           <div class="yr">2020</div>
           <div class="chron-entries">
-            <div class="ce"><span class="mo">Sep &ndash; Jul &rsquo;24</span><span class="tx">&#9633;&#9633; University, Applied Mathematics.</span></div>
-          </div>
-        </div>
-
-        <div class="chron-yr">
-          <div class="yr" style="font-size:19px;font-style:italic">Earlier</div>
-          <div class="chron-entries">
-            <div class="ce"><span class="mo">&mdash;</span><span class="tx">Tragic childhood.</span></div>
+            <div class="ce"><span class="mo">Sep &ndash; Jul &rsquo;24</span><span class="tx">B.S., Applied Mathematics.</span></div>
           </div>
         </div>
       </div>
@@ -727,7 +719,7 @@ try {
     var pct = Math.min(95, 15 + Math.round((completed / total) * 80));
     log('[' + String(pct).padStart(3, ' ') + '%] ' + label + ' (' + ms() + ')', '', pct);
     if (completed >= total){
-      log('[100%] ready · ./miyasaka --werden (' + ms() + ')', 'hi', 100);
+      log('[100%] ready (' + ms() + ')', 'hi', 100);
       setTimeout(finish, 140);
     }
   }
@@ -788,7 +780,7 @@ var SCENES = [
   },
   {
     id: 'ringbuf', num: '02 / 23', name: 'SPSC Ring Buffer',
-    subtitle: 'Locks are for cowards — real femboys align head and tail to 64-byte cache lines.',
+    subtitle: 'Align head and tail to separate 64-byte cache lines so two cores never fight over the same line.',
     title: 'Lock-Free SPSC Ring Buffer · std::atomic acquire/release · Zero False Sharing',
     hint: 'Click to trigger producer burst',
     legend: [
@@ -799,7 +791,7 @@ var SCENES = [
   },
   {
     id: 'branchpred', num: '03 / 23', name: 'Branch Predictor',
-    subtitle: 'Sort your array before branching, or watch your 5-stage pipeline flush its dignity away.',
+    subtitle: 'A single mispredicted branch flushes the pipeline — why sorting an array can double loop speed.',
     title: 'CPU 2-Bit Saturating Counter & 5-Stage Pipeline (IF → ID → EX → MEM → WB)',
     hint: 'Click to toggle Sorted (Predictable) vs Unsorted (Random) branches',
     legend: [
@@ -810,7 +802,7 @@ var SCENES = [
   },
   {
     id: 'cacheloc', num: '04 / 23', name: 'Cache Locality',
-    subtitle: 'Same O(N²) loop, 10× latency gap — because DRAM hates your column-major stride.',
+    subtitle: 'Identical O(N²) complexity, an order-of-magnitude gap in latency: sequential L1 hits vs strided DRAM misses.',
     title: 'L1 64B Cache-Line Traversal · Row-Major Hit vs Column-Major Stride Miss',
     hint: 'Click to toggle Row-Major (L1 Hit) vs Column-Major (Cache Miss)',
     legend: [
@@ -821,7 +813,7 @@ var SCENES = [
   },
   {
     id: 'skiplist', num: '05 / 23', name: 'Skip List · O(log n)',
-    subtitle: 'Who needs red-black rotations when a coin flip builds express lanes in O(log n)?',
+    subtitle: 'Probabilistic express lanes: trading strict tree rotations for expected O(log n) search.',
     title: 'Probabilistic Multi-Level Skip List · Express-Lane Top-Down Search',
     hint: 'Click to search a new random key',
     legend: [
@@ -832,7 +824,7 @@ var SCENES = [
   },
   {
     id: 'prng', num: '06 / 23', name: 'PRNG · Xorshift64*',
-    subtitle: 'Nothing is truly random; a femboy just XOR-shifts their chaos until it passes Dieharder.',
+    subtitle: 'Flipping a single seed bit cascades across all 64 bits in three shifts and a multiplication.',
     title: 'Bit-Avalanche State (64-bit) & Uniform Distribution U(0,1)',
     hint: 'Click to flip 1 seed bit & watch avalanche',
     legend: [
@@ -856,7 +848,7 @@ var SCENES = [
   /* ===== MATHEMATICS (08..14) ===== */
   {
     id: 'cheb', num: '08 / 23', name: 'Chebyshev · Runge',
-    subtitle: 'Good femboys oscillate smoothly between −1 and 1 without blowing up at the edges.',
+    subtitle: 'Equispaced interpolation diverges at the endpoints; clustering nodes as cos(kπ/n) restores exponential convergence.',
     title: 'Runge Phenomenon · f(x) = 1/(1+25x²) · Equispaced vs Chebyshev Nodes',
     hint: 'Auto-growing degree n = 4..16 · Click to step degree n',
     legend: [
@@ -867,7 +859,7 @@ var SCENES = [
   },
   {
     id: 'pca3d', num: '09 / 23', name: '3D PCA · SVD',
-    subtitle: 'Real femboys project their problems onto the top two singular values and call the rest noise.',
+    subtitle: 'Best rank-2 approximation in Frobenius norm: keep the dominant singular directions, drop the residual.',
     title: '3D SVD Geometry · Drag to Rotate · Click to Step Stage',
     hint: 'Drag to orbit 3D · Click to step SVD stage',
     legend: [
@@ -877,7 +869,7 @@ var SCENES = [
   },
   {
     id: 'simplex3d', num: '10 / 23', name: '3D Simplex · LP',
-    subtitle: 'Why wander the interior when a femboy can just hop from corner to corner until rich?',
+    subtitle: 'Pivoting along the edges of a convex polytope toward the objective gradient, with Bland’s rule for degeneracy.',
     title: '3D Simplex Method · 32-Vertex Polytope · Drag to Rotate',
     hint: 'Drag to orbit 3D · Click to step pivot',
     legend: [
@@ -887,7 +879,7 @@ var SCENES = [
   },
   {
     id: 'fem', num: '11 / 23', name: 'Finite Elements',
-    subtitle: 'When life is a nasty PDE, a femboy just chops it into tiny triangles and hopes K is invertible.',
+    subtitle: 'Weak formulation turns a differential operator into a sparse symmetric stiffness matrix K u = f.',
     title: '1D BVP Solver · −u\'\'(x) = f(x), u(0) = u(1) = 0',
     hint: 'Click solver to step build phase / refine mesh',
     legend: [
@@ -897,7 +889,7 @@ var SCENES = [
   },
   {
     id: 'fft', num: '12 / 23', name: 'FFT · Cooley–Tukey',
-    subtitle: 'Why pay O(N²) to untangle your feelings when a femboy can butterfly-split them in O(N log N)?',
+    subtitle: 'Divide-and-conquer over roots of unity reduces an O(N²) discrete Fourier transform to O(N log N) butterfly stages.',
     title: 'Radix-2 Cooley–Tukey FFT · Signal x[n] → Butterfly Stages → Spectrum |X[k]|',
     hint: 'Click to cycle signal (Harmonic Chord / Square / AM / Dual Pulse)',
     legend: [
@@ -908,7 +900,7 @@ var SCENES = [
   },
   {
     id: 'dwtmark', num: '13 / 23', name: 'DWT · HD · SVD',
-    subtitle: 'Hide your signature in the singular values of a Hessenberg wavelet subband — invisible, yet unerasable.',
+    subtitle: 'Embedding a watermark into the singular values of a Hessenberg-decomposed wavelet subband for imperceptible robustness.',
     title: 'Digital Watermarking · Haar DWT → Hessenberg (PHPᵀ) → SVD Embed & Extract',
     hint: 'Auto-stepping pipeline · Click to step Embed / Extract stage',
     legend: [
@@ -919,7 +911,7 @@ var SCENES = [
   },
   {
     id: 'fluid', num: '14 / 23', name: 'Navier–Stokes · Fluid',
-    subtitle: 'When life gets turbulent, a femboy just enforces ∇·u = 0 and lets the vortices curl.',
+    subtitle: 'Semi-Lagrangian advection paired with pressure projection to keep the velocity field divergence-free.',
     title: '2D Incompressible Navier–Stokes · Stable Fluids · Drag to Stir',
     hint: 'Drag to stir velocity & dye · Click for vortex impulse',
     legend: [
@@ -932,7 +924,7 @@ var SCENES = [
   /* ===== MARKETS (15..20) ===== */
   {
     id: 'market', num: '15 / 23', name: 'Itô · GARCH(1,1)',
-    subtitle: 'My mood follows an Itô process — zero drift, fat tails, and GARCH-certified volatility clustering.',
+    subtitle: 'Volatility clusters in time: conditional variance reacts to shocks and decays geometrically back to equilibrium.',
     title: 'Stochastic Price Process S_t · Itô Diffusion + GARCH(1,1) Volatility',
     hint: 'Click chart to inject volatility shock',
     legend: [
@@ -944,7 +936,7 @@ var SCENES = [
   },
   {
     id: 'mcoption', num: '16 / 23', name: 'Monte Carlo · Option',
-    subtitle: 'When closed-form fails, a femboy just simulates ten thousand futures and averages the survivors.',
+    subtitle: 'Discounted risk-neutral expectation over simulated GBM paths, converging to Black–Scholes at rate O(1/√N).',
     title: 'European Call Pricing · GBM Paths (S₀=100, K=105, σ=25%) → Black–Scholes',
     hint: 'Click to launch +250 Monte Carlo paths · resets when leaving',
     legend: [
@@ -956,7 +948,7 @@ var SCENES = [
   },
   {
     id: 'lob', num: '17 / 23', name: 'Limit Order Book',
-    subtitle: 'Liquidity is an illusion that evaporates the millisecond you send a market sweep.',
+    subtitle: 'Price-time priority matching: market sweeps consume resting liquidity before market makers replenish the spread.',
     title: 'Live L2 Order Book Depth (Bid / Ask) & Price-Time Matching Tape',
     hint: 'Click to fire an aggressive Market Sweep order',
     legend: [
@@ -967,7 +959,7 @@ var SCENES = [
   },
   {
     id: 'markowitz', num: '18 / 23', name: 'Markowitz Frontier',
-    subtitle: 'Diversification is the only free lunch — right until correlation snaps to 1.0.',
+    subtitle: 'Mean–variance portfolio optimization: how asset correlation reshapes the efficient frontier and maximum Sharpe ratio.',
     title: 'Mean–Variance Efficient Frontier & Capital Market Line (Max Sharpe)',
     hint: 'Click to switch market correlation regime',
     legend: [
@@ -978,7 +970,7 @@ var SCENES = [
   },
   {
     id: 'ivsmile', num: '19 / 23', name: 'IV Smile · SABR',
-    subtitle: 'Black–Scholes assumes flat volatility; the market prices crashophobia into OTM puts.',
+    subtitle: 'Where Black–Scholes assumes constant volatility, market option quotes price tail risk into a pronounced skew.',
     title: 'Implied Volatility Smile & Skew σ_imp(K) vs Constant Black–Scholes σ',
     hint: 'Click to cycle skew regime (Calm / Crash Skew / Event Spike)',
     legend: [
@@ -989,7 +981,7 @@ var SCENES = [
   },
   {
     id: 'ou_pairs', num: '20 / 23', name: 'OU Pairs Trading',
-    subtitle: 'Cointegrated spreads always come home — as long as you survive the 3σ detour.',
+    subtitle: 'Mean-reverting Ornstein–Uhlenbeck dynamics: statistical arbitrage trades the restoring drift back toward equilibrium.',
     title: 'Ornstein–Uhlenbeck Mean Reversion Spread z_t & ±2σ Stat-Arb Signals',
     hint: 'Click to inject a 3σ spread dislocation shock',
     legend: [
@@ -1002,7 +994,7 @@ var SCENES = [
   /* ===== PHILOSOPHY (21..23) ===== */
   {
     id: 'philo', num: '21 / 23', name: 'Überwindung · Chaos',
-    subtitle: 'Femboy is something that hath to be surpassed\u02f8 and therefore shalt thou love thy virtues\u201a for thou wilt succumb by them\u2024',
+    subtitle: 'From disorder to form — notes on Nietzsche’s idea of self-overcoming and becoming.',
     title: 'Friedrich Nietzsche · Chaos → Dancing Star (Selbstüberwindung)',
     hint: 'Click to scatter chaos into a new star & next fragment',
     legend: [
@@ -1013,7 +1005,7 @@ var SCENES = [
   },
   {
     id: 'ewige', num: '22 / 23', name: 'Ewige Wiederkehr',
-    subtitle: 'If this exact moment were to recur eternally on a single-sided band, a femboy would still say: Noch einmal.',
+    subtitle: 'A single-sided manifold with period 4π — a geometric image for Nietzsche’s thought experiment of eternal recurrence.',
     title: 'Eternal Recurrence · 3D Möbius Orbit (4π Period) · Drag to Rotate',
     hint: 'Drag to orbit Möbius band · Click for next Nietzsche aphorism',
     legend: [
@@ -1024,7 +1016,7 @@ var SCENES = [
   },
   {
     id: 'sisyphus', num: '23 / 23', name: 'Le Mythe de Sisyphe',
-    subtitle: 'The boulder always rolls back down — a femboy still smiles at the summit and walks down to meet it.',
+    subtitle: 'Camus’s absurd hero: lucidity at the summit, and the quiet decision to walk back down.',
     title: 'Albert Camus · The Myth of Sisyphus · Eternal Ascent & Lucid Descent',
     hint: 'Click to push boulder & cycle Camus fragment',
     legend: [
