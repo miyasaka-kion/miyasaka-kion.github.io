@@ -7,3 +7,6 @@ vendor/bundle/ruby/
 
 # macOS files
 .DS_Store
+
+# Local preview server
+preview.py

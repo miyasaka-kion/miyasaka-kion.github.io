@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "fast-inverse-square-root",
+    "cat": "math / dev",
+    "title": "Fast Inverse Square Root (0x5f3759df)"
+  },
+  {
+    "slug": "approx-ch7",
+    "cat": "approx",
+    "title": "Approximation Theory & Method — ch. 7"
+  },
+  {
+    "slug": "approx-part1",
+    "cat": "approx",
+    "title": "Approximation Theory & Method — part 1"
+  },
+  {
+    "slug": "approx-part2",
+    "cat": "approx",
+    "title": "Approximation Theory & Method — part 2"
+  },
+  {
+    "slug": "approx-part3",
+    "cat": "approx",
+    "title": "Approximation Theory & Method — part 3"
+  },
+  {
+    "slug": "cpp-notes",
+    "cat": "c++",
+    "title": "C++ Notes"
+  },
+  {
+    "slug": "cpp-template",
+    "cat": "c++",
+    "title": "C++ Template"
+  }
+]

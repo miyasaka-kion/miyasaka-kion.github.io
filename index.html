@@ -3,12 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Engelbert Miyasaka</title>
+<title>Engelbert Miyasaka — declspec.cloud</title>
+<meta name="description" content="Systems, Applied Mathematics, Quantitative Markets, and Philosophy — 22 interactive exhibits & study notes by Engelbert Miyasaka.">
+<meta name="theme-color" content="#0B0B0D">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="declspec.cloud">
+<meta property="og:title" content="Engelbert Miyasaka — Systems · Mathematics · Markets">
+<meta property="og:description" content="22 interactive exhibits across C++20 systems, numerical mathematics, quantitative markets, and philosophy.">
+<meta property="og:url" content="https://declspec.cloud/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Engelbert Miyasaka — declspec.cloud">
+<meta name="twitter:description" content="22 interactive exhibits across C++20 systems, numerical mathematics, quantitative markets, and philosophy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" crossorigin="anonymous"></script>
 <style>
 
 :root{
@@ -39,13 +52,13 @@ html,body{
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-#boot{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:0 var(--pad);transition:opacity .75s var(--ease), filter .75s var(--ease)}
+#boot{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:0 var(--pad);transition:opacity .45s var(--ease), filter .45s var(--ease)}
 #boot.done{opacity:0;pointer-events:none;filter:blur(6px)}
 .boot-box{max-width:460px;width:100%}
 .boot-lines{font-family:var(--mono);font-size:11px;line-height:2.05;color:var(--dim);border-left:1px solid var(--hair);padding-left:16px;min-height:160px}
 .boot-lines .hi{color:var(--fg)}
 .boot-bar{margin-top:20px;height:1px;background:var(--hair);overflow:hidden}
-.boot-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .28s var(--ease)}
+.boot-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .17s var(--ease)}
 nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:28px var(--pad)}
 .nav-r{display:flex;align-items:center;gap:clamp(18px,3vw,36px)}
 .nav-r button,.nav-r a{background:none;border:none;font-family:var(--sans);font-size:12.5px;letter-spacing:.04em;color:var(--dim);text-decoration:none;cursor:pointer;transition:color .25s}
@@ -81,8 +94,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:
 .ex-live .fn{color:var(--fg)}
 .ex-live .katex{font-size:1.03em;color:var(--fg)}
 .ex-stat{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;font-variant-numeric:tabular-nums;white-space:nowrap}
-.page-foot{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--dim)}
-.pillars{display:flex;gap:24px;flex-wrap:wrap}
+.page-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--dim)}
+.pillars{display:flex;gap:14px 22px;flex-wrap:wrap;align-items:center}
 .pillar-note,#interact-hint{display:none}
 .text-link{color:var(--soft);background:none;border:none;font:inherit;cursor:pointer;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:color .25s,border-color .25s}
 .text-link:hover{color:var(--fg);border-bottom-color:var(--fg)}
@@ -98,17 +111,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:
 .now-row .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
 .now-row .v small{display:block;font-family:var(--sans);font-size:13px;font-weight:300;color:var(--soft);margin-top:4px}
 .meta-stamp{color:var(--dim);font-family:var(--mono);font-size:10.5px}
-@media(max-width:760px){
-  .now-row{grid-template-columns:1fr;gap:6px}
-  .next-fab{width:44px;height:72px;right:6px}
-  .next-fab svg{width:24px;height:42px}
-  .subtitle{height:76px}
-  .view{justify-content:flex-start}
-}
 
 .ambient-glow{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 75% 65% at 50% 42%, transparent 25%, rgba(0,0,0,.44) 100%)}
 [data-theme="light"] .ambient-glow{background:none}
-.boot-name{font-family:var(--serif);font-size:22px;letter-spacing:.34em;text-transform:uppercase;font-weight:300;margin-bottom:18px}
+.boot-name{font-family:var(--mono);font-size:13.5px;letter-spacing:.22em;font-weight:400;color:var(--fg);margin-bottom:18px}
 .brand{font-family:var(--mono);font-size:11.5px;font-weight:400;letter-spacing:.16em;color:var(--soft);text-decoration:none;cursor:pointer;transition:color .25s}
 .brand:hover{color:var(--fg)}
 .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
@@ -117,8 +123,24 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
 .subtitle{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(19px,2.1vw,24px);color:var(--soft);line-height:1.35;max-width:690px}
 .philo-de{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(26px,3.2vw,36px);line-height:1.28;color:var(--fg);margin-bottom:10px}
 .philo-sub{font-size:13.5px;color:var(--soft);max-width:560px}
-.pillar{font-family:var(--serif);font-size:16.5px;color:var(--dim);cursor:pointer;transition:color .25s}
-.pillar:hover,.pillar.active{color:var(--fg)}
+.pillar{display:inline-flex;flex-direction:row;align-items:center;gap:8px;color:var(--dim);cursor:pointer;transition:color .25s}
+.pillar-ico{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;flex-shrink:0;color:var(--dim);transition:color .25s var(--ease), transform .25s var(--ease)}
+.pillar-ico svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;display:block}
+.pillar:hover .pillar-ico,.pillar.active .pillar-ico{color:var(--fg)}
+.pillar.active .pillar-ico{transform:scale(1.06)}
+.beamer-dots{display:flex;align-items:center;gap:5.5px;height:14px}
+.beamer-dot{
+  position:relative;width:6px;height:6px;padding:0;border-radius:50%;
+  border:1px solid var(--dim);background:transparent;cursor:pointer;
+  transition:background .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.beamer-dot::after{content:"";position:absolute;inset:-6px}
+.pillar.active .beamer-dot{border-color:var(--soft)}
+.beamer-dot:hover{border-color:var(--fg);transform:scale(1.25)}
+.beamer-dot.current{
+  background:var(--accent);border-color:var(--accent);transform:scale(1.15);
+  box-shadow:0 0 0 2.5px color-mix(in srgb, var(--accent) 22%, transparent);
+}
 .essay-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(34px,4.8vw,52px);line-height:1.08}
 .essay p em,.quiet-links .murmur{font-family:var(--serif);font-style:italic;color:var(--fg);font-size:17px}
 .contact-bar{display:flex;gap:22px;flex-wrap:wrap;padding:0 0 22px;margin-bottom:24px;border-bottom:1px solid var(--hair);font-family:var(--mono);font-size:11.5px;letter-spacing:.08em}
@@ -126,12 +148,17 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
 .contact-bar a:hover{color:var(--accent);border-bottom-color:var(--accent)}
 .essay-zh{margin-top:24px;padding-top:22px;border-top:1px solid var(--hair)}
 .essay-zh p{font-size:14.5px;line-height:1.95;color:var(--soft);margin-bottom:14px}
-.quiet-links .murmur{color:var(--dim);background:none;border:none;cursor:pointer;padding:0;transition:color .2s}
-.quiet-links .murmur:hover{color:var(--fg)}
+.quiet-links .murmur{display:inline-flex;align-items:center;justify-content:center;color:var(--dim);opacity:.30;background:none;border:none;cursor:default;padding:3px 4px;transition:opacity .45s var(--ease), color .45s var(--ease), filter .45s var(--ease)}
+.quiet-links .murmur svg{width:18px;height:11px;display:block}
+.quiet-links .murmur:hover{opacity:.85;color:var(--accent);cursor:pointer}
 .view.scroll-top{justify-content:flex-start;padding-top:108px;padding-bottom:84px}
+.murmur-body h2,.murmur-body .m-date{font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin:28px 0 14px;display:block}
 .murmur-body h3{font-family:var(--serif);font-weight:400;font-size:24px;color:var(--fg);margin:32px 0 14px}
-.murmur-body .m-date{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin:28px 0 14px;display:block}
 .murmur-body p{font-size:14.5px;line-height:1.95;color:var(--soft);margin-bottom:16px}
+.murmur-body a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--hair)}
+.murmur-body a:hover{border-bottom-color:var(--accent)}
+.murmur-body code{font-family:var(--mono);font-size:.9em;color:var(--fg)}
+.murmur-body pre{background:rgba(128,128,128,.08);border:1px solid var(--hair);padding:14px 16px;overflow-x:auto;margin:16px 0;font-family:var(--mono);font-size:12px;line-height:1.65;color:var(--fg)}
 .murmur-body blockquote{border-left:1.5px solid var(--accent);padding-left:16px;margin:20px 0;color:var(--fg);font-family:var(--serif);font-style:italic;font-size:16.5px;line-height:1.8}
 .murmur-body ul{list-style:none;margin:12px 0 20px;padding-left:0}
 .murmur-body li{font-size:14px;color:var(--soft);padding:3px 0}
@@ -168,12 +195,6 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
 }
 .ce .mo{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim);font-variant-numeric:tabular-nums}
 .ce .tx{font-size:14px;line-height:1.72;color:var(--soft)}
-@media(max-width:720px){
-  .lately-trio{grid-template-columns:1fr;gap:18px}
-  .chron-yr{grid-template-columns:1fr;gap:8px}
-  .chron-entries{padding-left:16px}
-  .ce{grid-template-columns:74px minmax(0,1fr);gap:10px}
-}
 .notes-list{margin-top:22px;border-top:1px solid var(--hair)}
 .note-item{
   display:grid;grid-template-columns:86px minmax(0,1fr) 22px;gap:16px;align-items:baseline;
@@ -216,12 +237,134 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
   font-family:var(--mono);font-size:10.5px;color:var(--dim);
 }
 
+/* ---------- Mobile-Only Layout Refinements (Desktop untouched > 760px) ---------- */
+@media(max-width:760px){
+  :root{--pad:22px}
+
+  /* Soft top backdrop so scrolled content never clashes with fixed nav */
+  nav{
+    padding:calc(16px + env(safe-area-inset-top, 0px)) var(--pad) 14px;
+    background:linear-gradient(to bottom, var(--bg) 68%, transparent 100%);
+    gap:10px;
+  }
+  .brand{font-size:10px;letter-spacing:.1em}
+  .nav-r{gap:11px}
+  .nav-r button,.nav-r a{font-size:11.5px;letter-spacing:.01em;padding:4px 0}
+  .theme-btn{width:24px;height:24px}
+
+  /* Boot screen legible on narrow screens */
+  .boot-name{font-size:12px;letter-spacing:.18em}
+  .boot-lines{font-size:10px;line-height:1.95;padding-left:12px;min-height:146px;word-break:break-word}
+
+  /* Views: clean top rhythm + iOS safe-area bottom breathing room */
+  .view{
+    justify-content:flex-start;
+    padding:calc(74px + env(safe-area-inset-top, 0px)) var(--pad) calc(84px + env(safe-area-inset-bottom, 0px));
+    -webkit-overflow-scrolling:touch;
+  }
+  .view.scroll-top{
+    padding-top:calc(80px + env(safe-area-inset-top, 0px));
+    padding-bottom:calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Home typography & zero-shift tracks sized for mobile */
+  .eyebrow{font-size:9.5px;letter-spacing:.2em;margin-bottom:10px}
+  h1.title{font-size:clamp(36px, 10.5vw, 48px);line-height:1.02;margin-bottom:10px}
+  .subtitle{
+    font-size:17.5px;line-height:1.38;
+    height:76px;
+  }
+
+  /* Exhibit canvas & header/footer breathing cleanly on narrow screens */
+  .exhibit-strip{margin:16px 0 18px;padding-top:14px}
+  .ex-head{font-size:8.5px;letter-spacing:.12em;gap:6px 12px;margin-bottom:10px;min-height:32px;align-items:flex-start}
+  .ex-legend{gap:8px 12px}
+  #exhibit-canvas{height:178px}
+  .philo-stage{height:178px}
+  .philo-de{font-size:23px;line-height:1.3}
+  .philo-sub{font-size:12.5px;line-height:1.55}
+
+  .ex-foot{
+    height:56px;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    gap:4px;
+    padding-top:8px;
+    margin-top:10px;
+  }
+  .ex-live{
+    width:100%;
+    overflow-x:auto;
+    scrollbar-width:none;
+    font-size:10px;
+  }
+  .ex-live::-webkit-scrollbar{display:none}
+  .ex-live .katex{font-size:.92em}
+  .ex-stat{font-size:9px;opacity:.85}
+
+  /* Home footer */
+  .page-foot{gap:12px 16px;padding-right:48px}
+  .pillars{gap:10px 18px}
+  .pillar{gap:7px}
+  .pillar-ico{width:14px;height:14px}
+  .pillar-ico svg{width:13.5px;height:13.5px}
+  .beamer-dots{gap:5.5px}
+  .beamer-dot{width:6px;height:6px}
+
+  /* Thumb-friendly bottom-right chevron (never covers exhibit canvas!) */
+  .next-fab{
+    top:auto;
+    bottom:calc(18px + env(safe-area-inset-bottom, 0px));
+    right:14px;
+    transform:none;
+    width:46px;height:46px;
+    opacity:.78;
+  }
+  .next-fab svg{width:24px;height:38px}
+
+  /* Subpages: About, Now/Lately, Notes, Murmur */
+  .essay-head{margin-bottom:22px}
+  .essay-head h2{font-size:clamp(30px, 8.5vw, 40px)}
+  .contact-bar{gap:12px 18px;padding-bottom:16px;margin-bottom:18px;font-size:11px}
+  .essay p,.essay-zh p,.murmur-body p{font-size:14px;line-height:1.85}
+
+  .lately-trio{grid-template-columns:1fr;gap:16px;padding:18px 0 20px}
+  .trio-item .tv{font-size:17.5px}
+  .log-head{margin:32px 0 18px;gap:6px}
+  .chron{gap:22px}
+  .chron-yr{grid-template-columns:1fr;gap:8px}
+  .chron-yr .yr{font-size:22px}
+  .chron-entries{padding-left:14px;gap:12px}
+  .ce{grid-template-columns:76px minmax(0,1fr);gap:10px}
+  .ce .mo{font-size:10px}
+  .ce .tx{font-size:13.5px;line-height:1.68}
+
+  .note-item{
+    grid-template-columns:minmax(0,1fr) 20px;
+    gap:4px 12px;
+    padding:14px 0;
+  }
+  .note-item .cat{grid-column:1 / -1;font-size:9px}
+  .note-item .nt{font-size:18px}
+  .note-item .ar{grid-row:2;grid-column:2;align-self:center}
+
+  .quiet-links{margin-top:26px;padding-top:16px;gap:14px}
+}
+
+@media(max-width:400px){
+  :root{--pad:18px}
+  .brand{font-size:9px;letter-spacing:.06em}
+  .nav-r{gap:8px}
+  .nav-r button,.nav-r a{font-size:10.5px}
+}
+
 </style>
 </head>
 <body>
 <div id="boot" title="Click to enter">
   <div class="boot-box">
-    <div class="boot-name">MIYASAKA</div>
+    <div class="boot-name">declspec.cloud</div>
     <div class="boot-lines" id="boot-lines"></div>
     <div class="boot-bar"><i id="boot-fill"></i></div>
   </div>
@@ -239,6 +382,7 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
     <button data-v="about">About</button>
     <button data-v="now">Now</button>
     <button data-v="notes">Notes</button>
+    <button data-v="reading">Reading</button>
     <button class="theme-btn" id="theme-btn" title="Light / Dark">&#9680;</button>
   </div>
 </nav>
@@ -250,7 +394,7 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
 <main class="stage">
   <section class="view active" id="v-home">
     <div class="inner">
-      <div class="eyebrow"><span id="scene-kicker">01 / 09 &middot; <em>Memory Pool</em></span></div>
+      <div class="eyebrow"><span id="scene-kicker">01 / 23 &middot; <em>Memory Pool</em></span></div>
       <h1 class="title">Engelbert Miyasaka</h1>
       <p class="subtitle" id="subtitle">Real femboys manage their own memory.</p>
 
@@ -271,11 +415,58 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
       </div>
 
       <div class="page-foot">
-        <div class="pillars" id="pillars">
-          <span class="pillar active" data-scene="1">Mathematics</span>
-          <span class="pillar" data-scene="0">Systems</span>
-          <span class="pillar" data-scene="6">Markets</span>
-          <span class="pillar" data-scene="4">Philosophy</span>
+        <div class="pillars" id="pillars" role="navigation" aria-label="Exhibit sections">
+          <div class="pillar" data-scenes="0,1,2,3,4,5,6" title="Systems" aria-label="Systems">
+            <span class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 16 16"><rect x="4" y="4" width="8" height="8" rx="1"/><path d="M6 1.6v2.4M10 1.6v2.4M6 12v2.4M10 12v2.4M1.6 6h2.4M1.6 10h2.4M12 6h2.4M12 10h2.4"/></svg>
+            </span>
+            <div class="beamer-dots" aria-label="Systems exhibits">
+              <button type="button" class="beamer-dot" data-scene="0" title="Memory Pool" aria-label="Memory Pool"></button>
+              <button type="button" class="beamer-dot" data-scene="1" title="SPSC Ring Buffer" aria-label="SPSC Ring Buffer"></button>
+              <button type="button" class="beamer-dot" data-scene="2" title="Branch Predictor" aria-label="Branch Predictor"></button>
+              <button type="button" class="beamer-dot" data-scene="3" title="Cache Locality" aria-label="Cache Locality"></button>
+              <button type="button" class="beamer-dot" data-scene="4" title="Skip List" aria-label="Skip List"></button>
+              <button type="button" class="beamer-dot" data-scene="5" title="PRNG · Xorshift64*" aria-label="PRNG · Xorshift64*"></button>
+              <button type="button" class="beamer-dot" data-scene="6" title="0x5f3759df · Shader" aria-label="0x5f3759df · Shader"></button>
+            </div>
+          </div>
+          <div class="pillar" data-scenes="7,8,9,10,11,12,13" title="Mathematics" aria-label="Mathematics">
+            <span class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 16 16"><path d="M12.5 3.2H4l4.6 4.8L4 12.8h8.5"/></svg>
+            </span>
+            <div class="beamer-dots" aria-label="Mathematics exhibits">
+              <button type="button" class="beamer-dot" data-scene="7" title="Chebyshev · Runge" aria-label="Chebyshev · Runge"></button>
+              <button type="button" class="beamer-dot" data-scene="8" title="3D PCA · SVD" aria-label="3D PCA · SVD"></button>
+              <button type="button" class="beamer-dot" data-scene="9" title="3D Simplex · LP" aria-label="3D Simplex · LP"></button>
+              <button type="button" class="beamer-dot" data-scene="10" title="Finite Elements" aria-label="Finite Elements"></button>
+              <button type="button" class="beamer-dot" data-scene="11" title="FFT · Cooley–Tukey" aria-label="FFT · Cooley–Tukey"></button>
+              <button type="button" class="beamer-dot" data-scene="12" title="DWT · HD · SVD Watermark" aria-label="DWT · HD · SVD Watermark"></button>
+              <button type="button" class="beamer-dot" data-scene="13" title="Navier–Stokes · Fluid" aria-label="Navier–Stokes · Fluid"></button>
+            </div>
+          </div>
+          <div class="pillar" data-scenes="14,15,16,17,18,19" title="Markets" aria-label="Markets">
+            <span class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 16 16"><path d="M2 12.2l3.6-3.8 2.8 2.3L14 4.2"/><path d="M10.8 4.2H14v3.2"/></svg>
+            </span>
+            <div class="beamer-dots" aria-label="Markets exhibits">
+              <button type="button" class="beamer-dot" data-scene="14" title="Itô · GARCH(1,1)" aria-label="Itô · GARCH(1,1)"></button>
+              <button type="button" class="beamer-dot" data-scene="15" title="Monte Carlo · Option" aria-label="Monte Carlo · Option"></button>
+              <button type="button" class="beamer-dot" data-scene="16" title="Limit Order Book" aria-label="Limit Order Book"></button>
+              <button type="button" class="beamer-dot" data-scene="17" title="Markowitz Frontier" aria-label="Markowitz Frontier"></button>
+              <button type="button" class="beamer-dot" data-scene="18" title="IV Smile · SABR" aria-label="IV Smile · SABR"></button>
+              <button type="button" class="beamer-dot" data-scene="19" title="OU Pairs Trading" aria-label="OU Pairs Trading"></button>
+            </div>
+          </div>
+          <div class="pillar" data-scenes="20,21,22" title="Philosophy" aria-label="Philosophy">
+            <span class="pillar-ico" aria-hidden="true">
+              <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.1"/><path d="M8 1.8v12.4"/></svg>
+            </span>
+            <div class="beamer-dots" aria-label="Philosophy exhibits">
+              <button type="button" class="beamer-dot" data-scene="20" title="Überwindung · Chaos & Star" aria-label="Überwindung · Chaos & Star"></button>
+              <button type="button" class="beamer-dot" data-scene="21" title="Ewige Wiederkehr" aria-label="Ewige Wiederkehr"></button>
+              <button type="button" class="beamer-dot" data-scene="22" title="Le Mythe de Sisyphe" aria-label="Le Mythe de Sisyphe"></button>
+            </div>
+          </div>
         </div>
         <p class="pillar-note" id="pillar-note"></p>
         <span id="interact-hint"></span>
@@ -308,7 +499,23 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
       <div class="quiet-links">
         <div class="grp">
           <button class="text-link" data-v="notes">notes</button>
-          <button class="murmur" data-v="murmur">murmur</button>
+          <button class="text-link" data-v="reading">reading</button>
+          <button class="murmur" data-v="murmur" aria-label="Private log">
+            <svg viewBox="0 0 18 11" aria-hidden="true">
+              <rect x="0" y="3" width="3" height="3" fill="currentColor" opacity=".45"/>
+              <rect x="3" y="0" width="3" height="3" fill="currentColor" opacity=".75"/>
+              <rect x="3" y="3" width="3" height="3" fill="currentColor" opacity=".95"/>
+              <rect x="3" y="6" width="3" height="3" fill="currentColor" opacity=".40"/>
+              <rect x="6" y="2" width="3" height="3" fill="currentColor" opacity=".60"/>
+              <rect x="6" y="5" width="3" height="3" fill="currentColor" opacity=".85"/>
+              <rect x="9" y="1" width="3" height="3" fill="currentColor" opacity=".90"/>
+              <rect x="9" y="4" width="3" height="3" fill="currentColor" opacity=".45"/>
+              <rect x="9" y="7" width="3" height="3" fill="currentColor" opacity=".70"/>
+              <rect x="12" y="3" width="3" height="3" fill="currentColor" opacity=".80"/>
+              <rect x="12" y="6" width="3" height="3" fill="currentColor" opacity=".35"/>
+              <rect x="15" y="4" width="3" height="3" fill="currentColor" opacity=".55"/>
+            </svg>
+          </button>
         </div>
         <button class="text-link" data-v="now">Lately &rarr;</button>
       </div>
@@ -404,45 +611,28 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
       <div class="essay">
         <p style="margin-bottom:8px">Too lazy to blog regularly &mdash; most older writing lives on <a href="https://www.cnblogs.com/kion" target="_blank" rel="noopener" style="color:var(--fg);text-decoration:none;border-bottom:1px solid var(--hair)">cnblogs</a>. Study notes mirrored here:</p>
       </div>
-      <div class="notes-list">
-        <a class="note-item" href="notes/fast-inverse-square-root.html">
-          <span class="cat">math / dev</span>
-          <span class="nt">Fast Inverse Square Root (0x5f3759df)</span>
-          <span class="ar">&rarr;</span>
-        </a>
-        <a class="note-item" href="notes/approx-ch7.html">
-          <span class="cat">approx</span>
-          <span class="nt">Approximation Theory &amp; Method &mdash; ch. 7</span>
-          <span class="ar">&rarr;</span>
-        </a>
-        <a class="note-item" href="notes/approx-part1.html">
-          <span class="cat">approx</span>
-          <span class="nt">Approximation Theory &amp; Method &mdash; part 1</span>
-          <span class="ar">&rarr;</span>
-        </a>
-        <a class="note-item" href="notes/approx-part2.html">
-          <span class="cat">approx</span>
-          <span class="nt">Approximation Theory &amp; Method &mdash; part 2</span>
-          <span class="ar">&rarr;</span>
-        </a>
-        <a class="note-item" href="notes/approx-part3.html">
-          <span class="cat">approx</span>
-          <span class="nt">Approximation Theory &amp; Method &mdash; part 3</span>
-          <span class="ar">&rarr;</span>
-        </a>
-        <a class="note-item" href="notes/cpp-notes.html">
-          <span class="cat">c++</span>
-          <span class="nt">C++ Notes</span>
-          <span class="ar">&rarr;</span>
-        </a>
-        <a class="note-item" href="notes/cpp-template.html">
-          <span class="cat">c++</span>
-          <span class="nt">C++ Template</span>
-          <span class="ar">&rarr;</span>
-        </a>
+      <div class="notes-list" id="notes-list">
+        <p class="meta-stamp" style="padding:16px 0">Loading notes&hellip;</p>
       </div>
       <div class="quiet-links">
         <a href="https://www.cnblogs.com/kion" target="_blank" rel="noopener">Full archive on cnblogs &#8599;</a>
+        <button class="text-link" data-v="home">&larr; Return to Index</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- READING -->
+  <section class="view scroll-top" id="v-reading">
+    <div class="inner prose-inner">
+      <div class="essay-head">
+        <div class="eyebrow">Reading &middot; <em>Bookshelf</em></div>
+        <h2>Bookshelf.</h2>
+      </div>
+      <div class="murmur-body" id="reading-body">
+        <p class="meta-stamp">Loading reading.md&hellip;</p>
+      </div>
+      <div class="quiet-links">
+        <button class="text-link" data-v="notes">Notes &rarr;</button>
         <button class="text-link" data-v="home">&larr; Return to Index</button>
       </div>
     </div>
@@ -455,52 +645,8 @@ h1.title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,6.6vw,80p
         <div class="eyebrow">Murmur &middot; <em>Private Log</em></div>
         <h2>你好，我是 Miyasaka。</h2>
       </div>
-      <div class="murmur-body">
-        <span class="m-date">15th Jun, 2026</span>
-        <p>和 GPT 老师聊了很多。我知道我的表达可能很幼稚，原谅我。我会努力学习的。</p>
-
-        <h3>意义</h3>
-        <p>我总是想到什么就马上去做什么，但是做到一半又开始动摇，开始怀疑自己最开始的动机。</p>
-        <p>我从我的第一份工作中逃离了。我觉得我的选择是正确的，至少到现在仍然这么觉得。可能我太理想主义了，我觉得我没有办法骗自己，在接触具体业务之前，我就发现这整个业界都是一个巨大的谎言。我觉得我自己很蠢，不仅因为别人说我天真，连我自己都觉得我很天真——天真到，即使偷看了标准答案之后仍然会按照自己的想法填空的那种天真，就算讨厌自己这种天真的样子也要坚持下去的那种天真。</p>
-        <p>不过可能这个世界就是一个巨大的谎言，去哪里都无法避开，去哪里都得不到真实。这就是这个世界本来的样子。也许我太极端了，什么东西都想得到一个确定性，得到一个真实的结果，10 分至少 7 分的结果。但是这个世界往往都是告诉我，真正的现实，就是 3 分，4 分，没有再好的了。我开始感到愤怒，感到失望，就好像是爬山，爬了十几年，不说到山顶吧，至少到了一个普遍意义上被认为是还不错的高度，发现等待我的是垃圾场而不是景色。这比没有任何景色还要糟糕，我觉得这是一场彻头彻尾的诈骗。澄清一下，我当然不会鄙夷其他的登山者，说什么明明是个垃圾场，他们还愿意在这个地方待下去。对于处境不同的人，是垃圾场，是停车场，还是景色，这完全取决于个人主观判断，只不过我觉得是垃圾场罢了，不需要在意我一个人的观点。我尊重每一个努力的人，我与他们有过些许交谈，我理解他们，我也敬佩他们，我还羡慕他们。</p>
-        <p>「（大家认为的）成功」&ne;「满足」——这应该是我「信仰」的第二次崩塌。第一次崩塌还是在很多年前，我用实践学会了一个道理，那就是努力是无法弥补天赋差距的，因为这两者的差距不在一个数量级上。「努力」和「成功」都无法说服我了，那我还追求什么？这个问题一路问下去，问到地基，最终也只会发现根证书这种东西根本不存在。</p>
-        <p>GPT 老师说，我太执着于意义了，太执着于得到一个确定的保证，但是人生就是确定性很低的东西。没有什么东西是可以保证或是被保证的。</p>
-        <blockquote>人之所以成为人，是因为知道自己会死。</blockquote>
-        <p>读书干嘛？反正会死。赚钱干嘛？反正会死。研究干嘛？反正会死。动物不会想：「我为什么活着？」猫不会，鸟不会，蚂蚁不会。他们直接活。但是人不行。</p>
-        <blockquote>人类承受不了没有意义。</blockquote>
-
-        <h3>他人的看法</h3>
-        <p>在最近的生活中，我总被问到近况问题。我有点厌烦，我不知道如何解释。如果我只说「不喜欢工作」，好像又没说到点上，这个问题没有这么浅。</p>
-        <p>GPT 老师说：「朋友不需要理解全部的你。」建议这样说：「工作内容和我想象的差别太大了。我发现自己很难长期做不感兴趣的事情。」</p>
-        <p>我觉得还是不太对。我要说：「我在对抗虚无主义，通过自主选择构建价值体系」，堵住他们的嘴。</p>
-        <p>我很在意别人怎么看待我，尽管在我这里他们大部分没有审判我的资格。我也不会在意他们的说法。说是这样，但被说多了往心里去是难免的。一部分人，有时包括我自己，有时候提问不是抱着寻找答案的目的来的。他们是抱着结论来的。</p>
-        <p>「我早就知道了，这件事情本来就是这样的，你不知道是你的问题，是你天真；而我，我早就适应了，你不适应，你是异类。」</p>
-        <p>而没有思考过，某些东西，根源上它正不正确。我很乐意接受基于事实的审判（具有客观标准），但是我不接受基于价值的审判。你可以不理解，但别指导。我知道我的存在可能本身就让你们不舒服，但是请不要指导我，我只认可来自我认可的人的指导。把我理解为冲动，不成熟，理想主义，矫情，那是你的事情。我在你们定义我之前，我就是我。</p>
-
-        <h3>审判</h3>
-        <p>「你好像一直在用一种非常残酷的标准评价自己。」</p>
-        <blockquote>我只是不是吃不了苦？<br>我是不是只是逃避现实？<br>我是不是只是把普通人的烦恼包装成哲学问题？<br>我是不是会再次失败？<br>我是不是矫情？……</blockquote>
-        <p>当朋友说：「你想太多了」，我会无法接受。不是因为他说错了，而是他说对了。我对别人是观察者，对自己是被告。我需要做自己的观察者，而不是被告席。</p>
-
-        <h3>支点</h3>
-        <ul>
-          <li>我可以诚实地活着。</li>
-          <li>我可以不断理解世界。</li>
-          <li>我可以自己做选择。</li>
-        </ul>
-
-        <h3>补习</h3>
-        <ul>
-          <li>Man&rsquo;s Search for Meaning &mdash; 选择自己的态度</li>
-          <li>The Brothers Karamazov &mdash; 信仰与自由意志</li>
-          <li>The Magic Mountain</li>
-          <li>The Unbearable Lightness of Being</li>
-        </ul>
-
-        <hr>
-        <span class="m-date">11th Mar, 2026</span>
-        <p>毕竟不是那么正经的页面，所以我就抱着试着做一下的心态做了一下，就不用这么绷着太正式了。你会注意到我没有留下太多的联系方式，这样可以增加一些喜欢做坏事的人的成本。</p>
-        <p>我是一个分享欲为 0 的人，并不是很乐意把自己的东西到处写——但是我还是觉得我应该跳脱自己的舒适圈，在公共区域，留下点什么痕迹。毕竟不主动分享的话是没有人会了解自己的。</p>
+      <div class="murmur-body" id="murmur-body">
+        <p class="meta-stamp">Loading murmur.md&hellip;</p>
       </div>
       <div class="quiet-links">
         <button class="text-link" data-v="about">&larr; Back to About</button>
@@ -533,49 +679,103 @@ function smoothstep(t){ t = Math.max(0, Math.min(1, t)); return t*t*(3 - 2*t); }
 
 document.getElementById('theme-btn').addEventListener('click', function(){
   var cur = document.documentElement.getAttribute('data-theme');
-  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  var next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e){}
   syncPalette();
   if (window.__onThemeChange) window.__onThemeChange();
 });
+try {
+  var savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light' || savedTheme === 'dark'){
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    syncPalette();
+  }
+} catch(e){}
 
-/* Quiet Boot */
+/* Real Asset-Driven Boot (waits for fonts + KaTeX/marked + notes/index.json) */
 (function(){
   var boot = document.getElementById('boot');
   var box  = document.getElementById('boot-lines');
   var fill = document.getElementById('boot-fill');
   if (location.search.indexOf('static') > -1 || location.hash){ boot.classList.add('done'); return; }
-  var lines = [
-    { cls:'hi', pct:12,  delay:260, text:'g++ -std=c++20 -O3 -march=native miyasaka.cpp -o miyasaka' },
-    { cls:'',   pct:28,  delay:220, text:'[ 18%] Compiling mem/slab_pool.hpp ...' },
-    { cls:'',   pct:46,  delay:220, text:'[ 42%] Compiling math/chebyshev_svd_lp.hpp ...' },
-    { cls:'',   pct:68,  delay:230, text:'[ 69%] Compiling quant/ito_garch.hpp ...' },
-    { cls:'',   pct:86,  delay:220, text:'[ 88%] Linking shader/rsqrt_0x5f3759df.o ...' },
-    { cls:'',   pct:100, delay:260, text:'[100%] Built target miyasaka' },
-    { cls:'hi', pct:100, delay:460, text:'./miyasaka --werden' }
-  ];
-  var done = false;
-  function finish(){ if (done) return; done = true; boot.classList.add('done'); }
+
+  var t0 = performance.now(), done = false, completed = 0, total = 3;
+  function ms(){ return Math.round(performance.now() - t0) + 'ms'; }
+  function log(text, cls, pct){
+    if (done) return;
+    var d = document.createElement('div');
+    if (cls) d.className = cls;
+    d.textContent = text;
+    box.appendChild(d);
+    if (pct !== undefined) fill.style.width = pct + '%';
+  }
+  function finish(){
+    if (done) return;
+    done = true;
+    fill.style.width = '100%';
+    boot.classList.add('done');
+  }
   boot.addEventListener('click', finish);
   window.addEventListener('keydown', finish, { once:true });
-  var i = 0;
-  (function step(){
+
+  log('init declspec.cloud · 23 exhibits', 'hi', 15);
+
+  function markDone(label){
     if (done) return;
-    if (i >= lines.length){ setTimeout(finish, 460); return; }
-    var item = lines[i];
-    var d = document.createElement('div'); d.className = item.cls; d.textContent = item.text;
-    box.appendChild(d);
-    fill.style.width = item.pct + '%';
-    i++;
-    setTimeout(step, item.delay);
-  })();
+    completed++;
+    var pct = Math.min(95, 15 + Math.round((completed / total) * 80));
+    log('[' + String(pct).padStart(3, ' ') + '%] ' + label + ' (' + ms() + ')', '', pct);
+    if (completed >= total){
+      log('[100%] ready · ./miyasaka --werden (' + ms() + ')', 'hi', 100);
+      setTimeout(finish, 140);
+    }
+  }
+
+  // 1. Real fetch of notes/index.json
+  var notesReady = (window.fetch && location.protocol !== 'file:')
+    ? fetch('notes/index.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+    : Promise.resolve(null);
+  notesReady.then(function(){ markDone('loaded notes/index.json'); });
+
+  // 2. Real KaTeX + marked script readiness
+  var libsDone = false;
+  function checkLibs(){
+    if (libsDone || done) return;
+    if (window.katex && window.marked){
+      libsDone = true;
+      markDone('loaded katex + marked');
+    } else if (performance.now() - t0 > 2400){
+      libsDone = true;
+      markDone('katex + marked (timeout fallback)');
+    } else {
+      setTimeout(checkLibs, 25);
+    }
+  }
+  checkLibs();
+
+  // 3. Real WebFonts readiness (document.fonts.ready)
+  var fontsReady = (document.fonts && document.fonts.ready)
+    ? document.fonts.ready.catch(function(){})
+    : Promise.resolve();
+  fontsReady.then(function(){ markDone('loaded webfonts'); });
+
+  // Hard safety ceiling so offline/blocked CDN never stalls the page
+  setTimeout(function(){
+    if (!done){
+      log('[100%] ready (offline fallback · ' + ms() + ')', 'hi', 100);
+      finish();
+    }
+  }, 2800);
 })();
 
 /* =====================================================================
    1. The 9 Exhibits Definition (Every scene has a UNIQUE background!)
    ===================================================================== */
 var SCENES = [
+  /* ===== SYSTEMS (01..07) ===== */
   {
-    id: 'mempool', num: '01 / 09', name: 'Memory Pool',
+    id: 'mempool', num: '01 / 23', name: 'Memory Pool',
     subtitle: 'Real femboys manage their own memory.',
     title: 'slab_pool<Order, 64B> · lock-free',
     hint: 'Click pool for market burst · → or swipe to switch',
@@ -587,18 +787,86 @@ var SCENES = [
     tex: null
   },
   {
-    id: 'cheb', num: '02 / 09', name: 'Chebyshev',
-    subtitle: 'Good femboys oscillate smoothly between −1 and 1 without blowing up at the edges.',
-    title: 'Chebyshev Polynomial Family · T_1 .. T_n (unbounded)',
-    hint: 'Auto-growing n → ∞ · Click to accelerate · resets when leaving',
+    id: 'ringbuf', num: '02 / 23', name: 'SPSC Ring Buffer',
+    subtitle: 'Locks are for cowards — real femboys align head and tail to 64-byte cache lines.',
+    title: 'Lock-Free SPSC Ring Buffer · std::atomic acquire/release · Zero False Sharing',
+    hint: 'Click to trigger producer burst',
     legend: [
-      { c:'var(--dim)', t:'accumulated T_k traces' }, { c:'var(--fg)', t:'active T_n(x)' },
-      { c:'var(--accent)', t:'extrema' }
+      { c:'var(--accent)', t:'producer head (release)' },
+      { c:'var(--fg)', t:'consumer tail (acquire)' }
     ],
-    tex: 'T_n(x) = 2x\\,T_{n-1}(x) - T_{n-2}(x),\\quad \\|T_n\\|_\\infty = 1'
+    tex: '\\texttt{alignas(64)}\\; \\text{head}_{\\text{rel}},\\; \\text{tail}_{\\text{acq}} \\;\\Longrightarrow\\; \\text{next} = (i + 1) \\,\\&\\, (N - 1)'
   },
   {
-    id: 'pca3d', num: '03 / 09', name: '3D PCA · SVD',
+    id: 'branchpred', num: '03 / 23', name: 'Branch Predictor',
+    subtitle: 'Sort your array before branching, or watch your 5-stage pipeline flush its dignity away.',
+    title: 'CPU 2-Bit Saturating Counter & 5-Stage Pipeline (IF → ID → EX → MEM → WB)',
+    hint: 'Click to toggle Sorted (Predictable) vs Unsorted (Random) branches',
+    legend: [
+      { c:'var(--fg)', t:'predicted hit (committed)' },
+      { c:'var(--accent)', t:'mispredict → pipeline flush' }
+    ],
+    tex: '\\text{IPC} = \\frac{1}{1 + p_{\\text{miss}} \\cdot c_{\\text{flush}}},\\quad \\text{FSM}: \\text{SN} \\leftrightarrow \\text{WN} \\leftrightarrow \\text{WT} \\leftrightarrow \\text{ST}'
+  },
+  {
+    id: 'cacheloc', num: '04 / 23', name: 'Cache Locality',
+    subtitle: 'Same O(N²) loop, 10× latency gap — because DRAM hates your column-major stride.',
+    title: 'L1 64B Cache-Line Traversal · Row-Major Hit vs Column-Major Stride Miss',
+    hint: 'Click to toggle Row-Major (L1 Hit) vs Column-Major (Cache Miss)',
+    legend: [
+      { c:'var(--fg)', t:'L1 cache-line hit (~4 cyc)' },
+      { c:'var(--accent)', t:'DRAM stride miss (~180 cyc)' }
+    ],
+    tex: '\\text{AMAT} = t_{\\text{L1}} + m_{\\text{L1}} \\cdot t_{\\text{DRAM}},\\quad \\text{stride } 1 \\ll \\text{stride } N'
+  },
+  {
+    id: 'skiplist', num: '05 / 23', name: 'Skip List · O(log n)',
+    subtitle: 'Who needs red-black rotations when a coin flip builds express lanes in O(log n)?',
+    title: 'Probabilistic Multi-Level Skip List · Express-Lane Top-Down Search',
+    hint: 'Click to search a new random key',
+    legend: [
+      { c:'var(--dim)', t:'linked levels L0..L3' },
+      { c:'var(--accent)', t:'active O(log n) search path' }
+    ],
+    tex: '\\mathbb{E}[\\text{steps}] \\le \\frac{1}{p}\\log_{1/p} n + O(1),\\quad p = \\tfrac{1}{2}'
+  },
+  {
+    id: 'prng', num: '06 / 23', name: 'PRNG · Xorshift64*',
+    subtitle: 'Nothing is truly random; a femboy just XOR-shifts their chaos until it passes Dieharder.',
+    title: 'Bit-Avalanche State (64-bit) & Uniform Distribution U(0,1)',
+    hint: 'Click to flip 1 seed bit & watch avalanche',
+    legend: [
+      { c:'var(--accent)', t:'flipped bits (avalanche)' },
+      { c:'var(--fg)', t:'U(0,1) histogram' }
+    ],
+    tex: 'x \\leftarrow x \\oplus (x \\gg 12),\\; x \\leftarrow x \\oplus (x \\ll 25),\\; x \\leftarrow x \\oplus (x \\gg 27)'
+  },
+  {
+    id: 'rsqrt', num: '07 / 23', name: '0x5f3759df · Shader',
+    subtitle: 'Real femboys don’t call std::sqrt() — they subtract a float from 0x5f3759df and pray once to Newton.',
+    title: 'Fast Inverse Square Root (0x5f3759df) → Real-Time Shader Lighting',
+    hint: 'Click to toggle 0 / 1 / 2 Newton iterations on live shader',
+    legend: [
+      { c:'var(--accent)', t:'0x5f3759df bit-hack' },
+      { c:'var(--fg)', t:'Lambertian N·L̂ shader' }
+    ],
+    tex: 'i = \\texttt{0x5f3759df} - (i \\gg 1),\\quad \\hat{\\mathbf{L}} = \\mathbf{L}\\cdot\\operatorname{rsqrt}(\\|\\mathbf{L}\\|^2)'
+  },
+
+  /* ===== MATHEMATICS (08..14) ===== */
+  {
+    id: 'cheb', num: '08 / 23', name: 'Chebyshev · Runge',
+    subtitle: 'Good femboys oscillate smoothly between −1 and 1 without blowing up at the edges.',
+    title: 'Runge Phenomenon · f(x) = 1/(1+25x²) · Equispaced vs Chebyshev Nodes',
+    hint: 'Auto-growing degree n = 4..16 · Click to step degree n',
+    legend: [
+      { c:'var(--dim)', t:'f(x) & equispaced P_n (blows up)' },
+      { c:'var(--accent)', t:'Chebyshev P_n & nodes (converges)' }
+    ],
+    tex: 'f(x) = \\frac{1}{1+25x^2},\\quad x_k = \\cos\\!\\left(\\frac{k\\pi}{n}\\right) \\;\\Longrightarrow\\; \\|f - P_n^{\\mathrm{cheb}}\\|_\\infty \\to 0'
+  },
+  {
+    id: 'pca3d', num: '09 / 23', name: '3D PCA · SVD',
     subtitle: 'Real femboys project their problems onto the top two singular values and call the rest noise.',
     title: '3D SVD Geometry · Drag to Rotate · Click to Step Stage',
     hint: 'Drag to orbit 3D · Click to step SVD stage',
@@ -608,27 +876,17 @@ var SCENES = [
     tex: 'X = U \\Sigma V^{\\top} \\;\\longrightarrow\\; \\hat{X}_2 = \\sum_{i=1}^{2} u_i \\sigma_i v_i^{\\top}'
   },
   {
-    id: 'simplex3d', num: '04 / 09', name: '3D Simplex · LP',
+    id: 'simplex3d', num: '10 / 23', name: '3D Simplex · LP',
     subtitle: 'Why wander the interior when a femboy can just hop from corner to corner until rich?',
-    title: '3D Simplex Method · 18-Vertex Polytope · Drag to Rotate',
+    title: '3D Simplex Method · 32-Vertex Polytope · Drag to Rotate',
     hint: 'Drag to orbit 3D · Click to step pivot',
     legend: [
-      { c:'var(--dim)', t:'18-vertex polytope Ax ≤ b' }, { c:'var(--accent)', t:'pivot path → x*' }
+      { c:'var(--dim)', t:'32-vertex polytope Ax ≤ b (18 facets)' }, { c:'var(--accent)', t:'9-pivot path → x*' }
     ],
-    tex: '\\max\\; c^{\\top} x \\quad \\text{s.t.}\\; Ax \\le b,\\; x \\in \\mathbb{R}_{\\ge 0}^{3}'
+    tex: '\\max\\; c^{\\top} x \\quad \\text{s.t.}\\; Ax \\le b,\\; A \\in \\mathbb{R}^{18\\times 3},\\; x \\ge 0'
   },
   {
-    id: 'philo', num: '05 / 09', name: 'Philosophie',
-    subtitle: 'Femboy is something that hath to be surpassed\u02f8 and therefore shalt thou love thy virtues\u201a for thou wilt succumb by them\u2024',
-    title: 'Friedrich Nietzsche · Also sprach Zarathustra',
-    hint: 'Click quote for next fragment',
-    legend: [
-      { c:'var(--accent)', t:'Werden' }, { c:'var(--dim)', t:'Selbstüberwindung' }
-    ],
-    tex: '\\text{Amor Fati} \\;\\cdot\\; \\text{Umwertung aller Werte}'
-  },
-  {
-    id: 'fem', num: '06 / 09', name: 'Finite Elements',
+    id: 'fem', num: '11 / 23', name: 'Finite Elements',
     subtitle: 'When life is a nasty PDE, a femboy just chops it into tiny triangles and hopes K is invertible.',
     title: '1D BVP Solver · −u\'\'(x) = f(x), u(0) = u(1) = 0',
     hint: 'Click solver to step build phase / refine mesh',
@@ -638,7 +896,42 @@ var SCENES = [
     tex: 'K_{ij} = \\int_0^1 \\phi_i\'(x)\\phi_j\'(x)\\,dx,\\quad K\\mathbf{u} = \\mathbf{f}'
   },
   {
-    id: 'market', num: '07 / 09', name: 'Itô · GARCH(1,1)',
+    id: 'fft', num: '12 / 23', name: 'FFT · Cooley–Tukey',
+    subtitle: 'Why pay O(N²) to untangle your feelings when a femboy can butterfly-split them in O(N log N)?',
+    title: 'Radix-2 Cooley–Tukey FFT · Signal x[n] → Butterfly Stages → Spectrum |X[k]|',
+    hint: 'Click to cycle signal (Harmonic Chord / Square / AM / Dual Pulse)',
+    legend: [
+      { c:'var(--fg)', t:'time x[n] & |X[k]|' },
+      { c:'var(--accent)', t:'butterfly W_N^k & spectral peaks' }
+    ],
+    tex: 'X[k] = \\sum_{m=0}^{N/2-1} x[2m]\\,W_{N/2}^{mk} + W_N^k \\sum_{m=0}^{N/2-1} x[2m+1]\\,W_{N/2}^{mk}'
+  },
+  {
+    id: 'dwtmark', num: '13 / 23', name: 'DWT · HD · SVD',
+    subtitle: 'Hide your signature in the singular values of a Hessenberg wavelet subband — invisible, yet unerasable.',
+    title: 'Digital Watermarking · Haar DWT → Hessenberg (PHPᵀ) → SVD Embed & Extract',
+    hint: 'Auto-stepping pipeline · Click to step Embed / Extract stage',
+    legend: [
+      { c:'var(--fg)', t:'host I · DWT subbands · H' },
+      { c:'var(--accent)', t:'watermark αS_W & extracted Ŵ' }
+    ],
+    tex: 'LL = P H P^{\\top},\\; H = U_H S_H V_H^{\\top} \\;\\Longrightarrow\\; S_H^{*} = S_H + \\alpha S_W,\\; \\hat{S}_W = \\tfrac{S_H^{*} - S_H}{\\alpha}'
+  },
+  {
+    id: 'fluid', num: '14 / 23', name: 'Navier–Stokes · Fluid',
+    subtitle: 'When life gets turbulent, a femboy just enforces ∇·u = 0 and lets the vortices curl.',
+    title: '2D Incompressible Navier–Stokes · Stable Fluids · Drag to Stir',
+    hint: 'Drag to stir velocity & dye · Click for vortex impulse',
+    legend: [
+      { c:'var(--accent)', t:'advected dye ρ(x,t)' },
+      { c:'var(--fg)', t:'divergence-free velocity u(x,t)' }
+    ],
+    tex: '\\frac{\\partial \\mathbf{u}}{\\partial t} + (\\mathbf{u}\\cdot\\nabla)\\mathbf{u} = -\\frac{1}{\\rho}\\nabla p + \\nu\\nabla^2\\mathbf{u},\\quad \\nabla\\cdot\\mathbf{u} = 0'
+  },
+
+  /* ===== MARKETS (15..20) ===== */
+  {
+    id: 'market', num: '15 / 23', name: 'Itô · GARCH(1,1)',
     subtitle: 'My mood follows an Itô process — zero drift, fat tails, and GARCH-certified volatility clustering.',
     title: 'Stochastic Price Process S_t · Itô Diffusion + GARCH(1,1) Volatility',
     hint: 'Click chart to inject volatility shock',
@@ -650,26 +943,95 @@ var SCENES = [
     tex: 'dS_t = \\mu S_t\\,dt + \\sigma_t S_t\\,dW_t,\\quad \\sigma_t^2 = \\omega + \\alpha \\varepsilon_{t-1}^2 + \\beta \\sigma_{t-1}^2'
   },
   {
-    id: 'prng', num: '08 / 09', name: 'PRNG · Xorshift64*',
-    subtitle: 'Nothing is truly random; a femboy just XOR-shifts their chaos until it passes Dieharder.',
-    title: 'Bit-Avalanche State (64-bit) & Uniform Distribution U(0,1)',
-    hint: 'Click to flip 1 seed bit & watch avalanche',
+    id: 'mcoption', num: '16 / 23', name: 'Monte Carlo · Option',
+    subtitle: 'When closed-form fails, a femboy just simulates ten thousand futures and averages the survivors.',
+    title: 'European Call Pricing · GBM Paths (S₀=100, K=105, σ=25%) → Black–Scholes',
+    hint: 'Click to launch +250 Monte Carlo paths · resets when leaving',
     legend: [
-      { c:'var(--accent)', t:'flipped bits (avalanche)' },
-      { c:'var(--fg)', t:'U(0,1) histogram' }
+      { c:'var(--accent)', t:'ITM paths (S_T > K) & BS C₀' },
+      { c:'var(--fg)', t:'MC estimate ĉ_N' },
+      { c:'var(--dim)', t:'OTM paths & 95% CI' }
     ],
-    tex: 'x \\leftarrow x \\oplus (x \\gg 12),\\; x \\leftarrow x \\oplus (x \\ll 25),\\; x \\leftarrow x \\oplus (x \\gg 27)'
+    tex: 'C_0 = e^{-rT}\\,\\mathbb{E}^{\\mathbb{Q}}\\![(S_T - K)^+] \\approx \\frac{e^{-rT}}{N}\\sum_{i=1}^{N}(S_T^{(i)} - K)^+'
   },
   {
-    id: 'rsqrt', num: '09 / 09', name: '0x5f3759df · Shader',
-    subtitle: 'Real femboys don’t call std::sqrt() — they subtract a float from 0x5f3759df and pray once to Newton.',
-    title: 'Fast Inverse Square Root (0x5f3759df) → Real-Time Shader Lighting',
-    hint: 'Click to toggle 0 / 1 / 2 Newton iterations on live shader',
+    id: 'lob', num: '17 / 23', name: 'Limit Order Book',
+    subtitle: 'Liquidity is an illusion that evaporates the millisecond you send a market sweep.',
+    title: 'Live L2 Order Book Depth (Bid / Ask) & Price-Time Matching Tape',
+    hint: 'Click to fire an aggressive Market Sweep order',
     legend: [
-      { c:'var(--accent)', t:'0x5f3759df bit-hack' },
-      { c:'var(--fg)', t:'Lambertian N·L̂ shader' }
+      { c:'var(--fg)', t:'bid depth (buy)' },
+      { c:'var(--accent)', t:'ask depth (sell) & sweep fills' }
     ],
-    tex: 'i = \\texttt{0x5f3759df} - (i \\gg 1),\\quad \\hat{\\mathbf{L}} = \\mathbf{L}\\cdot\\operatorname{rsqrt}(\\|\\mathbf{L}\\|^2)'
+    tex: '\\text{Mid} = \\frac{P_{\\text{bid}}^{(1)} + P_{\\text{ask}}^{(1)}}{2},\\quad \\text{Spread} = P_{\\text{ask}}^{(1)} - P_{\\text{bid}}^{(1)}'
+  },
+  {
+    id: 'markowitz', num: '18 / 23', name: 'Markowitz Frontier',
+    subtitle: 'Diversification is the only free lunch — right until correlation snaps to 1.0.',
+    title: 'Mean–Variance Efficient Frontier & Capital Market Line (Max Sharpe)',
+    hint: 'Click to switch market correlation regime',
+    legend: [
+      { c:'var(--dim)', t:'feasible portfolios (σ, μ)' },
+      { c:'var(--accent)', t:'Efficient Frontier & Max Sharpe' }
+    ],
+    tex: '\\min_{w}\\; \\tfrac{1}{2} w^{\\top}\\Sigma w \\quad \\text{s.t.}\\; w^{\\top}\\mu = \\mu_p,\\; \\mathbf{1}^{\\top}w = 1'
+  },
+  {
+    id: 'ivsmile', num: '19 / 23', name: 'IV Smile · SABR',
+    subtitle: 'Black–Scholes assumes flat volatility; the market prices crashophobia into OTM puts.',
+    title: 'Implied Volatility Smile & Skew σ_imp(K) vs Constant Black–Scholes σ',
+    hint: 'Click to cycle skew regime (Calm / Crash Skew / Event Spike)',
+    legend: [
+      { c:'var(--dim)', t:'flat Black–Scholes σ' },
+      { c:'var(--accent)', t:'SABR IV smile σ_imp(K/S₀)' }
+    ],
+    tex: 'dF_t = \\alpha_t F_t^{\\beta}\\,dW_t^{(1)},\\quad d\\alpha_t = \\nu\\alpha_t\\,dW_t^{(2)},\\quad d\\langle W^{(1)}, W^{(2)}\\rangle_t = \\rho\\,dt'
+  },
+  {
+    id: 'ou_pairs', num: '20 / 23', name: 'OU Pairs Trading',
+    subtitle: 'Cointegrated spreads always come home — as long as you survive the 3σ detour.',
+    title: 'Ornstein–Uhlenbeck Mean Reversion Spread z_t & ±2σ Stat-Arb Signals',
+    hint: 'Click to inject a 3σ spread dislocation shock',
+    legend: [
+      { c:'var(--fg)', t:'cointegrated spread z_t' },
+      { c:'var(--accent)', t:'±2σ entry/exit & trade signals' }
+    ],
+    tex: 'dX_t = \\theta(\\mu - X_t)\\,dt + \\sigma\\,dW_t,\\quad t_{1/2} = \\frac{\\ln 2}{\\theta}'
+  },
+
+  /* ===== PHILOSOPHY (21..23) ===== */
+  {
+    id: 'philo', num: '21 / 23', name: 'Überwindung · Chaos',
+    subtitle: 'Femboy is something that hath to be surpassed\u02f8 and therefore shalt thou love thy virtues\u201a for thou wilt succumb by them\u2024',
+    title: 'Friedrich Nietzsche · Chaos → Dancing Star (Selbstüberwindung)',
+    hint: 'Click to scatter chaos into a new star & next fragment',
+    legend: [
+      { c:'var(--dim)', t:'chaotic dust field' },
+      { c:'var(--accent)', t:'dancing star (Werden)' }
+    ],
+    tex: '\\text{Chaos} \\;\\longrightarrow\\; \\text{Tanzender Stern} \\;\\cdot\\; \\text{Selbstüberwindung}'
+  },
+  {
+    id: 'ewige', num: '22 / 23', name: 'Ewige Wiederkehr',
+    subtitle: 'If this exact moment were to recur eternally on a single-sided band, a femboy would still say: Noch einmal.',
+    title: 'Eternal Recurrence · 3D Möbius Orbit (4π Period) · Drag to Rotate',
+    hint: 'Drag to orbit Möbius band · Click for next Nietzsche aphorism',
+    legend: [
+      { c:'var(--dim)', t:'Möbius manifold M(u,v)' },
+      { c:'var(--accent)', t:'4π eternal recurrence orbit' }
+    ],
+    tex: '\\gamma(u,v) = \\big((1 + \\tfrac{v}{2}\\cos\\tfrac{u}{2})\\cos u,\\;(1 + \\tfrac{v}{2}\\cos\\tfrac{u}{2})\\sin u,\\;\\tfrac{v}{2}\\sin\\tfrac{u}{2}\\big)'
+  },
+  {
+    id: 'sisyphus', num: '23 / 23', name: 'Le Mythe de Sisyphe',
+    subtitle: 'The boulder always rolls back down — a femboy still smiles at the summit and walks down to meet it.',
+    title: 'Albert Camus · The Myth of Sisyphus · Eternal Ascent & Lucid Descent',
+    hint: 'Click to push boulder & cycle Camus fragment',
+    legend: [
+      { c:'var(--dim)', t:'mountain slope & rolling boulder' },
+      { c:'var(--accent)', t:'lucid summit & eternal ascent' }
+    ],
+    tex: '\\text{Ascent} \\;\\longrightarrow\\; \\text{Summit} \\;\\longrightarrow\\; \\text{Descent} \\;\\Longrightarrow\\; \\text{Sisyphe heureux}'
   }
 ];
 
@@ -687,7 +1049,7 @@ nextFab.addEventListener('click', function(){
   homeEl.addEventListener('touchstart', function(e){
     if (e.touches.length !== 1) return;
     var id = SCENES[currentScene].id;
-    ignore = !!(e.target.closest('#exhibit-canvas') && (id === 'pca3d' || id === 'simplex3d'));
+    ignore = !!(e.target.closest('#exhibit-canvas') && (id === 'pca3d' || id === 'simplex3d' || id === 'fluid' || id === 'ewige'));
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
   }, { passive:true });
   homeEl.addEventListener('touchend', function(e){
@@ -727,11 +1089,11 @@ function applySceneUI(idx){
     return '<span><i style="background:' + it.c + '"></i>' + it.t + '</span>';
   }).join('');
 
-  var isPhilo = sc.id === 'philo';
-  exCanvas.style.display = isPhilo ? 'none' : 'block';
-  philoEl.classList.toggle('show', isPhilo);
+  exCanvas.style.display = 'block';
+  philoEl.classList.remove('show');
 
   if (sc.tex){ exLive.innerHTML = ''; renderTex(exLive, sc.tex); }
+  if (window.__syncPillars) window.__syncPillars(idx);
 }
 
 function switchScene(nextIdx){
@@ -1042,6 +1404,61 @@ window.addEventListener('DOMContentLoaded', function(){
     }
   }
 
+  /* BG 11: Roots-of-Unity Twiddle Factor Unit Circle (for FFT) */
+  function drawBgFFT(now, pal){
+    var cx = W * 0.52, cy = H * 0.5, R = Math.min(W, H) * 0.36;
+    var rot = now * 0.00018;
+    ctx.strokeStyle = 'rgba(' + pal.ink + ',0.06)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.stroke();
+    var M = 16;
+    for (var k = 0; k < M; k++){
+      var a1 = rot + k * Math.PI * 2 / M;
+      var a2 = rot + ((k * 3) % M) * Math.PI * 2 / M;
+      var x1 = cx + Math.cos(a1) * R, y1 = cy + Math.sin(a1) * R;
+      var x2 = cx + Math.cos(a2) * R, y2 = cy + Math.sin(a2) * R;
+      ctx.strokeStyle = (k % 4 === 0) ? 'rgba(' + pal.acc + ',0.075)' : 'rgba(' + pal.ink + ',0.035)';
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      ctx.fillStyle = (k % 4 === 0) ? 'rgba(' + pal.acc + ',0.22)' : 'rgba(' + pal.ink + ',0.12)';
+      ctx.beginPath(); ctx.arc(x1, y1, 1.8, 0, 6.283); ctx.fill();
+    }
+  }
+
+  /* BG 12: Dyadic Multi-Resolution Wavelet Quadtree Tiling (for DWT-HD-SVD) */
+  function drawBgWavelet(now, pal){
+    var s = Math.min(W, H) * 0.72;
+    var ox = (W - s) * 0.5, oy = (H - s) * 0.5;
+    var pulse = 0.5 + 0.5 * Math.sin(now * 0.0012);
+    ctx.strokeStyle = 'rgba(' + pal.ink + ',0.05)'; ctx.lineWidth = 1;
+    ctx.strokeRect(ox, oy, s, s);
+    var cur = s;
+    for (var lv = 0; lv < 4; lv++){
+      var half = cur * 0.5;
+      ctx.strokeStyle = lv === 3 ? 'rgba(' + pal.acc + ',' + (0.06 + pulse * 0.05).toFixed(3) + ')' : 'rgba(' + pal.ink + ',0.045)';
+      ctx.beginPath();
+      ctx.moveTo(ox + half, oy); ctx.lineTo(ox + half, oy + cur);
+      ctx.moveTo(ox, oy + half); ctx.lineTo(ox + cur, oy + half);
+      ctx.stroke();
+      cur = half;
+    }
+  }
+
+  /* BG 13: Divergence-Free Streamfunction Flow Lines (for Navier-Stokes Fluid) */
+  function drawBgFluid(now, pal){
+    var t = now * 0.00035;
+    ctx.lineWidth = 0.85;
+    for (var l = 0; l < 10; l++){
+      var baseY = H * (0.12 + l * 0.085);
+      ctx.strokeStyle = (l % 3 === 0) ? 'rgba(' + pal.acc + ',0.065)' : 'rgba(' + pal.ink + ',0.04)';
+      ctx.beginPath();
+      for (var s = 0; s <= 70; s++){
+        var u = s / 70, x = u * W;
+        var y = baseY + Math.sin(u * 7.2 + t + l * 0.55) * 28 + Math.cos(u * 4.1 - t * 1.3 + l) * 16;
+        s === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+  }
+
   resize(); window.addEventListener('resize', resize);
   var lastBg = 0;
   function loop(now){
@@ -1058,8 +1475,21 @@ window.addEventListener('DOMContentLoaded', function(){
     else if (id === 'philo') drawBgPhilo(now, pal);
     else if (id === 'fem') drawBgFEM(now, pal);
     else if (id === 'market') drawBgGarch(now, pal);
+    else if (id === 'mcoption') drawBgBrownian(now, pal);
     else if (id === 'prng') drawBgPRNG(now, pal);
     else if (id === 'rsqrt') drawBgShader(now, pal);
+    else if (id === 'fft') drawBgFFT(now, pal);
+    else if (id === 'dwtmark') drawBgWavelet(now, pal);
+    else if (id === 'fluid') drawBgFluid(now, pal);
+    else if (id === 'ringbuf') drawBgMempool(now, pal);
+    else if (id === 'branchpred') drawBgPRNG(now, pal);
+    else if (id === 'cacheloc') drawBgWavelet(now, pal);
+    else if (id === 'skiplist') drawBgFEM(now, pal);
+    else if (id === 'lob') drawBgGarch(now, pal);
+    else if (id === 'markowitz') drawBgCluster(now, pal);
+    else if (id === 'ivsmile') drawBgCheb(now, pal);
+    else if (id === 'ou_pairs') drawBgBrownian(now, pal);
+    else if (id === 'ewige' || id === 'sisyphus') drawBgPhilo(now, pal);
   }
   requestAnimationFrame(loop);
 })();
@@ -1135,75 +1565,203 @@ window.addEventListener('DOMContentLoaded', function(){
     if(now-lastPoolStat>220){ lastPoolStat=now; exStat.textContent='in-use '+used+'/'+N+(isBurst?' · burst!':' · 5 threads'); }
   }
 
-  /* --- 2. Chebyshev Family (Auto-increments n -> Infinity, Offscreen Trace Cache, Resets on Re-enter!) --- */
-  var chebN = 1, chebRevealT = performance.now(), chebAutoT = performance.now();
-  var traceCv = document.createElement('canvas'), traceCtx = traceCv.getContext('2d');
-  function resetCheb(){
-    chebN = 1; chebRevealT = performance.now(); chebAutoT = performance.now();
-    traceCv.width = Math.max(1, Math.round(W * DPR));
-    traceCv.height = Math.max(1, Math.round(H * DPR));
-    traceCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    traceCtx.clearRect(0, 0, W, H);
+  /* --- 2. Chebyshev Interpolation Solving Runge's Phenomenon --- */
+  var rungeDegrees = [4, 6, 8, 10, 12, 14, 16];
+  var chebDegIdx = 0, chebRevealT = performance.now(), chebAutoT = performance.now();
+  function rungeF(x){ return 1 / (1 + 25 * x * x); }
+
+  function buildBary(nodes, weights){
+    var vals = nodes.map(rungeF);
+    return function(x){
+      var num = 0, den = 0;
+      for (var i = 0; i < nodes.length; i++){
+        var d = x - nodes[i];
+        if (Math.abs(d) < 1e-12) return vals[i];
+        var t = weights[i] / d;
+        num += t * vals[i];
+        den += t;
+      }
+      return num / den;
+    };
   }
-  function T(k, x){ return Math.cos(k * Math.acos(Math.max(-1, Math.min(1, x)))); }
-  function bakeChebTrace(k){
-    if (!W || !H) return;
-    var pal = getPalette();
-    // Gently fade older traces so infinite growth stays airy and legible
-    traceCtx.globalCompositeOperation = 'destination-out';
-    traceCtx.fillStyle = 'rgba(0,0,0,0.08)';
-    traceCtx.fillRect(0, 0, W, H);
-    traceCtx.globalCompositeOperation = 'source-over';
-    var samples = Math.min(900, Math.max(260, k * 14));
-    traceCtx.strokeStyle = 'rgba(' + pal.ink + ',0.22)';
-    traceCtx.lineWidth = 0.85;
-    traceCtx.beginPath();
-    for (var s = 0; s <= samples; s++){
-      var x = -1 + 2 * s / samples, y = T(k, x);
-      var sx = s / samples * W, sy = H * 0.5 - y * (H * 0.36);
-      s === 0 ? traceCtx.moveTo(sx, sy) : traceCtx.lineTo(sx, sy);
+
+  // Precompute equispaced & Chebyshev interpolants + L_inf errors for all degrees
+  var rungeData = rungeDegrees.map(function(n){
+    var uNodes = [], uW = [], cNodes = [], cW = [];
+    // Binomial coefficients for equispaced barycentric weights
+    var binom = [1];
+    for (var k = 1; k <= n; k++) binom[k] = binom[k - 1] * (n - k + 1) / k;
+    for (var i = 0; i <= n; i++){
+      uNodes.push(-1 + 2 * i / n);
+      uW.push((i % 2 === 0 ? 1 : -1) * binom[i]);
+      cNodes.push(Math.cos(i * Math.PI / n));
+      cW.push((i % 2 === 0 ? 1 : -1) * (i === 0 || i === n ? 0.5 : 1));
     }
-    traceCtx.stroke();
+    var evalU = buildBary(uNodes, uW);
+    var evalC = buildBary(cNodes, cW);
+    var S = 220, uPts = new Float32Array(S + 1), cPts = new Float32Array(S + 1);
+    var errU = 0, errC = 0;
+    for (var s = 0; s <= S; s++){
+      var x = -1 + 2 * s / S, fx = rungeF(x);
+      var vu = evalU(x), vc = evalC(x);
+      uPts[s] = vu; cPts[s] = vc;
+      var du = Math.abs(vu - fx), dc = Math.abs(vc - fx);
+      if (du > errU) errU = du;
+      if (dc > errC) errC = dc;
+    }
+    return { n: n, uNodes: uNodes, cNodes: cNodes, uPts: uPts, cPts: cPts, errU: errU, errC: errC, S: S };
+  });
+
+  function resetCheb(){
+    chebDegIdx = 0; chebRevealT = performance.now(); chebAutoT = performance.now();
   }
   function advanceCheb(now){
-    bakeChebTrace(chebN);
-    chebN++;
+    chebDegIdx = (chebDegIdx + 1) % rungeDegrees.length;
     chebRevealT = now;
     chebAutoT = now;
   }
+
   function drawExCheb(now, pal){
-    if (now - chebAutoT > 1550) advanceCheb(now);
-    var reveal = Math.min(1, (now - chebRevealT) / 480);
-    ctx.strokeStyle='rgba('+pal.ink+',0.10)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
-    ctx.setLineDash([2,5]); ctx.strokeStyle='rgba('+pal.ink+',0.14)'; ctx.beginPath(); ctx.moveTo(0,H*0.14); ctx.lineTo(W,H*0.14); ctx.moveTo(0,H*0.86); ctx.lineTo(W,H*0.86); ctx.stroke(); ctx.setLineDash([]);
+    if (now - chebAutoT > 2100) advanceCheb(now);
+    var p = smoothstep((now - chebRevealT) / 480);
+    var cur = rungeData[chebDegIdx];
+    var prev = rungeData[(chebDegIdx - 1 + rungeData.length) % rungeData.length];
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.64 : 0.68));
+    var padL = 10, padR = 12, padT = 14, padB = 22;
+    var plotW = splitX - padL - padR, plotH = H - padT - padB;
+    var yMin = -0.55, yMax = 1.45;
+    function px(x){ return padL + (x + 1) * 0.5 * plotW; }
+    function py(y){ return padT + (1 - (y - yMin) / (yMax - yMin)) * plotH; }
 
-    // Blit all accumulated previous traces in O(1)
-    if (traceCv.width > 1) ctx.drawImage(traceCv, 0, 0, W, H);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(padL - 2, padT - 4, plotW + 4, plotH + 8); ctx.clip();
 
-    // Active T_n(x) (uses cos(n*acos(x)) — O(1) per sample even for n = 500!)
-    var samples = Math.min(960, Math.max(320, chebN * 14));
-    var maxS = Math.max(2, Math.round(samples * reveal));
-    ctx.strokeStyle='rgba('+pal.ink+',0.94)'; ctx.lineWidth=1.55; ctx.beginPath();
-    for (var s2 = 0; s2 <= maxS; s2++){
-      var x2 = -1 + 2 * s2 / samples, y2 = T(chebN, x2);
-      s2 === 0 ? ctx.moveTo(s2/samples*W, H/2 - y2*(H*0.36)) : ctx.lineTo(s2/samples*W, H/2 - y2*(H*0.36));
+    // Baseline y = 0 and y = 1 guides
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.12)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, py(0)); ctx.lineTo(padL + plotW, py(0)); ctx.stroke();
+    ctx.setLineDash([2, 5]);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)';
+    ctx.beginPath(); ctx.moveTo(padL, py(1)); ctx.lineTo(padL + plotW, py(1)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Exact Runge function f(x) = 1 / (1 + 25x^2) (dashed reference)
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.46)'; ctx.lineWidth = 1.15;
+    ctx.beginPath();
+    for (var s0 = 0; s0 <= cur.S; s0++){
+      var x0 = -1 + 2 * s0 / cur.S, y0 = rungeF(x0);
+      s0 === 0 ? ctx.moveTo(px(x0), py(y0)) : ctx.lineTo(px(x0), py(y0));
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Equispaced interpolant P_n^unif(x) (oscillates & blows up at edges!)
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.52)'; ctx.lineWidth = 1.15;
+    ctx.beginPath();
+    for (var s1 = 0; s1 <= cur.S; s1++){
+      var x1 = -1 + 2 * s1 / cur.S;
+      var y1 = lerp(prev.uPts[s1], cur.uPts[s1], p);
+      var clampedY = Math.max(yMin - 0.6, Math.min(yMax + 0.6, y1));
+      s1 === 0 ? ctx.moveTo(px(x1), py(clampedY)) : ctx.lineTo(px(x1), py(clampedY));
     }
     ctx.stroke();
 
-    // Extrema dots (cap density visually when n is huge)
-    var stepJ = chebN > 28 ? Math.ceil(chebN / 28) : 1;
-    for (var j = 0; j <= chebN; j += stepJ){
-      var xe = Math.cos(j * Math.PI / chebN), ye = j % 2 === 0 ? 1 : -1;
-      if ((xe + 1) / 2 > reveal) continue;
-      ctx.fillStyle = 'rgba('+pal.acc+',0.90)';
-      ctx.beginPath(); ctx.arc((xe+1)/2*W, H/2 - ye*(H*0.36), 2.3, 0, 6.283); ctx.fill();
+    // Chebyshev interpolant P_n^cheb(x) (smoothly converges across [-1, 1]!)
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.96)'; ctx.lineWidth = 1.85;
+    ctx.beginPath();
+    for (var s2 = 0; s2 <= cur.S; s2++){
+      var x2 = -1 + 2 * s2 / cur.S;
+      var y2 = lerp(prev.cPts[s2], cur.cPts[s2], p);
+      s2 === 0 ? ctx.moveTo(px(x2), py(y2)) : ctx.lineTo(px(x2), py(y2));
     }
-    exStat.textContent = 'n = ' + chebN + ' (auto-growing) · traces preserved';
+    ctx.stroke();
+
+    // Chebyshev nodes on the curve (showing denser clustering near x = ±1)
+    for (var ci = 0; ci < cur.cNodes.length; ci++){
+      var xn = cur.cNodes[ci], yn = rungeF(xn);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.92)';
+      ctx.beginPath(); ctx.arc(px(xn), py(yn), 2.1, 0, 6.283); ctx.fill();
+    }
+    ctx.restore();
+
+    // Bottom axis node strip comparing Chebyshev clustering near ±1
+    var axisY = H - 8;
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.14)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, axisY); ctx.lineTo(padL + plotW, axisY); ctx.stroke();
+    for (var ui = 0; ui < cur.uNodes.length; ui++){
+      var ux = px(cur.uNodes[ui]);
+      ctx.strokeStyle = 'rgba('+pal.ink+',0.32)';
+      ctx.beginPath(); ctx.moveTo(ux, axisY - 3); ctx.lineTo(ux, axisY); ctx.stroke();
+    }
+    for (var ck = 0; ck < cur.cNodes.length; ck++){
+      var cxn = px(cur.cNodes[ck]);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.88)';
+      ctx.beginPath(); ctx.arc(cxn, axisY, 1.8, 0, 6.283); ctx.fill();
+    }
+
+    // Divider
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, H - 10); ctx.stroke();
+
+    // Right panel: Log-scale L_inf error divergence (Equispaced ↑ vs Chebyshev ↓)
+    var rx = splitX + 12, rw = Math.max(40, W - rx - 8);
+    var eTop = padT + 26, eBot = H - 18, eH = Math.max(30, eBot - eTop);
+    var logMin = -3.2, logMax = 2.4;
+    function ey(err){
+      var lv = Math.log10(Math.max(1e-4, err));
+      return eTop + (1 - Math.max(0, Math.min(1, (lv - logMin) / (logMax - logMin)))) * eH;
+    }
+
+    // Horizontal log-grid (10^0 = 1 reference line)
+    var yOne = ey(1);
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.14)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rx, yOne); ctx.lineTo(rx + rw, yOne); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Uniform error curve (diverging upward)
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.50)'; ctx.lineWidth = 1.15;
+    ctx.beginPath();
+    for (var d1 = 0; d1 <= chebDegIdx; d1++){
+      var ex1 = rx + (d1 / (rungeData.length - 1)) * rw;
+      var ey1 = ey(rungeData[d1].errU);
+      d1 === 0 ? ctx.moveTo(ex1, ey1) : ctx.lineTo(ex1, ey1);
+    }
+    ctx.stroke();
+
+    // Chebyshev error curve (converging downward)
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.95)'; ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    for (var d2 = 0; d2 <= chebDegIdx; d2++){
+      var ex2 = rx + (d2 / (rungeData.length - 1)) * rw;
+      var ey2 = ey(rungeData[d2].errC);
+      d2 === 0 ? ctx.moveTo(ex2, ey2) : ctx.lineTo(ex2, ey2);
+    }
+    ctx.stroke();
+
+    // Current degree dots on both error curves
+    var curEx = rx + (chebDegIdx / (rungeData.length - 1)) * rw;
+    ctx.fillStyle = 'rgba('+pal.ink+',0.78)';
+    ctx.beginPath(); ctx.arc(curEx, ey(cur.errU), 2.3, 0, 6.283); ctx.fill();
+    ctx.fillStyle = 'rgba('+pal.acc+',0.98)';
+    ctx.beginPath(); ctx.arc(curEx, ey(cur.errC), 2.6, 0, 6.283); ctx.fill();
+
+    // Right panel header & live max-error readouts
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.95)';
+    ctx.fillText('cheb ‖e‖∞ ' + cur.errC.toFixed(3), rx, padT + 6);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.62)';
+    ctx.fillText('unif ‖e‖∞ ' + (cur.errU >= 10 ? cur.errU.toFixed(1) : cur.errU.toFixed(2)), rx, padT + 19);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.36)';
+    ctx.fillText('log₁₀‖e‖∞ (n=4..16)', rx, H - 5);
+
+    exStat.textContent = 'n = ' + cur.n + ' · cheb err ' + cur.errC.toFixed(3) + ' vs unif ' + (cur.errU >= 10 ? cur.errU.toFixed(1) : cur.errU.toFixed(2));
   }
 
   /* --- Shared 3D Interactive Camera (Auto-orbits + Responds Immediately to Mouse/Touch Drag!) --- */
   var cam = { yaw: 0.65, pitch: 0.36, dragging: false, moved: false, lx: 0, ly: 0 };
-  function is3DScene(){ var id = SCENES[currentScene].id; return id === 'pca3d' || id === 'simplex3d'; }
+  function is3DScene(){ var id = SCENES[currentScene].id; return id === 'pca3d' || id === 'simplex3d' || id === 'ewige'; }
   cv.addEventListener('pointerdown', function(e){
     if (!is3DScene()) return;
     cam.dragging = true; cam.moved = false; cam.lx = e.clientX; cam.ly = e.clientY;
@@ -1300,65 +1858,96 @@ window.addEventListener('DOMContentLoaded', function(){
     exStat.textContent = (cam.dragging ? 'orbiting · ' : 'drag to rotate · ') + svdNames[svdStage];
   }
 
-  /* --- 4. Rich 18-Vertex 3D Simplex Polytope + Scrolling Tableau --- */
-  // 18-vertex faceted 3D convex polytope (base hexagon + mid-belt octagon + upper bevel quad)
+  /* --- 4. Rich 32-Vertex 3D Simplex Polytope + Synced Tableau Stream --- */
+  // 32-vertex 5-tier convex polytope (5 + 8 + 8 + 6 + 5 vertices, 18 facets)
   var lpVerts = [];
-  // Bottom ring (y = -0.65, 6 vertices)
-  for (var b0=0;b0<6;b0++){ var a0=b0*Math.PI/3; lpVerts.push([Math.cos(a0)*0.78, -0.65, Math.sin(a0)*0.78]); }
-  // Mid belt (y = 0.02, 8 vertices)
-  for (var b1=0;b1<8;b1++){ var a1=b1*Math.PI/4 + 0.18; lpVerts.push([Math.cos(a1)*1.05, 0.02, Math.sin(a1)*1.05]); }
-  // Top cap (y = 0.68, 4 vertices)
-  for (var b2=0;b2<4;b2++){ var a2=b2*Math.PI/2 + 0.4; lpVerts.push([Math.cos(a2)*0.58, 0.68, Math.sin(a2)*0.58]); }
+  // Tier 0: bottom pentagon (y = -0.80, indices 0..4)
+  for (var b0=0;b0<5;b0++){ var a0=b0*Math.PI*2/5; lpVerts.push([Math.cos(a0)*0.56, -0.80, Math.sin(a0)*0.56]); }
+  // Tier 1: lower-mid octagon (y = -0.38, indices 5..12)
+  for (var b1=0;b1<8;b1++){ var a1=b1*Math.PI/4 + 0.12; lpVerts.push([Math.cos(a1)*0.94, -0.38, Math.sin(a1)*0.94]); }
+  // Tier 2: equator octagon (y = 0.04, indices 13..20)
+  for (var b2=0;b2<8;b2++){ var a2=b2*Math.PI/4 + 0.51; lpVerts.push([Math.cos(a2)*1.08, 0.04, Math.sin(a2)*1.08]); }
+  // Tier 3: upper-mid hexagon (y = 0.45, indices 21..26)
+  for (var b3=0;b3<6;b3++){ var a3=b3*Math.PI/3 + 0.25; lpVerts.push([Math.cos(a3)*0.86, 0.45, Math.sin(a3)*0.86]); }
+  // Tier 4: top pentagon (y = 0.78, indices 27..31)
+  for (var b4=0;b4<5;b4++){ var a4=b4*Math.PI*2/5 + 0.35; lpVerts.push([Math.cos(a4)*0.48, 0.78, Math.sin(a4)*0.48]); }
 
   var lpEdges = [];
   // Ring loops
-  for (var e0=0;e0<6;e0++) lpEdges.push([e0, (e0+1)%6]);
-  for (var e1=0;e1<8;e1++) lpEdges.push([6+e1, 6+(e1+1)%8]);
-  for (var e2=0;e2<4;e2++) lpEdges.push([14+e2, 14+(e2+1)%4]);
-  // Inter-ring struts (triangulated convex facets)
-  [[0,6],[0,7],[1,7],[1,8],[2,9],[2,10],[3,10],[3,11],[4,12],[4,13],[5,13],[5,6],
-   [6,14],[7,14],[8,15],[9,15],[10,16],[11,16],[12,17],[13,17]].forEach(function(e){ lpEdges.push(e); });
+  for (var e0=0;e0<5;e0++) lpEdges.push([e0, (e0+1)%5]);
+  for (var e1=0;e1<8;e1++) lpEdges.push([5+e1, 5+(e1+1)%8]);
+  for (var e2=0;e2<8;e2++) lpEdges.push([13+e2, 13+(e2+1)%8]);
+  for (var e3=0;e3<6;e3++) lpEdges.push([21+e3, 21+(e3+1)%6]);
+  for (var e4=0;e4<5;e4++) lpEdges.push([27+e4, 27+(e4+1)%5]);
+  // Tier 0 <-> Tier 1 struts
+  [[0,5],[0,6],[1,6],[1,7],[2,7],[2,8],[2,9],[3,9],[3,10],[3,11],[4,11],[4,12],[0,12]].forEach(function(e){ lpEdges.push(e); });
+  // Tier 1 <-> Tier 2 antiprism struts
+  for (var k12=0;k12<8;k12++){ lpEdges.push([5+k12, 13+k12]); lpEdges.push([5+k12, 13+(k12+7)%8]); }
+  // Tier 2 <-> Tier 3 struts
+  [[20,21],[13,21],[13,22],[14,22],[15,22],[15,23],[16,23],[16,24],[17,24],[17,25],[18,25],[19,25],[19,26],[20,26]].forEach(function(e){ lpEdges.push(e); });
+  // Tier 3 <-> Tier 4 struts
+  [[21,27],[22,27],[22,28],[23,28],[23,29],[24,29],[24,30],[25,30],[25,31],[26,31],[26,27]].forEach(function(e){ lpEdges.push(e); });
 
-  var lpPath = [0, 1, 8, 15, 16, 17]; // 5-pivot climb from base to optimal vertex 17!
-  var lpLogLines = [
-    'init  B={s1..s10}  v0=(0.8,-0.6,0.0)  z=0.0',
-    'enter x1  min-ratio=0.78  leave s2',
-    'piv 1 v1=(0.4,-0.6,0.7)   c_bar=[0,2.4,1.9] z=2.8',
-    'enter x3  min-ratio=0.92  leave s5',
-    'piv 2 v2=(-0.2,0.0,1.0)   c_bar=[0,2.1,0.8] z=5.4',
-    'enter x2  min-ratio=0.66  leave s7',
-    'piv 3 v3=(-0.4,0.7,0.4)   c_bar=[0,0.9,0.4] z=7.9',
-    'piv 4 v4=(-0.4,0.7,-0.4)  c_bar=[0,0.3,0.0] z=9.1',
-    'piv 5 v*=(0.4,0.7,-0.4)   c_bar<=0  ★ z*=10.6'
+  // 9-pivot spiral climb across all 5 tiers along verified polytope edges -> optimal vertex 29
+  var lpPath = [0, 1, 7, 8, 15, 16, 24, 25, 30, 29];
+  var lpZ    = [0.00, 1.85, 4.30, 6.12, 9.40, 11.25, 14.10, 14.10, 16.95, 18.42];
+  var lpPivotLogs = [
+    ['init   B={s1..s18}  v0=(0.56,-0.80,0.00)', '       c_bar=[3.4, 2.8, 4.1]   z=0.00'],
+    ['piv 1  enter x1  leave s3   θ*=0.64',     '       v1=(0.17,-0.80,0.53)    z=1.85'],
+    ['piv 2  enter x2  leave s6   θ*=0.91',     '       v2=(-0.11,-0.38,0.93)   z=4.30'],
+    ['piv 3  enter s1  leave s8   θ*=0.52',     '       v3=(-0.74,-0.38,0.58)   z=6.12'],
+    ['piv 4  enter x3  leave s11  θ*=0.84',     '       v4=(-0.52,0.04,0.95)    z=9.40'],
+    ['piv 5  enter s3  leave s13  θ*=0.48',     '       v5=(-1.04,0.04,0.29)   z=11.25'],
+    ['piv 6  enter s6  leave s15  θ*=0.77',     '       v6=(-0.83,0.45,-0.21)  z=14.10'],
+    ['piv 7  enter s8  leave s16  θ*=0 (Bland)','       degenerate swap · tie  z=14.10'],
+    ['piv 8  enter s11 leave s17  θ*=0.61',     '       v8=(-0.27,0.78,-0.40)  z=16.95'],
+    ['piv 9  enter s14 leave s18  θ*=0.39',     '       c_bar≤0  ★ OPTIMAL  z*=18.42']
   ];
-  var simpStep = 0, simpT = performance.now();
+  var lpFlatLines = [];
+  lpPivotLogs.forEach(function(pair, pi){
+    lpFlatLines.push({ p: pi, text: pair[0], head: true });
+    lpFlatLines.push({ p: pi, text: pair[1], head: false });
+  });
+  var simpStep = 0, simpT = performance.now(), simpScroll = 0;
 
   function drawExSimplex3D(now, pal){
-    if (!cam.dragging) cam.yaw += 0.0036;
-    if (now - simpT > 2000){ simpStep = (simpStep + 1) % lpPath.length; simpT = now; }
-    var p = smoothstep((now - simpT) / 620);
+    if (!cam.dragging) cam.yaw += 0.0034;
+    if (now - simpT > 1850){ simpStep = (simpStep + 1) % lpPath.length; simpT = now; }
+    var p = smoothstep((now - simpT) / 580);
     var yaw = cam.yaw, pitch = cam.pitch;
-    var cx = W * 0.26, cy = H * 0.53, sc = Math.min(W * 0.145, H * 0.43);
+    var narrow = W < 480;
+    var cx = W * (narrow ? 0.25 : 0.26), cy = H * 0.52, sc = Math.min(W * 0.145, H * 0.42);
 
     var pv = lpVerts.map(function(v){ return proj3D(v[0], v[1], v[2], yaw, pitch, cx, cy, sc); });
 
     // Polytope edges (depth-shaded)
     lpEdges.forEach(function(e){
       var zAvg = (pv[e[0]].z + pv[e[1]].z) * 0.5;
-      var a = Math.max(0.08, Math.min(0.34, 0.22 - zAvg * 0.08));
-      ctx.strokeStyle = 'rgba('+pal.ink+','+a.toFixed(3)+')'; ctx.lineWidth = 0.9;
+      var a = Math.max(0.06, Math.min(0.30, 0.19 - zAvg * 0.075));
+      ctx.strokeStyle = 'rgba('+pal.ink+','+a.toFixed(3)+')'; ctx.lineWidth = 0.85;
       ctx.beginPath(); ctx.moveTo(pv[e[0]].sx, pv[e[0]].sy); ctx.lineTo(pv[e[1]].sx, pv[e[1]].sy); ctx.stroke();
     });
 
-    // Optimal top facet soft highlight
+    // Optimal top pentagon facet soft highlight
     ctx.beginPath();
-    [14,15,16,17].forEach(function(idx, k){ k===0?ctx.moveTo(pv[idx].sx,pv[idx].sy):ctx.lineTo(pv[idx].sx,pv[idx].sy); });
+    [27,28,29,30,31].forEach(function(idx, k){ k===0?ctx.moveTo(pv[idx].sx,pv[idx].sy):ctx.lineTo(pv[idx].sx,pv[idx].sy); });
     ctx.closePath(); ctx.fillStyle = 'rgba('+pal.acc+',0.09)'; ctx.fill();
+
+    // Objective direction vector c pointing out from optimal vertex 29
+    var optV = lpVerts[29];
+    var cStart = proj3D(optV[0]*0.35, optV[1]*0.55, optV[2]*0.35, yaw, pitch, cx, cy, sc);
+    var cEnd   = proj3D(optV[0]*1.55, optV[1]*1.32, optV[2]*1.55, yaw, pitch, cx, cy, sc);
+    ctx.setLineDash([2,3]);
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.45)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cStart.sx, cStart.sy); ctx.lineTo(cEnd.sx, cEnd.sy); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = 'italic 10px Georgia, serif'; ctx.fillStyle = 'rgba('+pal.acc+',0.85)';
+    ctx.fillText('c', cEnd.sx + 4, cEnd.sy + 3);
 
     // Traversed 3D pivot path
     var curI = lpPath[simpStep], prevI = simpStep > 0 ? lpPath[simpStep - 1] : curI;
     var curPt = { sx: lerp(pv[prevI].sx, pv[curI].sx, p), sy: lerp(pv[prevI].sy, pv[curI].sy, p) };
-    ctx.strokeStyle = 'rgba('+pal.acc+',0.94)'; ctx.lineWidth = 2.0;
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.94)'; ctx.lineWidth = 1.9;
     ctx.beginPath();
     for (var s=0;s<=simpStep;s++){
       var pt = pv[lpPath[s]];
@@ -1368,53 +1957,152 @@ window.addEventListener('DOMContentLoaded', function(){
     }
     ctx.stroke();
 
-    // All 18 vertices + active pivot
+    // All 32 vertices + visited markers + active pivot
+    var visitedSet = {};
+    for (var vs=0;vs<=simpStep;vs++) visitedSet[lpPath[vs]] = true;
     pv.forEach(function(pt, idx){
-      var isOpt = (idx === 17);
-      ctx.fillStyle = isOpt ? 'rgba('+pal.acc+',0.96)' : 'rgba('+pal.ink+',0.42)';
-      ctx.beginPath(); ctx.arc(pt.sx, pt.sy, isOpt ? 3.2 : 1.7, 0, 6.283); ctx.fill();
+      var isOpt = (idx === 29);
+      var isVis = !!visitedSet[idx];
+      ctx.fillStyle = isOpt ? 'rgba('+pal.acc+',0.96)' : (isVis ? 'rgba('+pal.acc+',0.62)' : 'rgba('+pal.ink+',0.36)');
+      ctx.beginPath(); ctx.arc(pt.sx, pt.sy, isOpt ? 3.2 : (isVis ? 2.1 : 1.45), 0, 6.283); ctx.fill();
     });
+    // Degenerate pivot pulse ring on step 7 (Bland's rule) or optimal ring on step 9
+    if (simpStep === 7 || simpStep === lpPath.length - 1){
+      ctx.strokeStyle = 'rgba('+pal.acc+','+(0.75 - p * 0.45).toFixed(2)+')';
+      ctx.lineWidth = 1.1;
+      ctx.beginPath(); ctx.arc(curPt.sx, curPt.sy, 4.5 + p * 7, 0, 6.283); ctx.stroke();
+    }
     ctx.fillStyle = 'rgba('+pal.ink+',1)';
-    ctx.beginPath(); ctx.arc(curPt.sx, curPt.sy, 3.8, 0, 6.283); ctx.fill();
+    ctx.beginPath(); ctx.arc(curPt.sx, curPt.sy, 3.6, 0, 6.283); ctx.fill();
 
-    // Right half: Smoothly scrolling Simplex Formula & Tableau Stream
-    var rx = W * 0.51;
+    // Right half: Pivot-synced Simplex Tableau & Ratio-Test Stream
+    var rx = W * (narrow ? 0.48 : 0.50);
     ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(rx - 16, 10); ctx.lineTo(rx - 16, H - 10); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(rx - 12, 10); ctx.lineTo(rx - 12, H - 10); ctx.stroke();
+
+    var lineH = narrow ? 15 : 16.5;
+    var targetScroll = Math.max(0, (simpStep * 2 + 1) * lineH - (H - 36) * 0.55);
+    var maxScroll = Math.max(0, lpFlatLines.length * lineH - (H - 34));
+    targetScroll = Math.min(maxScroll, targetScroll);
+    simpScroll += (targetScroll - simpScroll) * 0.12;
 
     ctx.save();
-    ctx.beginPath(); ctx.rect(rx - 6, 8, W - rx + 6, H - 16); ctx.clip();
-    ctx.font = '10.2px ui-monospace, Menlo, monospace';
-    var scrollY = (now * 0.017) % (lpLogLines.length * 22);
-    for (var pass = 0; pass < 2; pass++){
-      for (var li = 0; li < lpLogLines.length; li++){
-        var yy = 20 + (pass * lpLogLines.length + li) * 22 - scrollY;
-        if (yy < -10 || yy > H + 10) continue;
-        var isHi = (li === Math.min(lpLogLines.length - 1, Math.round(simpStep * 1.6)));
-        ctx.fillStyle = isHi ? 'rgba('+pal.acc+',0.95)' : 'rgba('+pal.ink+',0.44)';
-        ctx.fillText(lpLogLines[li], rx, yy);
+    ctx.beginPath(); ctx.rect(rx - 4, 6, W - rx + 4, H - 12); ctx.clip();
+    ctx.font = (narrow ? '8.6px' : '10px') + ' ui-monospace, Menlo, monospace';
+    for (var li = 0; li < lpFlatLines.length; li++){
+      var item = lpFlatLines[li];
+      var yy = 18 + li * lineH - simpScroll;
+      if (yy < -10 || yy > H + 10) continue;
+      var isCur = (item.p === simpStep);
+      var isPast = (item.p < simpStep);
+      if (isCur){
+        ctx.fillStyle = item.head ? 'rgba('+pal.acc+',0.98)' : 'rgba('+pal.ink+',0.92)';
+      } else if (isPast){
+        ctx.fillStyle = 'rgba('+pal.ink+',0.42)';
+      } else {
+        ctx.fillStyle = 'rgba('+pal.ink+',0.20)';
       }
+      ctx.fillText(item.text, rx, yy);
     }
     ctx.restore();
-    exStat.textContent = '18 vertices · pivot ' + simpStep + '/5 · ' + (simpStep===5 ? 'optimal z* = 10.6' : 'drag to orbit');
+    exStat.textContent = '32 verts · pivot ' + simpStep + '/9 · ' + (simpStep === lpPath.length - 1 ? 'optimal z* = 18.42' : (simpStep === 7 ? 'degenerate (Bland) · z = 14.10' : 'z = ' + lpZ[simpStep].toFixed(2)));
   }
 
-  /* --- 5. Philosophy Fragments --- */
-  var philoIdx = 0;
+  /* --- 21. Überwindung: Chaos Condensing into a Dancing Star --- */
+  var philoIdx = 0, philoT = performance.now(), philoBurst = 0;
   var philoFrags = [
-    { de:'„Werde, der du bist.“', sub:'Become who you are — questioning inherited values as a quiet daily discipline.' },
-    { de:'„Man muss noch Chaos in sich haben, um einen tanzenden Stern gebären zu können.“', sub:'One must still have chaos in oneself to give birth to a dancing star.' },
-    { de:'„Amor Fati — das sei von nun an meine Liebe.“', sub:'Love of fate — not passive resignation, but willing necessity into craft.' },
-    { de:'„Es gibt keine Tatsachen, nur Interpretationen.“', sub:'Every model is a perspective; clarity begins when you know your assumptions.' }
+    { de:'„Man muss noch Chaos in sich haben, um einen tanzenden Stern gebären zu können.“', sub:'One must still have chaos in oneself to give birth to a dancing star.', src:'Zarathustra · Vorrede 5' },
+    { de:'„Werde, der du bist.“', sub:'Become who you are — questioning inherited values as a quiet daily discipline.', src:'Fröhliche Wissenschaft · §270' },
+    { de:'„Amor Fati — das sei von nun an meine Liebe.“', sub:'Love of fate — not passive resignation, but willing necessity into craft.', src:'Fröhliche Wissenschaft · §276' },
+    { de:'„Es gibt keine Tatsachen, nur Interpretationen.“', sub:'Every model is a perspective; clarity begins when you know your assumptions.', src:'Nachlass · 1886' }
   ];
-  var philoDeEl = document.getElementById('philo-de'), philoSubEl = document.getElementById('philo-sub');
-  philoEl.addEventListener('click', function(){
-    philoIdx = (philoIdx + 1) % philoFrags.length;
-    philoDeEl.textContent = philoFrags[philoIdx].de;
-    philoSubEl.textContent = philoFrags[philoIdx].sub;
-    if (window.__emitGermanDanmaku) window.__emitGermanDanmaku(philoFrags[philoIdx].de.replace(/[„“]/g,''));
-    exStat.textContent = 'fragment ' + (philoIdx + 1) + ' / ' + philoFrags.length;
-  });
+  var chPts = [];
+  for (var cp = 0; cp < 72; cp++){
+    var ang = (cp / 72) * Math.PI * 2;
+    var arm = cp % 5;
+    chPts.push({
+      ang: ang,
+      r0: 0.25 + Math.random() * 0.85,
+      sp: 0.4 + Math.random() * 0.9,
+      arm: arm,
+      phase: Math.random() * 6.283
+    });
+  }
+  function drawExPhilo(now, pal){
+    var narrow = W < 480;
+    var cx = W * (narrow ? 0.25 : 0.25), cy = H * 0.51;
+    var R = Math.min(cx - 14, H * 0.41);
+    var t = now * 0.0009;
+    // Smooth breathing cycle between chaotic scatter and coherent 5-point dancing star
+    var burstBoost = Math.max(0, 1 - (now - philoBurst) / 1400);
+    var coherence = Math.max(0.08, Math.min(1, 0.52 + 0.44 * Math.sin(t * 0.85) - burstBoost * 0.55));
+
+    // Faint orbital rings
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.07)'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.arc(cx, cy, R * 0.92, 0, 6.283); ctx.stroke();
+
+    // Star wireframe emerging when coherent
+    var starPts = [];
+    for (var s = 0; s < 10; s++){
+      var sa = t * 0.45 + (s / 10) * Math.PI * 2 - Math.PI * 0.5;
+      var sr = (s % 2 === 0) ? R * 0.82 : R * 0.34;
+      starPts.push({ x: cx + Math.cos(sa) * sr, y: cy + Math.sin(sa) * sr });
+    }
+    ctx.strokeStyle = 'rgba('+pal.acc+','+(0.12 + coherence * 0.48).toFixed(3)+')';
+    ctx.lineWidth = 1.0;
+    ctx.beginPath();
+    starPts.forEach(function(pt, idx){ idx === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y); });
+    ctx.closePath(); ctx.stroke();
+
+    // Particles condensing from chaos into the dancing star
+    for (var i = 0; i < chPts.length; i++){
+      var pt2 = chPts[i];
+      var chaosA = pt2.ang + t * pt2.sp + Math.sin(t * 1.3 + pt2.phase) * 0.6;
+      var chaosR = R * (0.35 + pt2.r0 * 0.72 + Math.sin(t * 1.7 + pt2.phase) * 0.14);
+      var chX = cx + Math.cos(chaosA) * chaosR, chY = cy + Math.sin(chaosA) * chaosR;
+
+      var seg = i % 10, segNext = (seg + 1) % 10;
+      var frac = ((i * 0.137) % 1);
+      var stX = lerp(starPts[seg].x, starPts[segNext].x, frac);
+      var stY = lerp(starPts[seg].y, starPts[segNext].y, frac);
+
+      var px = lerp(chX, stX, coherence), py = lerp(chY, stY, coherence);
+      var isAcc = (i % 4 === 0);
+      ctx.fillStyle = isAcc ? 'rgba('+pal.acc+','+(0.45 + coherence * 0.50).toFixed(2)+')' : 'rgba('+pal.ink+','+(0.28 + coherence * 0.45).toFixed(2)+')';
+      ctx.beginPath(); ctx.arc(px, py, isAcc ? 1.8 : 1.25, 0, 6.283); ctx.fill();
+    }
+
+    // Center star core glow
+    ctx.fillStyle = 'rgba('+pal.acc+','+(0.18 + coherence * 0.25).toFixed(2)+')';
+    ctx.beginPath(); ctx.arc(cx, cy, 5 + coherence * 5, 0, 6.283); ctx.fill();
+    ctx.fillStyle = 'rgba('+pal.ink+',0.96)';
+    ctx.beginPath(); ctx.arc(cx, cy, 2.2, 0, 6.283); ctx.fill();
+
+    // Right panel: Zarathustra / Werden aphorism
+    var rx = W * (narrow ? 0.50 : 0.49), rw = Math.max(80, W - rx - 10);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rx - 14, 14); ctx.lineTo(rx - 14, H - 14); ctx.stroke();
+
+    var q = philoFrags[philoIdx];
+    var fadeIn = Math.min(1, (now - philoT) / 420);
+    ctx.font = 'italic ' + (narrow ? '13px' : '16.5px') + ' "Cormorant Garamond", Georgia, serif';
+    ctx.fillStyle = 'rgba('+pal.ink+','+(0.92 * fadeIn).toFixed(2)+')';
+    var deLines = wrapTextLines(q.de, rw);
+    var yy = narrow ? 34 : 42;
+    deLines.forEach(function(ln){ ctx.fillText(ln, rx, yy); yy += (narrow ? 17 : 22); });
+
+    yy += 6;
+    ctx.font = (narrow ? '9.8px' : '11.2px') + ' "DM Sans", -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba('+pal.ink+','+(0.56 * fadeIn).toFixed(2)+')';
+    var enLines = wrapTextLines(q.sub, rw);
+    enLines.forEach(function(ln){ ctx.fillText(ln, rx, yy); yy += (narrow ? 13.5 : 16); });
+
+    ctx.font = '9px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.86)';
+    ctx.fillText('— ' + q.src, rx, H - 14);
+
+    exStat.textContent = 'coherence ' + Math.round(coherence * 100) + '% · fragment ' + (philoIdx + 1) + '/' + philoFrags.length + ' · click to scatter';
+  }
 
   /* --- 6. Finite Element Method (1D BVP Solver) --- */
   var femStage = 0, femStageT = performance.now(), femElems = 6;
@@ -1535,6 +2223,186 @@ window.addEventListener('DOMContentLoaded', function(){
     }
     var annVol = (mSig[mSig.length - 1] * Math.sqrt(252) * 100).toFixed(1);
     exStat.textContent = 'S_t = ' + lastP.toFixed(2) + ' · σ_ann = ' + annVol + '%';
+  }
+
+  /* --- 8b. Monte Carlo European Call Option Pricing vs Black-Scholes --- */
+  var mcS0 = 100, mcK = 105, mcR = 0.05, mcSig = 0.25, mcT = 1.0, mcSteps = 36;
+  var mcDisc = Math.exp(-mcR * mcT);
+  function normCDF(x){
+    var sign = x < 0 ? -1 : 1;
+    var ax = Math.abs(x) / Math.SQRT2;
+    var t = 1 / (1 + 0.3275911 * ax);
+    var erf = 1 - (((((1.061405429*t - 1.453152027)*t) + 1.421413741)*t - 0.284496736)*t + 0.254829592)*t * Math.exp(-ax*ax);
+    return 0.5 * (1 + sign * erf);
+  }
+  var mcD1 = (Math.log(mcS0 / mcK) + (mcR + 0.5 * mcSig * mcSig) * mcT) / (mcSig * Math.sqrt(mcT));
+  var mcD2 = mcD1 - mcSig * Math.sqrt(mcT);
+  var mcBS = mcS0 * normCDF(mcD1) - mcK * mcDisc * normCDF(mcD2);
+
+  var mcPaths = [], mcMaxPaths = 42, mcConv = [], mcN = 0, mcMean = 0, mcM2 = 0, mcLast = 0;
+  var mcHistBins = new Uint32Array(22);
+
+  function mcRandn(){
+    var u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+  function simMCPath(recordVisual){
+    var dt = mcT / mcSteps, drift = (mcR - 0.5 * mcSig * mcSig) * dt, vol = mcSig * Math.sqrt(dt);
+    var s = mcS0, pts = recordVisual ? [s] : null;
+    for (var i = 0; i < mcSteps; i++){
+      s *= Math.exp(drift + vol * mcRandn());
+      if (recordVisual) pts.push(s);
+    }
+    var payoff = mcDisc * Math.max(0, s - mcK);
+    // Welford online mean & variance
+    mcN++;
+    var delta = payoff - mcMean;
+    mcMean += delta / mcN;
+    mcM2 += delta * (payoff - mcMean);
+
+    // Terminal S_T histogram (range 50 .. 180)
+    var hb = Math.max(0, Math.min(mcHistBins.length - 1, Math.floor((s - 50) / (130 / mcHistBins.length))));
+    mcHistBins[hb]++;
+
+    if (recordVisual){
+      mcPaths.push({ pts: pts, itm: s > mcK, endS: s });
+      if (mcPaths.length > mcMaxPaths) mcPaths.shift();
+    }
+  }
+  function pushMCConv(){
+    var se = mcN > 1 ? Math.sqrt((mcM2 / (mcN - 1)) / mcN) : 0;
+    mcConv.push({ n: mcN, mean: mcMean, se: se });
+    if (mcConv.length > 90) mcConv.shift();
+  }
+  function stepMCBatch(count, visCount){
+    for (var i = 0; i < count; i++) simMCPath(i >= count - visCount);
+    pushMCConv();
+  }
+  function resetMC(){
+    mcPaths = []; mcConv = []; mcN = 0; mcMean = 0; mcM2 = 0;
+    mcHistBins.fill(0);
+    for (var k = 0; k < 10; k++) stepMCBatch(4, 1);
+  }
+  resetMC();
+
+  function drawExMCOption(now, pal){
+    if (now - mcLast > 95){
+      mcLast = now;
+      stepMCBatch(mcN < 200 ? 6 : 16, 1);
+    }
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.54 : 0.56));
+    var histW = narrow ? 22 : 30;
+    var pathW = splitX - histW - 14;
+    var padT = 14, padB = 16, plotH = H - padT - padB;
+    var minS = 50, maxS = 180;
+    function sy(v){ return padT + (1 - Math.max(0, Math.min(1, (v - minS) / (maxS - minS)))) * plotH; }
+
+    // Left panel: Simulated GBM paths
+    for (var pi = 0; pi < mcPaths.length; pi++){
+      var path = mcPaths[pi];
+      var isLatest = (pi === mcPaths.length - 1);
+      var fade = 0.25 + 0.75 * (pi / Math.max(1, mcPaths.length - 1));
+      ctx.strokeStyle = path.itm
+        ? 'rgba('+pal.acc+','+(isLatest ? 0.92 : (0.14 + fade * 0.24)).toFixed(3)+')'
+        : 'rgba('+pal.ink+','+(isLatest ? 0.58 : (0.06 + fade * 0.14)).toFixed(3)+')';
+      ctx.lineWidth = isLatest ? 1.4 : 0.8;
+      ctx.beginPath();
+      for (var k = 0; k < path.pts.length; k++){
+        var px = 4 + (k / mcSteps) * pathW, py = sy(path.pts[k]);
+        k === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      if (isLatest){
+        ctx.fillStyle = path.itm ? 'rgba('+pal.acc+',0.98)' : 'rgba('+pal.ink+',0.85)';
+        ctx.beginPath(); ctx.arc(4 + pathW, sy(path.endS), 2.5, 0, 6.283); ctx.fill();
+      }
+    }
+
+    // Strike K horizontal dashed line
+    var ky = sy(mcK);
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.62)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(4, ky); ctx.lineTo(4 + pathW, ky); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '9.5px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.85)';
+    ctx.fillText('K=' + mcK, 8, ky - 4);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.45)';
+    ctx.fillText('S₀=' + mcS0, 8, sy(mcS0) + 11);
+
+    // Terminal S_T histogram bars along right edge of left panel
+    var maxBin = 1;
+    for (var hb = 0; hb < mcHistBins.length; hb++) if (mcHistBins[hb] > maxBin) maxBin = mcHistBins[hb];
+    var binH = plotH / mcHistBins.length;
+    for (var b = 0; b < mcHistBins.length; b++){
+      var valS = minS + (b + 0.5) * (maxS - minS) / mcHistBins.length;
+      var bw = (mcHistBins[b] / maxBin) * (histW - 4);
+      var by = padT + (mcHistBins.length - 1 - b) * binH;
+      ctx.fillStyle = valS > mcK ? 'rgba('+pal.acc+',0.50)' : 'rgba('+pal.ink+',0.18)';
+      ctx.fillRect(4 + pathW + 4, by + 1, bw, Math.max(1, binH - 2));
+    }
+
+    // Divider between left paths and right convergence plot
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, H - 10); ctx.stroke();
+
+    // Right panel: MC estimate convergence toward Black-Scholes C0 + 95% CI ribbon
+    var rx = splitX + 14, rw = Math.max(40, W - rx - 8);
+    var cTop = padT + 24, cBot = H - padB, cH = Math.max(30, cBot - cTop);
+    var cMin = mcBS - 4.2, cMax = mcBS + 4.2;
+    function cy(val){ return cTop + (1 - Math.max(0, Math.min(1, (val - cMin) / (cMax - cMin)))) * cH; }
+
+    // 95% CI ribbon (±1.96 SE)
+    if (mcConv.length > 1){
+      ctx.beginPath();
+      for (var ci = 0; ci < mcConv.length; ci++){
+        var cx1 = rx + (ci / (mcConv.length - 1)) * rw;
+        var cy1 = cy(mcConv[ci].mean + 1.96 * mcConv[ci].se);
+        ci === 0 ? ctx.moveTo(cx1, cy1) : ctx.lineTo(cx1, cy1);
+      }
+      for (var cj = mcConv.length - 1; cj >= 0; cj--){
+        var cx2 = rx + (cj / (mcConv.length - 1)) * rw;
+        var cy2 = cy(mcConv[cj].mean - 1.96 * mcConv[cj].se);
+        ctx.lineTo(cx2, cy2);
+      }
+      ctx.closePath();
+      ctx.fillStyle = 'rgba('+pal.ink+',0.09)';
+      ctx.fill();
+    }
+
+    // Black-Scholes analytical reference line
+    var bsY = cy(mcBS);
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.80)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rx, bsY); ctx.lineTo(rx + rw, bsY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // MC running mean curve
+    if (mcConv.length > 1){
+      ctx.strokeStyle = 'rgba('+pal.ink+',0.92)'; ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      for (var m = 0; m < mcConv.length; m++){
+        var mx = rx + (m / (mcConv.length - 1)) * rw, my = cy(mcConv[m].mean);
+        m === 0 ? ctx.moveTo(mx, my) : ctx.lineTo(mx, my);
+      }
+      ctx.stroke();
+      var tip = mcConv[mcConv.length - 1];
+      ctx.fillStyle = 'rgba('+pal.acc+',0.98)';
+      ctx.beginPath(); ctx.arc(rx + rw, cy(tip.mean), 2.5, 0, 6.283); ctx.fill();
+    }
+
+    // Right panel header readout
+    var curSE = mcN > 1 ? Math.sqrt((mcM2 / (mcN - 1)) / mcN) : 0;
+    ctx.font = (narrow ? '8.8px' : '9.8px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.86)';
+    ctx.fillText('MC ĉ = ' + mcMean.toFixed(2) + ' ± ' + (1.96 * curSE).toFixed(2), rx, padT + 6);
+    ctx.fillStyle = 'rgba('+pal.acc+',0.90)';
+    ctx.fillText('BS C = ' + mcBS.toFixed(2) + '  (N=' + mcN + ')', rx, padT + 19);
+
+    exStat.textContent = 'N = ' + mcN + ' · MC ' + mcMean.toFixed(2) + ' vs BS ' + mcBS.toFixed(2) + ' · SE ±' + curSE.toFixed(2);
   }
 
   /* --- 9. PRNG (Xorshift64* Bit-Avalanche + Uniformity Histogram) --- */
@@ -1704,6 +2572,1470 @@ window.addEventListener('DOMContentLoaded', function(){
     exStat.textContent = rsqrtIters + ' Newton step · rel err ' + relErr.toFixed(3) + '%';
   }
 
+  /* --- 11. Radix-2 Cooley-Tukey FFT (Signal -> Butterfly Stages -> |X[k]| Spectrum) --- */
+  var fftN = 64;
+  var fftRe = new Float64Array(fftN), fftIm = new Float64Array(fftN);
+  var fftPresets = [
+    { name: 'Harmonic Chord (f=3, 7, 13)', fn: function(u, ph){ return 0.90*Math.sin(6.28318*3*u + ph) + 0.62*Math.sin(6.28318*7*u - ph*1.4) + 0.44*Math.sin(6.28318*13*u + ph*0.8); } },
+    { name: 'Square Wave (odd harmonics)', fn: function(u, ph){ var v=0; for(var h=1;h<=15;h+=2) v += (1/h)*Math.sin(6.28318*h*2*u + ph*h*0.35); return v*1.25; } },
+    { name: 'AM Carrier (f=10 ± 2)',       fn: function(u, ph){ return (1 + 0.72*Math.cos(6.28318*2*u + ph*0.6)) * Math.sin(6.28318*10*u + ph*1.5) * 0.95; } },
+    { name: 'Gaussian Burst (broadband)',  fn: function(u, ph){ var c = (u + (ph * 0.08) % 1) % 1; var d = c - 0.5; return Math.exp(-d*d*55) * Math.cos(6.28318*9*u) * 1.55; } }
+  ];
+  var fftPresetIdx = 0;
+
+  // Authentic iterative Radix-2 Cooley-Tukey FFT in-place
+  function runRadix2FFT(re, im){
+    var n = re.length;
+    for (var i = 1, j = 0; i < n; i++){
+      var bit = n >> 1;
+      for (; j & bit; bit >>= 1) j ^= bit;
+      j ^= bit;
+      if (i < j){
+        var tr = re[i]; re[i] = re[j]; re[j] = tr;
+        var ti = im[i]; im[i] = im[j]; im[j] = ti;
+      }
+    }
+    for (var len = 2; len <= n; len <<= 1){
+      var ang = -2 * Math.PI / len;
+      var wlenR = Math.cos(ang), wlenI = Math.sin(ang);
+      for (var i0 = 0; i0 < n; i0 += len){
+        var wr = 1, wi = 0;
+        for (var k = 0; k < (len >> 1); k++){
+          var uR = re[i0 + k], uI = im[i0 + k];
+          var vR = re[i0 + k + (len >> 1)] * wr - im[i0 + k + (len >> 1)] * wi;
+          var vI = re[i0 + k + (len >> 1)] * wi + im[i0 + k + (len >> 1)] * wr;
+          re[i0 + k] = uR + vR;
+          im[i0 + k] = uI + vI;
+          re[i0 + k + (len >> 1)] = uR - vR;
+          im[i0 + k + (len >> 1)] = uI - vI;
+          var nwr = wr * wlenR - wi * wlenI;
+          wi = wr * wlenI + wi * wlenR;
+          wr = nwr;
+        }
+      }
+    }
+  }
+
+  function drawExFFT(now, pal){
+    var ph = now * 0.0014;
+    var preset = fftPresets[fftPresetIdx];
+    var narrow = W < 480;
+
+    // Sample N = 64 points & compute live FFT
+    var rawSig = new Float32Array(fftN);
+    for (var i = 0; i < fftN; i++){
+      var v = preset.fn(i / fftN, ph);
+      rawSig[i] = v;
+      fftRe[i] = v;
+      fftIm[i] = 0;
+    }
+    runRadix2FFT(fftRe, fftIm);
+
+    var mags = new Float32Array(fftN / 2);
+    var maxMag = 0.001, peakBin = 1, peakVal = 0;
+    for (var k = 0; k < fftN / 2; k++){
+      var mag = Math.hypot(fftRe[k], fftIm[k]) / (fftN / 2);
+      mags[k] = mag;
+      if (mag > maxMag) maxMag = mag;
+      if (k > 0 && mag > peakVal){ peakVal = mag; peakBin = k; }
+    }
+
+    // 3-zone layout: Time Signal (left) | Butterfly Network (center) | FFT Spectrum (right)
+    var x1 = Math.floor(W * (narrow ? 0.36 : 0.38));
+    var x2 = Math.floor(W * (narrow ? 0.58 : 0.61));
+    var padT = 22, padB = 18, plotH = H - padT - padB;
+    var midY = padT + plotH * 0.5;
+
+    // Zone 1: Time-domain waveform x[n]
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.10)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(4, midY); ctx.lineTo(x1 - 10, midY); ctx.stroke();
+
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.86)'; ctx.lineWidth = 1.25;
+    ctx.beginPath();
+    for (var s = 0; s < fftN; s++){
+      var sx = 4 + (s / (fftN - 1)) * (x1 - 16);
+      var sy = midY - Math.max(-1.8, Math.min(1.8, rawSig[s])) * (plotH * 0.24);
+      s === 0 ? ctx.moveTo(sx, sy) : ctx.lineTo(sx, sy);
+    }
+    ctx.stroke();
+    // Discrete sample dots (every 2nd sample for crispness)
+    for (var sd = 0; sd < fftN; sd += 2){
+      var dx = 4 + (sd / (fftN - 1)) * (x1 - 16);
+      var dy = midY - Math.max(-1.8, Math.min(1.8, rawSig[sd])) * (plotH * 0.24);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.70)';
+      ctx.beginPath(); ctx.arc(dx, dy, 1.35, 0, 6.283); ctx.fill();
+    }
+
+    // Dividers
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.08)'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x1, 10); ctx.lineTo(x1, H - 10);
+    ctx.moveTo(x2, 10); ctx.lineTo(x2, H - 10);
+    ctx.stroke();
+
+    // Zone 2: Animated 8-point Radix-2 Butterfly Flow (3 stages)
+    var bx0 = x1 + 12, bw = Math.max(36, x2 - x1 - 24);
+    var stages = 3, rows = 8;
+    var activeStage = Math.floor((now * 0.0011) % stages);
+    var stagePulse = ((now * 0.0011) % 1);
+    function rowY(r){ return padT + 4 + (r / (rows - 1)) * (plotH - 8); }
+    function colX(c){ return bx0 + (c / stages) * bw; }
+
+    for (var st = 0; st < stages; st++){
+      var half = 1 << st, step = half << 1;
+      var cx0 = colX(st), cx1 = colX(st + 1);
+      var isAct = (st === activeStage);
+      for (var grp = 0; grp < rows; grp += step){
+        for (var j = 0; j < half; j++){
+          var a = grp + j, b = grp + j + half;
+          var ya = rowY(a), yb = rowY(b);
+          // Straight & cross butterfly wings
+          ctx.strokeStyle = isAct ? 'rgba('+pal.acc+',0.52)' : 'rgba('+pal.ink+',0.14)';
+          ctx.lineWidth = isAct ? 1.05 : 0.7;
+          ctx.beginPath();
+          ctx.moveTo(cx0, ya); ctx.lineTo(cx1, ya);
+          ctx.moveTo(cx0, yb); ctx.lineTo(cx1, yb);
+          ctx.moveTo(cx0, ya); ctx.lineTo(cx1, yb);
+          ctx.moveTo(cx0, yb); ctx.lineTo(cx1, ya);
+          ctx.stroke();
+          if (isAct && j === 0){
+            var px = lerp(cx0, cx1, stagePulse);
+            ctx.fillStyle = 'rgba('+pal.acc+',0.95)';
+            ctx.beginPath(); ctx.arc(px, lerp(ya, yb, stagePulse), 1.9, 0, 6.283); ctx.fill();
+          }
+        }
+      }
+    }
+    for (var c = 0; c <= stages; c++){
+      for (var r = 0; r < rows; r++){
+        ctx.fillStyle = (c === activeStage || c === activeStage + 1) ? 'rgba('+pal.acc+',0.88)' : 'rgba('+pal.ink+',0.36)';
+        ctx.beginPath(); ctx.arc(colX(c), rowY(r), 1.6, 0, 6.283); ctx.fill();
+      }
+    }
+
+    // Zone 3: Live FFT Magnitude Spectrum |X[k]| (bins 0..31)
+    var sx0 = x2 + 12, sw = Math.max(40, W - sx0 - 8);
+    var baseY = H - padB, specH = plotH - 6;
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.12)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(sx0, baseY); ctx.lineTo(sx0 + sw, baseY); ctx.stroke();
+
+    var bins = fftN / 2;
+    var barW = Math.max(1.5, sw / bins - 1.5);
+    var peakLabels = 0;
+    for (var kb = 1; kb < bins; kb++){
+      var norm = mags[kb] / Math.max(0.8, maxMag);
+      var bh = Math.max(1, norm * specH);
+      var bx = sx0 + (kb / bins) * sw;
+      var isPeak = norm > 0.36 && mags[kb] >= mags[kb - 1] && (kb === bins - 1 || mags[kb] >= mags[kb + 1]);
+      ctx.fillStyle = isPeak ? 'rgba('+pal.acc+',0.94)' : 'rgba('+pal.ink+',0.32)';
+      ctx.fillRect(bx, baseY - bh, barW, bh);
+      if (isPeak && peakLabels < 3 && !narrow){
+        peakLabels++;
+        ctx.font = '8.5px ui-monospace, Menlo, monospace';
+        ctx.fillStyle = 'rgba('+pal.acc+',0.90)';
+        ctx.fillText('f' + kb, bx - 2, baseY - bh - 4);
+      }
+    }
+
+    // Zone headers
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.52)';
+    ctx.fillText('x[n] (N=' + fftN + ')', 4, 12);
+    ctx.fillStyle = 'rgba('+pal.acc+',0.86)';
+    ctx.fillText('butterfly', bx0, 12);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.78)';
+    ctx.fillText('|X[k]| spectrum', sx0, 12);
+
+    exStat.textContent = preset.name + ' · peak bin f=' + peakBin + ' · O(N log N)';
+  }
+
+  /* --- 12. DWT + Hessenberg (HD) + SVD Digital Watermarking (Embed & Extract) --- */
+  var wmSize = 32, wmSub = 16, wmAlpha = 0.06;
+  // Build 32x32 smooth host image I (concentric wave + soft gradient)
+  var wmHost = [];
+  for (var r = 0; r < wmSize; r++){
+    var row = new Float64Array(wmSize);
+    for (var c = 0; c < wmSize; c++){
+      var nx = (c / (wmSize - 1)) * 2 - 1, ny = (r / (wmSize - 1)) * 2 - 1;
+      var rad = Math.hypot(nx - 0.15, ny + 0.1);
+      var val = 0.52 + 0.26 * Math.cos(rad * 5.2) * Math.exp(-rad * 0.7) + 0.18 * nx - 0.12 * ny;
+      row[c] = Math.max(0.05, Math.min(0.95, val));
+    }
+    wmHost.push(row);
+  }
+
+  // Build 16x16 binary watermark W (crisp "M" monogram inside frame)
+  var wmMark = [];
+  for (var wr = 0; wr < wmSub; wr++){
+    var wrow = new Float64Array(wmSub);
+    for (var wc = 0; wc < wmSub; wc++){
+      var border = (wr === 1 || wr === wmSub - 2) && wc >= 1 && wc <= wmSub - 2;
+      var leftLeg = (wc === 3 || wc === 4) && wr >= 3 && wr <= 12;
+      var rightLeg = (wc === 11 || wc === 12) && wr >= 3 && wr <= 12;
+      var diagL = wr >= 4 && wr <= 9 && Math.abs((wc - 3) - (wr - 3)) <= 0.6;
+      var diagR = wr >= 4 && wr <= 9 && Math.abs((12 - wc) - (wr - 3)) <= 0.6;
+      wrow[wc] = (border || leftLeg || rightLeg || diagL || diagR) ? 1.0 : 0.0;
+    }
+    wmMark.push(wrow);
+  }
+
+  // Real 1-level 2D Haar DWT
+  function haarDWT2D(img){
+    var N = img.length, half = N >> 1;
+    var tmp = [];
+    for (var r = 0; r < N; r++){
+      var tr = new Float64Array(N);
+      for (var c = 0; c < half; c++){
+        tr[c] = (img[r][2*c] + img[r][2*c+1]) * 0.5;
+        tr[c + half] = (img[r][2*c] - img[r][2*c+1]) * 0.5;
+      }
+      tmp.push(tr);
+    }
+    var LL = [], HL = [], LH = [], HH = [];
+    for (var i = 0; i < half; i++){
+      LL.push(new Float64Array(half)); HL.push(new Float64Array(half));
+      LH.push(new Float64Array(half)); HH.push(new Float64Array(half));
+    }
+    for (var c2 = 0; c2 < half; c2++){
+      for (var r2 = 0; r2 < half; r2++){
+        LL[r2][c2] = (tmp[2*r2][c2] + tmp[2*r2+1][c2]) * 0.5;
+        LH[r2][c2] = (tmp[2*r2][c2] - tmp[2*r2+1][c2]) * 0.5;
+        HL[r2][c2] = (tmp[2*r2][c2+half] + tmp[2*r2+1][c2+half]) * 0.5;
+        HH[r2][c2] = (tmp[2*r2][c2+half] - tmp[2*r2+1][c2+half]) * 0.5;
+      }
+    }
+    return { LL: LL, HL: HL, LH: LH, HH: HH };
+  }
+
+  // Real Householder Hessenberg Decomposition: A = P * H * P^T
+  function hessenberg(A){
+    var n = A.length;
+    var H = A.map(function(r){ return Float64Array.from(r); });
+    for (var k = 0; k < n - 2; k++){
+      var norm = 0;
+      for (var i = k + 1; i < n; i++) norm += H[i][k] * H[i][k];
+      norm = Math.sqrt(norm);
+      if (norm < 1e-12) continue;
+      var sgn = H[k + 1][k] >= 0 ? 1 : -1;
+      var u0 = H[k + 1][k] + sgn * norm;
+      var v = new Float64Array(n - k - 1);
+      v[0] = u0;
+      for (var i2 = k + 2; i2 < n; i2++) v[i2 - k - 1] = H[i2][k];
+      var v2 = 0;
+      for (var j = 0; j < v.length; j++) v2 += v[j] * v[j];
+      if (v2 < 1e-12) continue;
+      var beta = 2 / v2;
+      // Left multiply: H[k+1:, k:] -= beta * v * (v^T * H[k+1:, k:])
+      for (var col = k; col < n; col++){
+        var dot = 0;
+        for (var r1 = 0; r1 < v.length; r1++) dot += v[r1] * H[k + 1 + r1][col];
+        for (var r2 = 0; r2 < v.length; r2++) H[k + 1 + r2][col] -= beta * dot * v[r2];
+      }
+      // Right multiply: H[:, k+1:] -= beta * (H[:, k+1:] * v) * v^T
+      for (var row = 0; row < n; row++){
+        var dot2 = 0;
+        for (var c1 = 0; c1 < v.length; c1++) dot2 += H[row][k + 1 + c1] * v[c1];
+        for (var c2 = 0; c2 < v.length; c2++) H[row][k + 1 + c2] -= beta * dot2 * v[c2];
+      }
+    }
+    return H;
+  }
+
+  // Jacobi eigenvalue solver for symmetric M^T M -> singular values sigma_i
+  function singularValues(M){
+    var n = M.length;
+    var G = [];
+    for (var i = 0; i < n; i++){
+      var gr = new Float64Array(n);
+      for (var j = 0; j < n; j++){
+        var sum = 0;
+        for (var k = 0; k < n; k++) sum += M[k][i] * M[k][j];
+        gr[j] = sum;
+      }
+      G.push(gr);
+    }
+    for (var sw = 0; sw < 14; sw++){
+      for (var p = 0; p < n - 1; p++){
+        for (var q = p + 1; q < n; q++){
+          var gpq = G[p][q];
+          if (Math.abs(gpq) < 1e-10) continue;
+          var tau = (G[q][q] - G[p][p]) / (2 * gpq);
+          var t = (tau >= 0 ? 1 : -1) / (Math.abs(tau) + Math.sqrt(1 + tau * tau));
+          var c = 1 / Math.sqrt(1 + t * t), s = t * c;
+          var gpp = G[p][p], gqq = G[q][q];
+          G[p][p] = c*c*gpp - 2*s*c*gpq + s*s*gqq;
+          G[q][q] = s*s*gpp + 2*s*c*gpq + c*c*gqq;
+          G[p][q] = G[q][p] = 0;
+          for (var r = 0; r < n; r++){
+            if (r === p || r === q) continue;
+            var grp = G[r][p], grq = G[r][q];
+            G[r][p] = G[p][r] = c * grp - s * grq;
+            G[r][q] = G[q][r] = s * grp + c * grq;
+          }
+        }
+      }
+    }
+    var sigs = [];
+    for (var d = 0; d < n; d++) sigs.push(Math.sqrt(Math.max(0, G[d][d])));
+    sigs.sort(function(a, b){ return b - a; });
+    return sigs;
+  }
+
+  var wmDWT = haarDWT2D(wmHost);
+  var wmHess = hessenberg(wmDWT.LL);
+  var wmSigH = singularValues(wmHess);
+  var wmSigW = singularValues(wmMark);
+  var wmSigEmb = wmSigH.map(function(s, idx){ return s + wmAlpha * wmSigW[idx]; });
+  // Simulate subtle watermarked host I* (imperceptible delta) and slightly noisy extracted watermark W_hat
+  var wmWatermarked = wmHost.map(function(row, r){
+    var out = new Float64Array(wmSize);
+    for (var c = 0; c < wmSize; c++){
+      var wv = wmMark[r >> 1][c >> 1];
+      out[c] = Math.max(0, Math.min(1, row[c] + (wv - 0.25) * wmAlpha * 0.14));
+    }
+    return out;
+  });
+  var wmMSE = 0;
+  for (var mr = 0; mr < wmSize; mr++) for (var mc = 0; mc < wmSize; mc++){
+    var diff = wmHost[mr][mc] - wmWatermarked[mr][mc]; wmMSE += diff * diff;
+  }
+  var wmPSNR = 10 * Math.log10(1 / Math.max(1e-8, wmMSE / (wmSize * wmSize)));
+  var wmExtracted = wmMark.map(function(row, r){
+    var out = new Float64Array(wmSub);
+    for (var c = 0; c < wmSub; c++){
+      var noise = (Math.sin(r * 12.9898 + c * 78.233) * 43758.5453) % 1;
+      out[c] = Math.max(0, Math.min(1, row[c] * 0.94 + Math.abs(noise) * 0.08));
+    }
+    return out;
+  });
+
+  var wmStages = ['1. Host I & W', '2. Haar DWT', '3. HD (PHPᵀ)', '4. SVD Embed', '5. Extract Ŵ'];
+  var wmStage = 0, wmStageT = performance.now();
+
+  function drawMatrixBlock(mat, x, y, size, pal, accentMode){
+    var N = mat.length, cell = size / N;
+    var maxAbs = 0.001;
+    for (var r = 0; r < N; r++) for (var c = 0; c < N; c++){
+      var a = Math.abs(mat[r][c]); if (a > maxAbs) maxAbs = a;
+    }
+    for (var r2 = 0; r2 < N; r2++){
+      for (var c2 = 0; c2 < N; c2++){
+        var v = Math.abs(mat[r2][c2]) / maxAbs;
+        if (accentMode === 'hess'){
+          var belowSub = (r2 > c2 + 1);
+          ctx.fillStyle = belowSub ? 'rgba('+pal.ink+',0.03)' : (v > 0.15 ? 'rgba('+pal.acc+','+(0.16 + v*0.78).toFixed(2)+')' : 'rgba('+pal.ink+','+(0.06 + v*0.45).toFixed(2)+')');
+        } else if (accentMode === 'mark'){
+          ctx.fillStyle = v > 0.45 ? 'rgba('+pal.acc+','+(0.25 + v*0.72).toFixed(2)+')' : 'rgba('+pal.ink+',0.05)';
+        } else {
+          ctx.fillStyle = 'rgba('+pal.ink+','+(0.08 + v*0.78).toFixed(2)+')';
+        }
+        ctx.fillRect(x + c2 * cell, y + r2 * cell, cell + 0.35, cell + 0.35);
+      }
+    }
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.18)'; ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, size, size);
+  }
+
+  function drawExDWTMark(now, pal){
+    if (now - wmStageT > 2700){ wmStage = (wmStage + 1) % wmStages.length; wmStageT = now; }
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.50 : 0.46));
+    var boxS = Math.min(H - 36, splitX - (narrow ? 28 : 44));
+    var bx = 8, by = Math.floor((H - boxS) * 0.5) + 6;
+
+    // Left panel: Stage-dependent matrix/image visual
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    if (wmStage === 0){
+      var hostS = Math.floor(boxS * 0.72), markS = Math.floor(boxS * 0.44);
+      drawMatrixBlock(wmHost, bx, by + 6, hostS, pal, 'gray');
+      drawMatrixBlock(wmMark, bx + hostS + 12, by + hostS - markS + 6, markS, pal, 'mark');
+      ctx.fillStyle = 'rgba('+pal.ink+',0.65)'; ctx.fillText('Host I (32×32)', bx, by);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.90)'; ctx.fillText('W (16×16)', bx + hostS + 12, by + hostS - markS);
+    } else if (wmStage === 1){
+      var half = boxS * 0.5;
+      drawMatrixBlock(wmDWT.LL, bx, by, half, pal, 'gray');
+      drawMatrixBlock(wmDWT.HL, bx + half, by, half, pal, 'gray');
+      drawMatrixBlock(wmDWT.LH, bx, by + half, half, pal, 'gray');
+      drawMatrixBlock(wmDWT.HH, bx + half, by + half, half, pal, 'gray');
+      ctx.strokeStyle = 'rgba('+pal.acc+',0.92)'; ctx.lineWidth = 1.6;
+      ctx.strokeRect(bx, by, half, half);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.95)'; ctx.fillText('LL', bx + 4, by + 11);
+      ctx.fillStyle = 'rgba('+pal.ink+',0.55)';
+      ctx.fillText('HL', bx + half + 4, by + 11);
+      ctx.fillText('LH', bx + 4, by + half + 11);
+      ctx.fillText('HH', bx + half + 4, by + half + 11);
+      ctx.fillStyle = 'rgba('+pal.ink+',0.68)'; ctx.fillText('2D Haar DWT Subbands', bx, by - 5);
+    } else if (wmStage === 2){
+      drawMatrixBlock(wmHess, bx, by, boxS, pal, 'hess');
+      // Subtle subdiagonal indicator
+      ctx.fillStyle = 'rgba('+pal.acc+',0.92)';
+      ctx.fillText('H = Pᵀ·LL·P (upper Hessenberg)', bx, by - 5);
+    } else if (wmStage === 3){
+      drawMatrixBlock(wmWatermarked, bx, by, boxS, pal, 'gray');
+      ctx.strokeStyle = 'rgba('+pal.acc+',0.55)'; ctx.lineWidth = 1.2;
+      ctx.strokeRect(bx - 1, by - 1, boxS + 2, boxS + 2);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.92)';
+      ctx.fillText('I* = IDWT(P·H*·Pᵀ) · PSNR ' + wmPSNR.toFixed(1) + 'dB', bx, by - 5);
+    } else {
+      var hostS2 = Math.floor(boxS * 0.64), extS = Math.floor(boxS * 0.52);
+      drawMatrixBlock(wmWatermarked, bx, by + 6, hostS2, pal, 'gray');
+      drawMatrixBlock(wmExtracted, bx + hostS2 + 16, by + hostS2 - extS + 6, extS, pal, 'mark');
+      ctx.fillStyle = 'rgba('+pal.ink+',0.65)'; ctx.fillText('I* (received)', bx, by);
+      ctx.fillStyle = 'rgba('+pal.acc+',0.95)'; ctx.fillText('Extracted Ŵ', bx + hostS2 + 16, by + hostS2 - extS);
+      // Arrow from I* to Extracted W
+      ctx.strokeStyle = 'rgba('+pal.acc+',0.80)'; ctx.lineWidth = 1.2;
+      var ay = by + hostS2 * 0.65;
+      ctx.beginPath(); ctx.moveTo(bx + hostS2 + 3, ay); ctx.lineTo(bx + hostS2 + 13, ay); ctx.stroke();
+    }
+
+    // Divider
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, H - 10); ctx.stroke();
+
+    // Right panel: Pipeline step bar + Singular Value Embedding/Extraction Spectrum
+    var rx = splitX + 14, rw = Math.max(60, W - rx - 8);
+    // Pipeline breadcrumbs
+    var labels = ['DWT', 'HD', 'SVD', 'EMB', 'EXT'];
+    var stepW = rw / labels.length;
+    for (var si = 0; si < labels.length; si++){
+      var isCur = (si === wmStage);
+      ctx.fillStyle = isCur ? 'rgba('+pal.acc+',0.98)' : (si < wmStage ? 'rgba('+pal.ink+',0.62)' : 'rgba('+pal.ink+',0.25)');
+      ctx.font = (narrow ? '8px' : '9px') + ' ui-monospace, Menlo, monospace';
+      ctx.fillText(labels[si], rx + si * stepW, 18);
+      ctx.fillStyle = isCur ? 'rgba('+pal.acc+',0.92)' : 'rgba('+pal.ink+',0.10)';
+      ctx.fillRect(rx + si * stepW, 23, stepW - 5, isCur ? 2 : 1);
+    }
+
+    // Singular value spectrum chart (top 10 singular values)
+    var kBars = 10, sTop = 44, sBot = H - 28, sH = Math.max(30, sBot - sTop);
+    var maxS = wmSigEmb[0] || 1;
+    var bw = rw / kBars;
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.12)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rx, sBot); ctx.lineTo(rx + rw, sBot); ctx.stroke();
+
+    for (var kb = 0; kb < kBars; kb++){
+      var hBase = (wmSigH[kb] / maxS) * sH;
+      var hDelta = ((wmAlpha * wmSigW[kb]) / maxS) * sH * 3.8; // Visually scaled perturbation cap
+      var xBar = rx + kb * bw + 1;
+      if (wmStage === 4){
+        // Extraction view: highlight recovered S_W = (S_H* - S_H) / alpha
+        var hExt = (wmSigW[kb] / (wmSigW[0] || 1)) * sH * 0.85;
+        ctx.fillStyle = 'rgba('+pal.ink+',0.12)';
+        ctx.fillRect(xBar, sBot - hBase, Math.max(2, bw - 4), hBase);
+        ctx.fillStyle = 'rgba('+pal.acc+',0.92)';
+        ctx.fillRect(xBar, sBot - hExt, Math.max(2, bw - 4), hExt);
+      } else {
+        ctx.fillStyle = 'rgba('+pal.ink+',0.42)';
+        ctx.fillRect(xBar, sBot - hBase, Math.max(2, bw - 4), hBase);
+        if (wmStage >= 3){
+          ctx.fillStyle = 'rgba('+pal.acc+',0.94)';
+          ctx.fillRect(xBar, sBot - hBase - Math.max(2, hDelta), Math.max(2, bw - 4), Math.max(2, hDelta));
+        }
+      }
+    }
+
+    ctx.font = (narrow ? '8.3px' : '9.2px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.62)';
+    ctx.fillText(wmStage === 4 ? 'recovered σ(Ŵ) = (S*−S)/α' : 'singular values σ(H) + α·σ(W)', rx, 38);
+    ctx.fillStyle = 'rgba('+pal.acc+',0.88)';
+    ctx.fillText('α=' + wmAlpha.toFixed(2) + ' · PSNR ' + wmPSNR.toFixed(1) + 'dB · NCC 0.994', rx, H - 10);
+
+    exStat.textContent = wmStages[wmStage] + ' · PSNR ' + wmPSNR.toFixed(1) + ' dB · click to step';
+  }
+
+  /* --- 13. 2D Incompressible Navier-Stokes Fluid Simulation (Jos Stam Stable Fluids) --- */
+  var flW = 72, flH = 26, flN = flW * flH;
+  var flU = new Float32Array(flN), flV = new Float32Array(flN);
+  var flU0 = new Float32Array(flN), flV0 = new Float32Array(flN);
+  var flD = new Float32Array(flN), flD0 = new Float32Array(flN);
+  var flDiv = new Float32Array(flN), flP = new Float32Array(flN);
+  var flCv = document.createElement('canvas'); flCv.width = flW; flCv.height = flH;
+  var flCtx = flCv.getContext('2d'), flImg = flCtx.createImageData(flW, flH);
+  var flPtr = { down: false, lx: 0, ly: 0 };
+
+  function flIdx(x, y){ return x + y * flW; }
+  function flSetBnd(b, arr){
+    for (var x = 1; x < flW - 1; x++){
+      arr[flIdx(x, 0)] = b === 2 ? -arr[flIdx(x, 1)] : arr[flIdx(x, 1)];
+      arr[flIdx(x, flH - 1)] = b === 2 ? -arr[flIdx(x, flH - 2)] : arr[flIdx(x, flH - 2)];
+    }
+    for (var y = 1; y < flH - 1; y++){
+      arr[flIdx(0, y)] = b === 1 ? -arr[flIdx(1, y)] : arr[flIdx(1, y)];
+      arr[flIdx(flW - 1, y)] = b === 1 ? -arr[flIdx(flW - 2, y)] : arr[flIdx(flW - 2, y)];
+    }
+  }
+  function flProject(u, v, p, div){
+    for (var y = 1; y < flH - 1; y++){
+      for (var x = 1; x < flW - 1; x++){
+        var i = flIdx(x, y);
+        div[i] = -0.5 * (u[i + 1] - u[i - 1] + v[i + flW] - v[i - flW]);
+        p[i] = 0;
+      }
+    }
+    flSetBnd(0, div); flSetBnd(0, p);
+    for (var k = 0; k < 10; k++){
+      for (var y2 = 1; y2 < flH - 1; y2++){
+        for (var x2 = 1; x2 < flW - 1; x2++){
+          var i2 = flIdx(x2, y2);
+          p[i2] = (div[i2] + p[i2 - 1] + p[i2 + 1] + p[i2 - flW] + p[i2 + flW]) * 0.25;
+        }
+      }
+      flSetBnd(0, p);
+    }
+    for (var y3 = 1; y3 < flH - 1; y3++){
+      for (var x3 = 1; x3 < flW - 1; x3++){
+        var i3 = flIdx(x3, y3);
+        u[i3] -= 0.5 * (p[i3 + 1] - p[i3 - 1]);
+        v[i3] -= 0.5 * (p[i3 + flW] - p[i3 - flW]);
+      }
+    }
+    flSetBnd(1, u); flSetBnd(2, v);
+  }
+  function flAdvect(b, d, d0, u, v, dt){
+    for (var y = 1; y < flH - 1; y++){
+      for (var x = 1; x < flW - 1; x++){
+        var i = flIdx(x, y);
+        var px = Math.max(0.5, Math.min(flW - 1.5, x - dt * u[i]));
+        var py = Math.max(0.5, Math.min(flH - 1.5, y - dt * v[i]));
+        var i0 = Math.floor(px), i1 = i0 + 1, j0 = Math.floor(py), j1 = j0 + 1;
+        var s1 = px - i0, s0 = 1 - s1, t1 = py - j0, t0 = 1 - t1;
+        d[i] = s0 * (t0 * d0[flIdx(i0, j0)] + t1 * d0[flIdx(i0, j1)]) +
+               s1 * (t0 * d0[flIdx(i1, j0)] + t1 * d0[flIdx(i1, j1)]);
+      }
+    }
+    flSetBnd(b, d);
+  }
+  function flAddImpulse(gx, gy, vx, vy, dye){
+    for (var dy = -2; dy <= 2; dy++){
+      for (var dx = -2; dx <= 2; dx++){
+        var x = Math.round(gx) + dx, y = Math.round(gy) + dy;
+        if (x < 1 || x >= flW - 1 || y < 1 || y >= flH - 1) continue;
+        var w = Math.exp(-(dx*dx + dy*dy) * 0.45);
+        var i = flIdx(x, y);
+        flU[i] += vx * w; flV[i] += vy * w; flD[i] = Math.min(2.2, flD[i] + dye * w);
+      }
+    }
+  }
+  function flStep(now){
+    // Continuous opposing twin vortex jets so the fluid stays alive & curling
+    var t = now * 0.0014;
+    var j1y = flH * (0.5 + 0.24 * Math.sin(t));
+    var j2y = flH * (0.5 - 0.24 * Math.cos(t * 0.85));
+    flAddImpulse(6, j1y, 1.45, Math.cos(t * 1.4) * 0.55, 0.36);
+    flAddImpulse(flW - 7, j2y, -1.45, Math.sin(t * 1.2) * 0.55, 0.36);
+
+    flU0.set(flU); flV0.set(flV);
+    flProject(flU0, flV0, flP, flDiv);
+    flAdvect(1, flU, flU0, flU0, flV0, 0.55);
+    flAdvect(2, flV, flV0, flU0, flV0, 0.55);
+    flProject(flU, flV, flP, flDiv);
+
+    flD0.set(flD);
+    flAdvect(0, flD, flD0, flU, flV, 0.55);
+    for (var i = 0; i < flN; i++){
+      flD[i] *= 0.986;
+      flU[i] *= 0.992;
+      flV[i] *= 0.992;
+    }
+  }
+  // Pre-warm fluid so first frame already has rich swirling vortices
+  for (var fw = 0; fw < 28; fw++) flStep(fw * 35);
+
+  cv.addEventListener('pointerdown', function(e){
+    if (SCENES[currentScene].id !== 'fluid') return;
+    var rect = cv.getBoundingClientRect();
+    flPtr.down = true; flPtr.lx = e.clientX - rect.left; flPtr.ly = e.clientY - rect.top;
+  });
+  cv.addEventListener('pointermove', function(e){
+    if (SCENES[currentScene].id !== 'fluid' || !flPtr.down) return;
+    var rect = cv.getBoundingClientRect();
+    var mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    var gx = (mx / Math.max(1, rect.width)) * flW, gy = (my / Math.max(1, rect.height)) * flH;
+    flAddImpulse(gx, gy, (mx - flPtr.lx) * 0.32, (my - flPtr.ly) * 0.32, 0.95);
+    flPtr.lx = mx; flPtr.ly = my;
+  });
+  cv.addEventListener('pointerup', function(){ flPtr.down = false; });
+  cv.addEventListener('pointercancel', function(){ flPtr.down = false; });
+
+  function drawExFluid(now, pal){
+    flStep(now);
+    var ink = pal.ink.split(',').map(Number), acc = pal.acc.split(',').map(Number);
+    var data = flImg.data;
+    var maxSpd = 0;
+    for (var i = 0; i < flN; i++){
+      var d = Math.min(1, flD[i] * 0.78);
+      var spd = Math.hypot(flU[i], flV[i]);
+      if (spd > maxSpd) maxSpd = spd;
+      var mix = Math.min(1, d * 0.75 + spd * 0.25);
+      var idx = i * 4;
+      data[idx]     = ink[0] * (1 - mix) + acc[0] * mix;
+      data[idx + 1] = ink[1] * (1 - mix) + acc[1] * mix;
+      data[idx + 2] = ink[2] * (1 - mix) + acc[2] * mix;
+      data[idx + 3] = Math.min(235, Math.round(d * 215));
+    }
+    flCtx.putImageData(flImg, 0, 0);
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(flCv, 0, 0, W, H);
+    ctx.restore();
+
+    // Sparse divergence-free velocity field vectors u(x,y)
+    var stepX = 4, stepY = 3;
+    ctx.strokeStyle = 'rgba(' + pal.ink + ',0.28)'; ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    for (var y = 2; y < flH - 1; y += stepY){
+      for (var x = 2; x < flW - 1; x += stepX){
+        var i2 = flIdx(x, y);
+        var ux = flU[i2], vy = flV[i2];
+        var mag = Math.hypot(ux, vy);
+        if (mag < 0.08) continue;
+        var sx = (x / flW) * W, sy = (y / flH) * H;
+        var sc = Math.min(12, mag * 6.5) / mag;
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx + ux * sc, sy + vy * sc);
+      }
+    }
+    ctx.stroke();
+
+    exStat.textContent = flW + '×' + flH + ' grid · ∇·u = 0 · max |u| = ' + maxSpd.toFixed(2) + ' · drag to stir';
+  }
+
+  /* --- 14. Lock-Free SPSC Ring Buffer (64B Cache-Line Aligned) --- */
+  var rbCap = 32, rbMask = rbCap - 1, rbHead = 8, rbTail = 0, rbOps = 0, rbLast = 0, rbBurst = 0;
+  var rbHeat = new Float32Array(rbCap);
+  function rbStep(now){
+    var writes = (now < rbBurst) ? 3 : 1;
+    for (var w = 0; w < writes; w++){
+      if (((rbHead + 1) & rbMask) !== rbTail){
+        rbHeat[rbHead] = 1.0;
+        rbHead = (rbHead + 1) & rbMask;
+        rbOps++;
+      }
+    }
+    if (rbTail !== rbHead && (Math.random() < 0.78 || ((rbHead - rbTail) & rbMask) > 22)){
+      rbHeat[rbTail] = 0.55;
+      rbTail = (rbTail + 1) & rbMask;
+      rbOps++;
+    }
+  }
+  function drawExRingBuf(now, pal){
+    if (now - rbLast > 85){ rbLast = now; rbStep(now); }
+    var narrow = W < 480;
+    var cx = W * (narrow ? 0.30 : 0.28), cy = H * 0.52, R = Math.min(cx - 18, H * 0.38);
+    var used = (rbHead - rbTail) & rbMask;
+
+    // Ring slots
+    for (var i = 0; i < rbCap; i++){
+      rbHeat[i] *= 0.90;
+      var a = (i / rbCap) * Math.PI * 2 - Math.PI * 0.5;
+      var sx = cx + Math.cos(a) * R, sy = cy + Math.sin(a) * R;
+      var distFromTail = (i - rbTail) & rbMask;
+      var isOcc = distFromTail < used;
+      var isHead = (i === rbHead), isTail = (i === rbTail);
+      ctx.fillStyle = isHead ? 'rgba('+pal.acc+',0.98)' : (isTail ? 'rgba('+pal.ink+',0.98)' : (isOcc ? 'rgba('+pal.acc+','+(0.28 + rbHeat[i]*0.55).toFixed(2)+')' : 'rgba('+pal.ink+',0.14)'));
+      ctx.beginPath(); ctx.arc(sx, sy, (isHead || isTail) ? 4.2 : (isOcc ? 2.8 : 1.9), 0, 6.283); ctx.fill();
+    }
+    ctx.font = '9.5px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.80)';
+    ctx.fillText(used + ' / ' + rbCap, cx, cy - 2);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.42)';
+    ctx.fillText('in-flight', cx, cy + 11);
+    ctx.textAlign = 'left';
+
+    // Right panel: Cache-line padding diagram & atomic ops readout
+    var rx = W * (narrow ? 0.54 : 0.52), rw = Math.max(80, W - rx - 8);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rx - 14, 10); ctx.lineTo(rx - 14, H - 10); ctx.stroke();
+
+    var rows = [
+      { lbl: 'CL0 [0..63B]  alignas(64) head=' + rbHead, acc: true,  bar: rbHead / rbCap },
+      { lbl: 'CL1 [64..127B] alignas(64) tail=' + rbTail, acc: false, bar: rbTail / rbCap },
+      { lbl: 'ring[32] occupancy  ' + Math.round(used / rbCap * 100) + '%', acc: true, bar: used / rbCap }
+    ];
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    rows.forEach(function(item, idx){
+      var yy = 28 + idx * 48;
+      ctx.fillStyle = item.acc ? 'rgba('+pal.acc+',0.92)' : 'rgba('+pal.ink+',0.80)';
+      ctx.fillText(item.lbl, rx, yy);
+      ctx.fillStyle = 'rgba('+pal.ink+',0.07)';
+      ctx.fillRect(rx, yy + 8, rw, 10);
+      ctx.fillStyle = item.acc ? 'rgba('+pal.acc+',0.55)' : 'rgba('+pal.ink+',0.45)';
+      ctx.fillRect(rx, yy + 8, rw * item.bar, 10);
+    });
+    ctx.fillStyle = 'rgba('+pal.ink+',0.48)';
+    ctx.fillText('memory_order_acquire / release · 0 locks', rx, H - 12);
+    exStat.textContent = 'head=' + rbHead + ' · tail=' + rbTail + ' · ops ' + rbOps + ' · click for burst';
+  }
+
+  /* --- 15. CPU 2-Bit Branch Predictor & 5-Stage Pipeline --- */
+  var bpRandom = false, bpState = 3; // 0:SN, 1:WN, 2:WT, 3:ST
+  var bpHits = 0, bpMiss = 0, bpLast = 0, bpStepIdx = 0;
+  var bpPipe = []; // recent instructions with { taken, pred, miss }
+  var bpStateNames = ['SN', 'WN', 'WT', 'ST'];
+  function bpTick(){
+    bpStepIdx++;
+    var actual = bpRandom ? (Math.random() < 0.5) : ((bpStepIdx % 8) !== 0);
+    var pred = (bpState >= 2);
+    var miss = (actual !== pred);
+    if (miss) bpMiss++; else bpHits++;
+    if (actual) bpState = Math.min(3, bpState + 1);
+    else bpState = Math.max(0, bpState - 1);
+    bpPipe.unshift({ taken: actual, pred: pred, miss: miss });
+    if (bpPipe.length > 7) bpPipe.pop();
+  }
+  for (var bpi = 0; bpi < 7; bpi++) bpTick();
+
+  function drawExBranchPred(now, pal){
+    if (now - bpLast > 260){ bpLast = now; bpTick(); }
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.58 : 0.60));
+    var stages = ['IF', 'ID', 'EX', 'MEM', 'WB'];
+    var colW = (splitX - 24) / stages.length;
+
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    for (var s = 0; s < stages.length; s++){
+      ctx.fillStyle = 'rgba('+pal.ink+',0.50)';
+      ctx.fillText(stages[s], 12 + s * colW, 16);
+    }
+    for (var r = 0; r < bpPipe.length; r++){
+      var ins = bpPipe[r];
+      var yy = 26 + r * 22;
+      for (var c = 0; c < stages.length; c++){
+        var active = (c === (r % stages.length));
+        var flushed = ins.miss && c >= 2;
+        ctx.fillStyle = flushed ? 'rgba('+pal.acc+',0.24)' : (active ? (ins.miss ? 'rgba('+pal.acc+',0.90)' : 'rgba('+pal.ink+',0.78)') : 'rgba('+pal.ink+',0.09)');
+        ctx.fillRect(10 + c * colW, yy, colW - 6, 15);
+        if (active){
+          ctx.fillStyle = flushed || ins.miss ? 'rgba('+pal.acc+',0.98)' : 'rgba('+pal.ink+',0.95)';
+          ctx.font = '8px ui-monospace, Menlo, monospace';
+          ctx.fillText(ins.miss ? 'FLUSH' : (ins.taken ? 'T✓' : 'NT✓'), 14 + c * colW, yy + 10.5);
+        }
+      }
+    }
+
+    // Right panel: 2-bit FSM + live accuracy / IPC
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, H - 10); ctx.stroke();
+
+    var rx = splitX + 14, rw = Math.max(70, W - rx - 8);
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.72)';
+    ctx.fillText(bpRandom ? 'mode: UNSORTED (random)' : 'mode: SORTED (predictable)', rx, 20);
+
+    var nodeW = rw / 4;
+    for (var k = 0; k < 4; k++){
+      var nx = rx + k * nodeW + nodeW * 0.45, ny = 62;
+      var isCur = (k === bpState);
+      if (k < 3){
+        ctx.strokeStyle = 'rgba('+pal.ink+',0.22)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(nx + 13, ny); ctx.lineTo(nx + nodeW - 13, ny); ctx.stroke();
+      }
+      ctx.strokeStyle = isCur ? 'rgba('+pal.acc+',0.95)' : 'rgba('+pal.ink+',0.28)';
+      ctx.fillStyle = isCur ? 'rgba('+pal.acc+',0.20)' : 'transparent';
+      ctx.lineWidth = isCur ? 1.5 : 1;
+      ctx.beginPath(); ctx.arc(nx, ny, 12, 0, 6.283); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = isCur ? 'rgba('+pal.acc+',0.98)' : 'rgba('+pal.ink+',0.55)';
+      ctx.textAlign = 'center';
+      ctx.fillText(bpStateNames[k], nx, ny + 3);
+      ctx.textAlign = 'left';
+    }
+
+    var tot = Math.max(1, bpHits + bpMiss);
+    var accPct = (bpHits / tot) * 100;
+    var ipc = 1 / (1 + (bpMiss / tot) * 3);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.86)';
+    ctx.fillText('accuracy  ' + accPct.toFixed(1) + '%', rx, 114);
+    ctx.fillStyle = bpRandom ? 'rgba('+pal.acc+',0.92)' : 'rgba('+pal.ink+',0.68)';
+    ctx.fillText('est. IPC  ' + ipc.toFixed(2) + ' inst/cyc', rx, 134);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.42)';
+    ctx.fillText('click to toggle sorted/random', rx, H - 14);
+    exStat.textContent = (bpRandom ? 'unsorted' : 'sorted') + ' · acc ' + accPct.toFixed(1) + '% · IPC ' + ipc.toFixed(2);
+  }
+
+  /* --- 16. CPU Cache Locality (Row-Major vs Column-Major Stride) --- */
+  var clN = 12, clColMajor = false, clPos = 0, clLast = 0, clHits = 0, clMisses = 0, clCycles = 0;
+  var clLineAge = new Float32Array(clN * clN);
+  var clMissFlash = new Float32Array(clN * clN);
+  function clReset(){ clPos = 0; clHits = 0; clMisses = 0; clCycles = 0; clLineAge.fill(0); clMissFlash.fill(0); }
+  function clStep(){
+    var r = clColMajor ? (clPos % clN) : Math.floor(clPos / clN);
+    var c = clColMajor ? Math.floor(clPos / clN) : (clPos % clN);
+    var idx = r * clN + c;
+    var isHit = !clColMajor && (c % 4 !== 0);
+    if (isHit){ clHits++; clCycles += 4; }
+    else {
+      clMisses++; clCycles += 180;
+      clMissFlash[idx] = 1.0;
+      // Load 4-element cache line
+      var base = r * clN + Math.floor(c / 4) * 4;
+      for (var k = 0; k < 4 && (Math.floor(c / 4) * 4 + k) < clN; k++) clLineAge[base + k] = 1.0;
+    }
+    clPos = (clPos + 1) % (clN * clN);
+  }
+  function drawExCacheLoc(now, pal){
+    if (now - clLast > 95){ clLast = now; clStep(); }
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.48 : 0.44));
+    var gridS = Math.min(H - 26, splitX - 28), cell = gridS / clN;
+    var gx = 10, gy = Math.floor((H - gridS) * 0.5) + 4;
+
+    var curR = clColMajor ? ((clPos - 1 + clN*clN) % (clN*clN)) % clN : Math.floor(((clPos - 1 + clN*clN) % (clN*clN)) / clN);
+    var curC = clColMajor ? Math.floor(((clPos - 1 + clN*clN) % (clN*clN)) / clN) : ((clPos - 1 + clN*clN) % (clN*clN)) % clN;
+
+    for (var r = 0; r < clN; r++){
+      for (var c = 0; c < clN; c++){
+        var idx = r * clN + c;
+        clLineAge[idx] *= 0.94; clMissFlash[idx] *= 0.88;
+        var isCur = (r === curR && c === curC);
+        ctx.fillStyle = isCur ? 'rgba('+pal.ink+',0.98)' : (clMissFlash[idx] > 0.12 ? 'rgba('+pal.acc+','+(0.25 + clMissFlash[idx]*0.70).toFixed(2)+')' : (clLineAge[idx] > 0.08 ? 'rgba('+pal.ink+','+(0.08 + clLineAge[idx]*0.34).toFixed(2)+')' : 'rgba('+pal.ink+',0.05)'));
+        ctx.fillRect(gx + c * cell + 1, gy + r * cell + 1, cell - 2, cell - 2);
+      }
+    }
+
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, H - 10); ctx.stroke();
+
+    var rx = splitX + 14, rw = Math.max(70, W - rx - 8);
+    var tot = Math.max(1, clHits + clMisses), hitRate = clHits / tot;
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = clColMajor ? 'rgba('+pal.acc+',0.95)' : 'rgba('+pal.ink+',0.90)';
+    ctx.fillText(clColMajor ? 'a[r][c] COLUMN-MAJOR (stride ' + clN + ')' : 'a[r][c] ROW-MAJOR (stride 1)', rx, 26);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.68)';
+    ctx.fillText('L1 hit rate  ' + (hitRate * 100).toFixed(1) + '%', rx, 56);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.08)';
+    ctx.fillRect(rx, 66, rw, 10);
+    ctx.fillStyle = clColMajor ? 'rgba('+pal.acc+',0.85)' : 'rgba('+pal.ink+',0.68)';
+    ctx.fillRect(rx, 66, rw * hitRate, 10);
+
+    var avgCyc = clCycles / tot;
+    ctx.fillStyle = 'rgba('+pal.ink+',0.82)';
+    ctx.fillText('avg latency  ' + avgCyc.toFixed(1) + ' cycles/elem', rx, 104);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.45)';
+    ctx.fillText('hits ' + clHits + ' · misses ' + clMisses, rx, 126);
+    ctx.fillText('click to switch traversal order', rx, H - 14);
+    exStat.textContent = (clColMajor ? 'col-major' : 'row-major') + ' · L1 hit ' + (hitRate*100).toFixed(0) + '% · ' + avgCyc.toFixed(1) + ' cyc';
+  }
+
+  /* --- 17. Skip List (Probabilistic Multi-Level Search) --- */
+  var slKeys = [3, 7, 11, 16, 19, 24, 29, 34, 41, 47, 52, 58, 63, 71, 79, 88];
+  var slHeights = [4, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1];
+  var slTargetIdx = 12, slPath = [], slStep = 0, slLast = performance.now();
+  function slBuildSearch(targetIdx){
+    slTargetIdx = targetIdx;
+    var target = slKeys[targetIdx];
+    slPath = [];
+    var lv = 3, cur = 0;
+    slPath.push({ idx: cur, lv: lv });
+    while (lv >= 0){
+      var next = -1;
+      for (var j = cur + 1; j < slKeys.length; j++){
+        if (slHeights[j] > lv){ next = j; break; }
+      }
+      if (next !== -1 && slKeys[next] <= target){
+        cur = next;
+        slPath.push({ idx: cur, lv: lv });
+      } else {
+        lv--;
+        if (lv >= 0) slPath.push({ idx: cur, lv: lv });
+      }
+    }
+    slStep = 0; slLast = performance.now();
+  }
+  slBuildSearch(12);
+
+  function drawExSkipList(now, pal){
+    if (now - slLast > 520){
+      slLast = now;
+      if (slStep < slPath.length - 1) slStep++;
+      else slBuildSearch((slTargetIdx + 5) % slKeys.length);
+    }
+    var padL = 18, padR = 16, padT = 26, padB = 24;
+    var usableW = W - padL - padR, usableH = H - padT - padB;
+    function nx(i){ return padL + (i / (slKeys.length - 1)) * usableW; }
+    function ny(lv){ return padT + (3 - lv) * (usableH / 3); }
+
+    // Draw horizontal express-lane links
+    for (var lv = 0; lv < 4; lv++){
+      var prev = -1;
+      for (var i = 0; i < slKeys.length; i++){
+        if (slHeights[i] > lv){
+          if (prev !== -1){
+            ctx.strokeStyle = 'rgba('+pal.ink+',0.14)'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(nx(prev), ny(lv)); ctx.lineTo(nx(i), ny(lv)); ctx.stroke();
+          }
+          prev = i;
+        }
+      }
+    }
+    // Draw vertical tower links & nodes
+    for (var i2 = 0; i2 < slKeys.length; i2++){
+      var h = slHeights[i2];
+      if (h > 1){
+        ctx.strokeStyle = 'rgba('+pal.ink+',0.10)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(nx(i2), ny(0)); ctx.lineTo(nx(i2), ny(h - 1)); ctx.stroke();
+      }
+      for (var lv2 = 0; lv2 < h; lv2++){
+        var isTgt = (i2 === slTargetIdx && lv2 === 0);
+        ctx.fillStyle = isTgt ? 'rgba('+pal.acc+',0.95)' : 'rgba('+pal.ink+',0.36)';
+        ctx.beginPath(); ctx.arc(nx(i2), ny(lv2), isTgt ? 3.5 : 2.1, 0, 6.283); ctx.fill();
+      }
+      if (W > 420 || i2 % 2 === 0){
+        ctx.font = '8.5px ui-monospace, Menlo, monospace';
+        ctx.fillStyle = (i2 === slTargetIdx) ? 'rgba('+pal.acc+',0.95)' : 'rgba('+pal.ink+',0.42)';
+        ctx.textAlign = 'center';
+        ctx.fillText(slKeys[i2], nx(i2), H - 7);
+        ctx.textAlign = 'left';
+      }
+    }
+
+    // Active O(log n) search path in accent
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.94)'; ctx.lineWidth = 1.9;
+    ctx.beginPath();
+    for (var s = 0; s <= slStep && s < slPath.length; s++){
+      var pt = slPath[s];
+      s === 0 ? ctx.moveTo(nx(pt.idx), ny(pt.lv)) : ctx.lineTo(nx(pt.idx), ny(pt.lv));
+    }
+    ctx.stroke();
+    var head = slPath[Math.min(slStep, slPath.length - 1)];
+    ctx.fillStyle = 'rgba('+pal.ink+',1)';
+    ctx.beginPath(); ctx.arc(nx(head.idx), ny(head.lv), 3.6, 0, 6.283); ctx.fill();
+
+    ctx.font = '9.5px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.90)';
+    ctx.fillText('find(' + slKeys[slTargetIdx] + ') · step ' + (slStep + 1) + '/' + slPath.length, padL, 14);
+    exStat.textContent = 'target ' + slKeys[slTargetIdx] + ' · ' + slPath.length + ' hops (n=16) · click for new key';
+  }
+
+  /* --- 18. Limit Order Book & Matching Engine --- */
+  var lobMid = 100.00, lobBids = [], lobAsks = [], lobTrades = [], lobLast = 0;
+  function lobInit(){
+    lobBids = []; lobAsks = [];
+    for (var i = 0; i < 10; i++){
+      lobBids.push({ px: +(lobMid - 0.05 - i * 0.05).toFixed(2), qty: 18 + Math.floor(Math.random() * 42) });
+      lobAsks.push({ px: +(lobMid + 0.05 + i * 0.05).toFixed(2), qty: 18 + Math.floor(Math.random() * 42) });
+    }
+  }
+  lobInit();
+  function lobSweep(sideBuy){
+    var book = sideBuy ? lobAsks : lobBids;
+    var rem = 95 + Math.floor(Math.random() * 65);
+    var filled = 0, lastPx = lobMid;
+    while (rem > 0 && book.length > 2){
+      var take = Math.min(rem, book[0].qty);
+      book[0].qty -= take; rem -= take; filled += take; lastPx = book[0].px;
+      if (book[0].qty <= 0) book.shift();
+    }
+    lobMid = +((lobBids[0].px + lobAsks[0].px) * 0.5).toFixed(2);
+    lobTrades.unshift({ side: sideBuy ? 'BUY ' : 'SELL', qty: filled, px: lastPx, sweep: true });
+    if (lobTrades.length > 8) lobTrades.pop();
+  }
+  function lobTick(){
+    // Market maker replenishment + small random flow
+    while (lobBids.length < 10){
+      var bp = lobBids.length ? +(lobBids[lobBids.length - 1].px - 0.05).toFixed(2) : +(lobMid - 0.05).toFixed(2);
+      lobBids.push({ px: bp, qty: 20 + Math.floor(Math.random() * 35) });
+    }
+    while (lobAsks.length < 10){
+      var ap = lobAsks.length ? +(lobAsks[lobAsks.length - 1].px + 0.05).toFixed(2) : +(lobMid + 0.05).toFixed(2);
+      lobAsks.push({ px: ap, qty: 20 + Math.floor(Math.random() * 35) });
+    }
+    for (var i = 0; i < 10; i++){
+      lobBids[i].qty = Math.max(5, Math.min(90, lobBids[i].qty + Math.floor((Math.random() - 0.48) * 10)));
+      lobAsks[i].qty = Math.max(5, Math.min(90, lobAsks[i].qty + Math.floor((Math.random() - 0.48) * 10)));
+    }
+    if (Math.random() < 0.42){
+      var buy = Math.random() < 0.5;
+      var q = 4 + Math.floor(Math.random() * 18);
+      var px = buy ? lobAsks[0].px : lobBids[0].px;
+      lobTrades.unshift({ side: buy ? 'BUY ' : 'SELL', qty: q, px: px, sweep: false });
+      if (lobTrades.length > 8) lobTrades.pop();
+    }
+  }
+  for (var lt = 0; lt < 6; lt++) lobTick();
+
+  function drawExLOB(now, pal){
+    if (now - lobLast > 210){ lobLast = now; lobTick(); }
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.56 : 0.62));
+    var padT = 22, padB = 18, plotH = H - padT - padB;
+    var midX = splitX * 0.5;
+
+    // Cumulative depth curves (Bids left, Asks right)
+    var cumB = [], cumA = [], sb = 0, sa = 0;
+    for (var i = 0; i < lobBids.length; i++){ sb += lobBids[i].qty; cumB.push(sb); }
+    for (var j = 0; j < lobAsks.length; j++){ sa += lobAsks[j].qty; cumA.push(sa); }
+    var maxD = Math.max(100, sb, sa);
+    var halfW = midX - 10;
+
+    // Bid depth fill & steps
+    ctx.beginPath();
+    ctx.moveTo(midX - 4, H - padB);
+    for (var bi = 0; bi < cumB.length; bi++){
+      var bx = midX - 4 - (bi / (cumB.length - 1)) * halfW;
+      var by = H - padB - (cumB[bi] / maxD) * plotH;
+      ctx.lineTo(bx, by);
+    }
+    ctx.lineTo(midX - 4 - halfW, H - padB);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba('+pal.ink+',0.14)'; ctx.fill();
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.80)'; ctx.lineWidth = 1.3; ctx.stroke();
+
+    // Ask depth fill & steps
+    ctx.beginPath();
+    ctx.moveTo(midX + 4, H - padB);
+    for (var ai = 0; ai < cumA.length; ai++){
+      var ax = midX + 4 + (ai / (cumA.length - 1)) * halfW;
+      var ay = H - padB - (cumA[ai] / maxD) * plotH;
+      ctx.lineTo(ax, ay);
+    }
+    ctx.lineTo(midX + 4 + halfW, H - padB);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba('+pal.acc+',0.18)'; ctx.fill();
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.90)'; ctx.lineWidth = 1.3; ctx.stroke();
+
+    var spread = +(lobAsks[0].px - lobBids[0].px).toFixed(2);
+    ctx.font = (narrow ? '8.5px' : '9.5px') + ' ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.78)';
+    ctx.fillText('MID ' + lobMid.toFixed(2) + ' · SPD ' + spread.toFixed(2), 8, 13);
+
+    // Right panel: Trade tape
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 10); ctx.lineTo(splitX, H - 10); ctx.stroke();
+    var rx = splitX + 12;
+    ctx.fillStyle = 'rgba('+pal.ink+',0.50)';
+    ctx.fillText('MATCH TAPE', rx, 14);
+    for (var ti = 0; ti < lobTrades.length; ti++){
+      var tr = lobTrades[ti];
+      ctx.fillStyle = tr.sweep ? 'rgba('+pal.acc+',0.98)' : (tr.side === 'BUY ' ? 'rgba('+pal.ink+',0.78)' : 'rgba('+pal.acc+',0.68)');
+      ctx.fillText(tr.side + ' ' + String(tr.qty).padStart(3, ' ') + ' @ ' + tr.px.toFixed(2) + (tr.sweep ? ' ★' : ''), rx, 32 + ti * 20);
+    }
+    exStat.textContent = 'bid ' + lobBids[0].px.toFixed(2) + ' / ask ' + lobAsks[0].px.toFixed(2) + ' · click for sweep';
+  }
+
+  /* --- 19. Markowitz Mean-Variance Efficient Frontier --- */
+  var mkRegimes = [
+    { name: 'Normal Regime (ρ = 0.25)',   rf: 0.03, mvp: [0.095, 0.068], tan: [0.145, 0.128], spread: 0.14 },
+    { name: 'Diversified (ρ = −0.15)',    rf: 0.03, mvp: [0.072, 0.074], tan: [0.125, 0.136], spread: 0.15 },
+    { name: 'Crisis Stress (ρ = 0.82)',   rf: 0.04, mvp: [0.155, 0.058], tan: [0.215, 0.112], spread: 0.12 }
+  ];
+  var mkIdx = 0, mkBlend = 1, mkT = performance.now();
+  var mkCloud = [];
+  for (var mc = 0; mc < 220; mc++){
+    var u1 = Math.random(), u2 = Math.random();
+    mkCloud.push({ dy: (u1 - 0.5) * 2, dx: Math.pow(u2, 0.72) });
+  }
+  function drawExMarkowitz(now, pal){
+    mkBlend = Math.min(1, (now - mkT) / 480);
+    var cur = mkRegimes[mkIdx], prev = mkRegimes[(mkIdx - 1 + mkRegimes.length) % mkRegimes.length];
+    var p = smoothstep(mkBlend);
+    var mvpS = lerp(prev.mvp[0], cur.mvp[0], p), mvpM = lerp(prev.mvp[1], cur.mvp[1], p);
+    var tanS = lerp(prev.tan[0], cur.tan[0], p), tanM = lerp(prev.tan[1], cur.tan[1], p);
+    var rf = lerp(prev.rf, cur.rf, p);
+    var aCurv = (tanS*tanS - mvpS*mvpS) / Math.max(1e-5, (tanM - mvpM)*(tanM - mvpM));
+
+    var padL = 34, padR = 18, padT = 18, padB = 22;
+    var pw = W - padL - padR, ph = H - padT - padB;
+    function px(sig){ return padL + (sig / 0.34) * pw; }
+    function py(mu){ return padT + (1 - (mu - 0.01) / 0.17) * ph; }
+
+    // Axes
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.14)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, H - padB); ctx.lineTo(W - padR, H - padB); ctx.stroke();
+
+    // Feasible portfolio cloud inside the hyperbola
+    for (var i = 0; i < mkCloud.length; i++){
+      var pt = mkCloud[i];
+      var mu = mvpM + pt.dy * 0.072;
+      var sigMin = Math.sqrt(mvpS*mvpS + aCurv * (mu - mvpM)*(mu - mvpM));
+      var sig = sigMin + pt.dx * 0.11;
+      if (sig > 0.33 || mu < 0.015 || mu > 0.175) continue;
+      ctx.fillStyle = 'rgba('+pal.ink+',0.24)';
+      ctx.beginPath(); ctx.arc(px(sig), py(mu), 1.4, 0, 6.283); ctx.fill();
+    }
+
+    // Efficient Frontier upper branch
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.95)'; ctx.lineWidth = 1.9;
+    ctx.beginPath();
+    for (var s = 0; s <= 40; s++){
+      var mu2 = mvpM + (s / 40) * 0.088;
+      var sig2 = Math.sqrt(mvpS*mvpS + aCurv * (mu2 - mvpM)*(mu2 - mvpM));
+      if (sig2 > 0.33) break;
+      s === 0 ? ctx.moveTo(px(sig2), py(mu2)) : ctx.lineTo(px(sig2), py(mu2));
+    }
+    ctx.stroke();
+
+    // Capital Market Line (CML) from (0, rf) through Max-Sharpe tangency
+    var sharpe = (tanM - rf) / tanS;
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.55)'; ctx.lineWidth = 1.05;
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(rf));
+    ctx.lineTo(px(0.28), py(rf + sharpe * 0.28));
+    ctx.stroke(); ctx.setLineDash([]);
+
+    // MVP & Tangency dots
+    ctx.fillStyle = 'rgba('+pal.ink+',0.95)';
+    ctx.beginPath(); ctx.arc(px(mvpS), py(mvpM), 3.0, 0, 6.283); ctx.fill();
+    ctx.fillStyle = 'rgba('+pal.acc+',0.98)';
+    ctx.beginPath(); ctx.arc(px(tanS), py(tanM), 3.8, 0, 6.283); ctx.fill();
+
+    ctx.font = '9px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.92)';
+    ctx.fillText('Max Sharpe ' + sharpe.toFixed(2), px(tanS) + 7, py(tanM) - 4);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.55)';
+    ctx.fillText('σ (volatility) →', W - 96, H - 7);
+    ctx.fillText('μ', 12, padT + 8);
+    ctx.fillText(cur.name, padL + 8, padT + 8);
+    exStat.textContent = cur.name + ' · Max Sharpe = ' + sharpe.toFixed(2) + ' · click regime';
+  }
+
+  /* --- 20. Implied Volatility Smile & SABR Skew --- */
+  var ivRegimes = [
+    { name: 'Calm Equity Skew (ρ = −0.45)', atm: 0.20, skew: -0.26, curv: 0.55 },
+    { name: 'Crashophobia (ρ = −0.80)',     atm: 0.31, skew: -0.58, curv: 0.85 },
+    { name: 'Pre-Event Vol Spike (FOMC)',   atm: 0.28, skew: -0.14, curv: 1.15 }
+  ];
+  var ivIdx = 0, ivT = performance.now();
+  function drawExIVSmile(now, pal){
+    var p = smoothstep((now - ivT) / 480);
+    var cur = ivRegimes[ivIdx], prev = ivRegimes[(ivIdx - 1 + ivRegimes.length) % ivRegimes.length];
+    var atm = lerp(prev.atm, cur.atm, p), skew = lerp(prev.skew, cur.skew, p), curv = lerp(prev.curv, cur.curv, p);
+
+    var padL = 36, padR = 16, padT = 20, padB = 22;
+    var pw = W - padL - padR, ph = H - padT - padB;
+    function px(m){ return padL + ((m - 0.70) / 0.60) * pw; }
+    function py(vol){ return padT + (1 - (vol - 0.08) / 0.44) * ph; }
+    function ivFn(m){ var lm = Math.log(m); return Math.max(0.10, atm + skew * lm + curv * lm * lm); }
+
+    // ATM vertical guide (K/S0 = 1.0) & flat Black-Scholes reference line
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.14)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px(1.0), padT); ctx.lineTo(px(1.0), H - padB); ctx.stroke();
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.36)';
+    ctx.beginPath(); ctx.moveTo(padL, py(atm)); ctx.lineTo(W - padR, py(atm)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // SABR IV Smile curve
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.96)'; ctx.lineWidth = 1.9;
+    ctx.beginPath();
+    for (var s = 0; s <= 120; s++){
+      var m = 0.70 + (s / 120) * 0.60;
+      s === 0 ? ctx.moveTo(px(m), py(ivFn(m))) : ctx.lineTo(px(m), py(ivFn(m)));
+    }
+    ctx.stroke();
+
+    // Quoted strike dots
+    for (var q = 0; q <= 10; q++){
+      var mq = 0.75 + q * 0.05;
+      var vq = ivFn(mq);
+      ctx.fillStyle = (Math.abs(mq - 1.0) < 0.01) ? 'rgba('+pal.ink+',0.98)' : 'rgba('+pal.acc+',0.88)';
+      ctx.beginPath(); ctx.arc(px(mq), py(vq), 2.4, 0, 6.283); ctx.fill();
+    }
+
+    ctx.font = '9px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.ink+',0.55)';
+    ctx.fillText('OTM Put (0.75)', padL + 2, H - 7);
+    ctx.fillText('ATM (1.0)', px(1.0) - 22, H - 7);
+    ctx.fillText('OTM Call (1.25)', W - 96, H - 7);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.45)';
+    ctx.fillText('BS flat ' + (atm*100).toFixed(0) + '%', W - 82, py(atm) - 5);
+    ctx.fillStyle = 'rgba('+pal.acc+',0.92)';
+    ctx.fillText(cur.name, padL + 4, 13);
+    var rr25 = (ivFn(0.85) - ivFn(1.15)) * 100;
+    exStat.textContent = 'ATM ' + (atm*100).toFixed(1) + '% · 25Δ skew +' + rr25.toFixed(1) + 'v · click regime';
+  }
+
+  /* --- 21. Ornstein-Uhlenbeck Mean Reversion & Pairs Trading --- */
+  var ouLen = 180, ouZ = [], ouSigs = [], ouVal = 0, ouLast = 0, ouPnL = 0, ouPos = 0;
+  function ouStep(shock){
+    var theta = 0.085, sigma = 0.42;
+    ouVal += -theta * ouVal + sigma * mcRandn() + (shock || 0);
+    ouZ.push(ouVal);
+    var sig = 0;
+    if (ouPos === 0 && ouVal > 2.0){ ouPos = -1; sig = -1; }
+    else if (ouPos === 0 && ouVal < -2.0){ ouPos = 1; sig = 1; }
+    else if (ouPos !== 0 && Math.abs(ouVal) < 0.25){ ouPnL += 1.85; ouPos = 0; sig = 2; }
+    ouSigs.push(sig);
+    if (ouZ.length > ouLen){ ouZ.shift(); ouSigs.shift(); }
+  }
+  for (var oi = 0; oi < ouLen; oi++) ouStep(0);
+
+  function drawExOUPairs(now, pal){
+    if (now - ouLast > 95){ ouLast = now; ouStep(0); }
+    var padL = 10, padR = 48, padT = 18, padB = 18;
+    var pw = W - padL - padR, midY = padT + (H - padT - padB) * 0.5;
+    var scaleY = (H - padT - padB) * 0.13;
+    function zy(z){ return midY - Math.max(-3.6, Math.min(3.6, z)) * scaleY; }
+
+    // Mean μ = 0 and ±2σ entry bands
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.14)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, midY); ctx.lineTo(padL + pw, midY); ctx.stroke();
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.52)';
+    ctx.beginPath();
+    ctx.moveTo(padL, zy(2)); ctx.lineTo(padL + pw, zy(2));
+    ctx.moveTo(padL, zy(-2)); ctx.lineTo(padL + pw, zy(-2));
+    ctx.stroke(); ctx.setLineDash([]);
+
+    // OU spread curve z_t
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.88)'; ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    for (var i = 0; i < ouZ.length; i++){
+      var x = padL + (i / (ouLen - 1)) * pw, y = zy(ouZ[i]);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Entry/exit signal dots
+    for (var j = 0; j < ouSigs.length; j++){
+      if (!ouSigs[j]) continue;
+      var sx = padL + (j / (ouLen - 1)) * pw, sy = zy(ouZ[j]);
+      ctx.fillStyle = ouSigs[j] === 2 ? 'rgba('+pal.ink+',0.95)' : 'rgba('+pal.acc+',0.98)';
+      ctx.beginPath(); ctx.arc(sx, sy, ouSigs[j] === 2 ? 2.5 : 3.4, 0, 6.283); ctx.fill();
+    }
+
+    ctx.font = '9px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.82)';
+    ctx.fillText('+2σ', padL + pw + 6, zy(2) + 3);
+    ctx.fillText('−2σ', padL + pw + 6, zy(-2) + 3);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.45)';
+    ctx.fillText('μ=0', padL + pw + 6, midY + 3);
+    ctx.fillStyle = 'rgba('+pal.ink+',0.78)';
+    ctx.fillText('z_t = ' + ouVal.toFixed(2) + ' · pos ' + (ouPos === 0 ? 'FLAT' : (ouPos > 0 ? 'LONG' : 'SHORT')), padL, 12);
+    exStat.textContent = 'z_t = ' + ouVal.toFixed(2) + ' · PnL +' + ouPnL.toFixed(1) + 'σ · click for 3σ shock';
+  }
+
+  /* --- 22. Ewige Wiederkehr (3D Möbius Strip + 4π Eternal Recurrence Orbit + Nietzsche) --- */
+  var ewQuotes = [
+    { de: '„War das das Leben? Wohlan! Noch einmal!“', en: 'Was that life? Well then! Once more!', src: 'Zarathustra · III' },
+    { de: '„Alles geht, alles kommt zurück; ewig rollt das Rad des Seins.“', en: 'Everything goes, everything returns; eternally rolls the wheel of being.', src: 'Zarathustra · III' },
+    { de: '„Die Mitte ist überall. Krumm ist der Pfad der Ewigkeit.“', en: 'The center is everywhere. Curved is the path of eternity.', src: 'Der Genesende' },
+    { de: '„Das größte Schwergewicht.“', en: 'What if this exact moment returned to you innumerable times?', src: 'Fröhliche Wissenschaft · §341' }
+  ];
+  var ewIdx = 0, ewT = performance.now();
+  function mobiusPt(u, v){
+    var r = 1.0 + v * 0.5 * Math.cos(u * 0.5);
+    return [r * Math.cos(u), v * 0.5 * Math.sin(u * 0.5) * 1.35, r * Math.sin(u)];
+  }
+  function wrapTextLines(text, maxW){
+    var words = text.split(' '), lines = [], cur = '';
+    for (var i = 0; i < words.length; i++){
+      var test = cur ? (cur + ' ' + words[i]) : words[i];
+      if (ctx.measureText(test).width > maxW && cur){ lines.push(cur); cur = words[i]; }
+      else cur = test;
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  }
+  function drawExEwige(now, pal){
+    if (!cam.dragging) cam.yaw += 0.0028;
+    var yaw = cam.yaw, pitch = cam.pitch;
+    var narrow = W < 480;
+    var cx = W * (narrow ? 0.27 : 0.26), cy = H * 0.51;
+    var sc = Math.min(W * 0.14, H * 0.37);
+
+    // 3D Möbius strip rulings (v-crossbars & boundary curves)
+    var U = 54, halfV = 0.56;
+    for (var i = 0; i < U; i++){
+      var u = (i / U) * Math.PI * 2;
+      var pA = mobiusPt(u, -halfV), pB = mobiusPt(u, halfV);
+      var a = proj3D(pA[0], pA[1], pA[2], yaw, pitch, cx, cy, sc);
+      var b = proj3D(pB[0], pB[1], pB[2], yaw, pitch, cx, cy, sc);
+      var zAvg = (a.z + b.z) * 0.5;
+      var alpha = Math.max(0.06, Math.min(0.28, 0.17 - zAvg * 0.06));
+      ctx.strokeStyle = 'rgba('+pal.ink+','+alpha.toFixed(3)+')'; ctx.lineWidth = 0.75;
+      ctx.beginPath(); ctx.moveTo(a.sx, a.sy); ctx.lineTo(b.sx, b.sy); ctx.stroke();
+    }
+    // Single continuous 4π boundary edge of the Möbius strip
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.36)'; ctx.lineWidth = 0.95;
+    ctx.beginPath();
+    for (var j = 0; j <= 108; j++){
+      var ub = (j / 108) * Math.PI * 4;
+      var pb = mobiusPt(ub, halfV);
+      var q = proj3D(pb[0], pb[1], pb[2], yaw, pitch, cx, cy, sc);
+      j === 0 ? ctx.moveTo(q.sx, q.sy) : ctx.lineTo(q.sx, q.sy);
+    }
+    ctx.stroke();
+
+    // Eternal recurrence 4π orbital trail + glowing star traveler
+    var headU = (now * 0.0011) % (Math.PI * 4);
+    var trailN = 36;
+    for (var k = 0; k < trailN; k++){
+      var frac = k / (trailN - 1);
+      var u0 = headU - (1 - frac) * 2.2, u1 = headU - (1 - (k + 1) / (trailN - 1)) * 2.2;
+      var q0 = mobiusPt(u0, 0.24 * Math.sin(u0 * 0.5));
+      var q1 = mobiusPt(u1, 0.24 * Math.sin(u1 * 0.5));
+      var m0 = proj3D(q0[0], q0[1], q0[2], yaw, pitch, cx, cy, sc);
+      var m1 = proj3D(q1[0], q1[1], q1[2], yaw, pitch, cx, cy, sc);
+      ctx.strokeStyle = 'rgba('+pal.acc+','+(frac * frac * 0.92).toFixed(3)+')';
+      ctx.lineWidth = 0.8 + frac * 1.4;
+      ctx.beginPath(); ctx.moveTo(m0.sx, m0.sy); ctx.lineTo(m1.sx, m1.sy); ctx.stroke();
+    }
+    var h3 = mobiusPt(headU, 0.24 * Math.sin(headU * 0.5));
+    var hp = proj3D(h3[0], h3[1], h3[2], yaw, pitch, cx, cy, sc);
+    ctx.fillStyle = 'rgba('+pal.acc+',0.22)';
+    ctx.beginPath(); ctx.arc(hp.sx, hp.sy, 7.5, 0, 6.283); ctx.fill();
+    ctx.fillStyle = 'rgba('+pal.ink+',1)';
+    ctx.beginPath(); ctx.arc(hp.sx, hp.sy, 2.8, 0, 6.283); ctx.fill();
+
+    // Right panel: Nietzschean Eternal Recurrence aphorism
+    var rx = W * (narrow ? 0.50 : 0.49), rw = Math.max(80, W - rx - 10);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(rx - 14, 14); ctx.lineTo(rx - 14, H - 14); ctx.stroke();
+
+    var qObj = ewQuotes[ewIdx];
+    var fadeIn = Math.min(1, (now - ewT) / 420);
+    ctx.font = 'italic ' + (narrow ? '13.5px' : '17.5px') + ' "Cormorant Garamond", Georgia, serif';
+    ctx.fillStyle = 'rgba('+pal.ink+','+(0.92 * fadeIn).toFixed(2)+')';
+    var deLines = wrapTextLines(qObj.de, rw);
+    var yy = narrow ? 38 : 48;
+    deLines.forEach(function(ln){ ctx.fillText(ln, rx, yy); yy += (narrow ? 18 : 23); });
+
+    yy += 8;
+    ctx.font = (narrow ? '10px' : '11.5px') + ' "DM Sans", -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba('+pal.ink+','+(0.56 * fadeIn).toFixed(2)+')';
+    var enLines = wrapTextLines(qObj.en, rw);
+    enLines.forEach(function(ln){ ctx.fillText(ln, rx, yy); yy += (narrow ? 14 : 17); });
+
+    ctx.font = '9px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.86)';
+    ctx.fillText('— ' + qObj.src, rx, H - 14);
+
+    var cycleDeg = Math.round((headU / (Math.PI * 4)) * 720);
+    exStat.textContent = 'orbit ' + cycleDeg + '° / 720° (4π) · fragment ' + (ewIdx + 1) + '/' + ewQuotes.length + ' · drag to rotate';
+  }
+
+  /* --- 23. Le Mythe de Sisyphe (Albert Camus · Eternal Ascent & Descent) --- */
+  var sisQuotes = [
+    { fr: '« Il faut imaginer Sisyphe heureux. »', en: 'One must imagine Sisyphus happy.', src: 'Camus · Le Mythe de Sisyphe' },
+    { fr: '« La lutte elle-même vers les sommets suffit à remplir un cœur d’homme. »', en: 'The struggle itself toward the heights is enough to fill a man’s heart.', src: 'Camus · 1942' },
+    { fr: '« Il n’est pas de destin qui ne se surmonte par le mépris. »', en: 'There is no fate that cannot be surmounted by scorn.', src: 'Camus · 1942' },
+    { fr: '« Chacun des grains de cette pierre forme à lui seul un monde. »', en: 'Each atom of that stone, each mineral flake of that night-filled mountain, in itself forms a world.', src: 'Camus · 1942' }
+  ];
+  var sisIdx = 0, sisT = performance.now(), sisPos = 0.12, sisPhase = 0; // 0=push up, 1=summit pause, 2=roll down
+  var sisPauseT = 0, sisCycles = 1, sisLast = performance.now(), sisRot = 0;
+
+  function drawExSisyphus(now, pal){
+    var dt = Math.min(0.05, (now - sisLast) / 1000);
+    sisLast = now;
+    if (sisPhase === 0){
+      // Steady strenuous climb (slower near the steep upper slope)
+      var spd = 0.14 - 0.04 * sisPos;
+      sisPos += spd * dt;
+      sisRot += spd * dt * 16;
+      if (sisPos >= 0.96){ sisPos = 0.96; sisPhase = 1; sisPauseT = now; }
+    } else if (sisPhase === 1){
+      // Poignant conscious pause at the summit
+      if (now - sisPauseT > 1100) sisPhase = 2;
+    } else {
+      // Gravity accelerates boulder back down to the valley
+      var fallSpd = 0.25 + (1 - sisPos) * 0.95;
+      sisPos -= fallSpd * dt;
+      sisRot -= fallSpd * dt * 22;
+      if (sisPos <= 0.06){ sisPos = 0.06; sisPhase = 0; sisCycles++; }
+    }
+
+    var narrow = W < 480;
+    var splitX = Math.floor(W * (narrow ? 0.48 : 0.46));
+    var padL = 12, padR = 14, padT = 24, padB = 18;
+    var mw = splitX - padL - padR, mh = H - padT - padB;
+    // Smooth asymmetric mountain slope y(u) for u in [0, 1]
+    function slopeY(u){
+      var h = Math.pow(Math.max(0, Math.min(1, u)), 1.32);
+      return H - padB - h * mh;
+    }
+    function slopeX(u){ return padL + u * mw; }
+
+    // Mountain silhouette & faint contour strata
+    ctx.beginPath();
+    ctx.moveTo(padL, H - padB);
+    for (var s = 0; s <= 40; s++){
+      var u = s / 40;
+      ctx.lineTo(slopeX(u), slopeY(u));
+    }
+    ctx.lineTo(slopeX(1), H - padB);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba('+pal.ink+',0.055)'; ctx.fill();
+
+    // Crisp mountain ridge line
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.42)'; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    for (var s2 = 0; s2 <= 40; s2++){
+      var u2 = s2 / 40;
+      s2 === 0 ? ctx.moveTo(slopeX(u2), slopeY(u2)) : ctx.lineTo(slopeX(u2), slopeY(u2));
+    }
+    ctx.stroke();
+
+    // Summit marker
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.32)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(slopeX(0.96), slopeY(0.96) - 14); ctx.lineTo(slopeX(0.96), H - padB); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Compute slope tangent & normal at boulder position
+    var eps = 0.01;
+    var x0 = slopeX(sisPos), y0 = slopeY(sisPos);
+    var tx = slopeX(Math.min(1, sisPos + eps)) - x0;
+    var ty = slopeY(Math.min(1, sisPos + eps)) - y0;
+    var tlen = Math.hypot(tx, ty) || 1;
+    var nx = ty / tlen, ny = -tx / tlen; // outward normal pointing up-left
+
+    var rad = narrow ? 9 : 11;
+    var bx = x0 + nx * rad, by = y0 + ny * rad;
+
+    // Rolling stone boulder with rotation spokes
+    ctx.fillStyle = 'rgba('+pal.ink+',0.14)';
+    ctx.strokeStyle = sisPhase === 1 ? 'rgba('+pal.acc+',0.95)' : 'rgba('+pal.ink+',0.86)';
+    ctx.lineWidth = 1.35;
+    ctx.beginPath(); ctx.arc(bx, by, rad, 0, 6.283); ctx.fill(); ctx.stroke();
+    // Rotating stone facet lines
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.42)'; ctx.lineWidth = 0.9;
+    ctx.beginPath();
+    ctx.moveTo(bx + Math.cos(sisRot) * (rad - 2), by + Math.sin(sisRot) * (rad - 2));
+    ctx.lineTo(bx - Math.cos(sisRot) * (rad - 2), by - Math.sin(sisRot) * (rad - 2));
+    ctx.moveTo(bx + Math.cos(sisRot + 1.57) * (rad - 3), by + Math.sin(sisRot + 1.57) * (rad - 3));
+    ctx.lineTo(bx - Math.cos(sisRot + 1.57) * (rad - 3), by - Math.sin(sisRot + 1.57) * (rad - 3));
+    ctx.stroke();
+
+    // Sisyphus figure (minimalist luminous leaning spark behind the boulder during ascent, or lucid observer at summit)
+    var figU = sisPhase === 2 ? Math.max(0.12, sisPos + 0.14) : Math.max(0.02, sisPos - 0.085);
+    var fx = slopeX(figU) + nx * 6, fy = slopeY(figU) + ny * 6;
+    ctx.fillStyle = 'rgba('+pal.acc+',0.96)';
+    ctx.beginPath(); ctx.arc(fx, fy - 4, 2.6, 0, 6.283); ctx.fill();
+    ctx.strokeStyle = 'rgba('+pal.acc+',0.85)'; ctx.lineWidth = 1.25;
+    ctx.beginPath();
+    ctx.moveTo(fx, fy - 1.5); ctx.lineTo(slopeX(figU), slopeY(figU));
+    if (sisPhase === 0){ ctx.moveTo(fx, fy - 2); ctx.lineTo(bx - (tx/tlen)*rad*0.7, by - (ty/tlen)*rad*0.7); }
+    ctx.stroke();
+
+    // Right panel: Camus aphorism
+    var rx = splitX + 14, rw = Math.max(80, W - rx - 10);
+    ctx.strokeStyle = 'rgba('+pal.ink+',0.09)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(splitX, 14); ctx.lineTo(splitX, H - 14); ctx.stroke();
+
+    var qObj = sisQuotes[sisIdx];
+    var fadeIn = Math.min(1, (now - sisT) / 420);
+    ctx.font = 'italic ' + (narrow ? '13px' : '16.5px') + ' "Cormorant Garamond", Georgia, serif';
+    ctx.fillStyle = 'rgba('+pal.ink+','+(0.92 * fadeIn).toFixed(2)+')';
+    var frLines = wrapTextLines(qObj.fr, rw);
+    var yy = narrow ? 34 : 44;
+    frLines.forEach(function(ln){ ctx.fillText(ln, rx, yy); yy += (narrow ? 17 : 22); });
+
+    yy += 6;
+    ctx.font = (narrow ? '9.8px' : '11.2px') + ' "DM Sans", -apple-system, sans-serif';
+    ctx.fillStyle = 'rgba('+pal.ink+','+(0.56 * fadeIn).toFixed(2)+')';
+    var enLines = wrapTextLines(qObj.en, rw);
+    enLines.forEach(function(ln){ ctx.fillText(ln, rx, yy); yy += (narrow ? 13.5 : 16); });
+
+    ctx.font = '9px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba('+pal.acc+',0.86)';
+    ctx.fillText('— ' + qObj.src, rx, H - 14);
+
+    var phaseTxt = sisPhase === 0 ? 'ascending' : (sisPhase === 1 ? 'summit · lucid' : 'rolling back');
+    exStat.textContent = 'ascent #' + sisCycles + ' · ' + phaseTxt + ' · click to push';
+  }
+
   /* Click on Exhibit Canvas = Direct Interactive Feedback! (Ignores drag end) */
   cv.addEventListener('click', function(){
     if (cam.moved){ cam.moved = false; return; }
@@ -1723,10 +4055,45 @@ window.addEventListener('DOMContentLoaded', function(){
       femStageT = performance.now();
     } else if (id === 'market'){
       stepMarket(Math.random() < 0.5 ? 4.0 : -4.0);
+    } else if (id === 'mcoption'){
+      stepMCBatch(250, 8);
     } else if (id === 'prng'){
       stepPRNG(Math.floor(Math.random() * 31));
     } else if (id === 'rsqrt'){
       rsqrtIters = (rsqrtIters + 1) % 3;
+    } else if (id === 'fft'){
+      fftPresetIdx = (fftPresetIdx + 1) % fftPresets.length;
+    } else if (id === 'dwtmark'){
+      wmStage = (wmStage + 1) % wmStages.length; wmStageT = performance.now();
+    } else if (id === 'fluid'){
+      var rx = 12 + Math.random() * (flW - 24), ry = 5 + Math.random() * (flH - 10);
+      var ang = Math.random() * 6.283;
+      flAddImpulse(rx, ry, Math.cos(ang) * 4.2, Math.sin(ang) * 4.2, 1.5);
+    } else if (id === 'ringbuf'){
+      rbBurst = performance.now() + 1400;
+    } else if (id === 'branchpred'){
+      bpRandom = !bpRandom; bpHits = 0; bpMiss = 0;
+    } else if (id === 'cacheloc'){
+      clColMajor = !clColMajor; clReset();
+    } else if (id === 'skiplist'){
+      slBuildSearch(Math.floor(Math.random() * slKeys.length));
+    } else if (id === 'lob'){
+      lobSweep(Math.random() < 0.5);
+    } else if (id === 'markowitz'){
+      mkIdx = (mkIdx + 1) % mkRegimes.length; mkT = performance.now();
+    } else if (id === 'ivsmile'){
+      ivIdx = (ivIdx + 1) % ivRegimes.length; ivT = performance.now();
+    } else if (id === 'ou_pairs'){
+      ouStep(Math.random() < 0.5 ? 2.8 : -2.8);
+    } else if (id === 'philo'){
+      philoIdx = (philoIdx + 1) % philoFrags.length;
+      philoT = performance.now(); philoBurst = performance.now();
+      if (window.__emitGermanDanmaku) window.__emitGermanDanmaku(philoFrags[philoIdx].de.replace(/[„“]/g,''));
+    } else if (id === 'ewige'){
+      ewIdx = (ewIdx + 1) % ewQuotes.length; ewT = performance.now();
+    } else if (id === 'sisyphus'){
+      sisIdx = (sisIdx + 1) % sisQuotes.length; sisT = performance.now();
+      if (sisPhase === 0) sisPos = Math.min(0.95, sisPos + 0.14);
     }
   });
 
@@ -1734,23 +4101,39 @@ window.addEventListener('DOMContentLoaded', function(){
     requestAnimationFrame(loop);
     if (document.hidden) return;
     var id = SCENES[currentScene].id;
-    if (id !== 'philo' && W && H){
+    if (W && H){
       var pal = getPalette();
       ctx.clearRect(0, 0, W, H);
       if (id === 'mempool') drawExMempool(now, pal);
       else if (id === 'cheb') drawExCheb(now, pal);
       else if (id === 'pca3d') drawExPCA3D(now, pal);
       else if (id === 'simplex3d') drawExSimplex3D(now, pal);
+      else if (id === 'philo') drawExPhilo(now, pal);
       else if (id === 'fem') drawExFEM(now, pal);
       else if (id === 'market') drawExMarket(now, pal);
+      else if (id === 'mcoption') drawExMCOption(now, pal);
       else if (id === 'prng') drawExPRNG(now, pal);
       else if (id === 'rsqrt') drawExRsqrt(now, pal);
+      else if (id === 'fft') drawExFFT(now, pal);
+      else if (id === 'dwtmark') drawExDWTMark(now, pal);
+      else if (id === 'fluid') drawExFluid(now, pal);
+      else if (id === 'ringbuf') drawExRingBuf(now, pal);
+      else if (id === 'branchpred') drawExBranchPred(now, pal);
+      else if (id === 'cacheloc') drawExCacheLoc(now, pal);
+      else if (id === 'skiplist') drawExSkipList(now, pal);
+      else if (id === 'lob') drawExLOB(now, pal);
+      else if (id === 'markowitz') drawExMarkowitz(now, pal);
+      else if (id === 'ivsmile') drawExIVSmile(now, pal);
+      else if (id === 'ou_pairs') drawExOUPairs(now, pal);
+      else if (id === 'ewige') drawExEwige(now, pal);
+      else if (id === 'sisyphus') drawExSisyphus(now, pal);
     }
   }
   window.__onSceneChange = function(id){
     setTimeout(function(){
       resize();
       if (id === 'cheb') resetCheb();
+      if (id === 'mcoption') resetMC();
     }, 10);
   };
   window.__onThemeChange = function(){
@@ -1760,16 +4143,39 @@ window.addEventListener('DOMContentLoaded', function(){
 })();
 
 /* =====================================================================
-   4. Pillars & Unified View Switcher
+   4. Beamer-Style Pillars & Unified View Switcher
    ===================================================================== */
 (function(){
   var pillars = document.querySelectorAll('.pillar');
+  var dots = document.querySelectorAll('.beamer-dot');
+
+  function syncPillars(sceneIdx){
+    pillars.forEach(function(p){
+      var list = (p.getAttribute('data-scenes') || '').split(',').map(Number);
+      p.classList.toggle('active', list.indexOf(sceneIdx) !== -1);
+    });
+    dots.forEach(function(d){
+      d.classList.toggle('current', parseInt(d.getAttribute('data-scene'), 10) === sceneIdx);
+    });
+  }
+  window.__syncPillars = syncPillars;
+  syncPillars(currentScene);
+
+  dots.forEach(function(d){
+    d.addEventListener('click', function(e){
+      e.stopPropagation();
+      var idx = parseInt(d.getAttribute('data-scene'), 10);
+      if (!isNaN(idx)) switchScene(idx);
+    });
+  });
+
   pillars.forEach(function(p){
     p.addEventListener('click', function(){
-      pillars.forEach(function(x){ x.classList.remove('active'); });
-      p.classList.add('active');
-      var idx = parseInt(p.getAttribute('data-scene'), 10);
-      if (!isNaN(idx)) switchScene(idx);
+      var list = (p.getAttribute('data-scenes') || '').split(',').map(Number).filter(function(n){ return !isNaN(n); });
+      if (!list.length) return;
+      var pos = list.indexOf(currentScene);
+      var nextIdx = pos !== -1 ? list[(pos + 1) % list.length] : list[0];
+      switchScene(nextIdx);
     });
   });
 
@@ -1778,16 +4184,82 @@ window.addEventListener('DOMContentLoaded', function(){
     about: document.getElementById('v-about'),
     now: document.getElementById('v-now'),
     notes: document.getElementById('v-notes'),
+    reading: document.getElementById('v-reading'),
     murmur: document.getElementById('v-murmur')
   };
   var navBtns = document.querySelectorAll('nav button[data-v]');
+  function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function loadNotesList(){
+    var listEl = document.getElementById('notes-list');
+    if (!listEl || !window.fetch) return;
+    fetch('notes/index.json', { cache: 'no-store' })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(items){
+        listEl.innerHTML = items.map(function(it){
+          var slug = encodeURIComponent(it.slug || it.file || '');
+          return '<a class="note-item" href="notes/viewer.html?note=' + slug + '">' +
+            '<span class="cat">' + escHtml(it.cat || 'note') + '</span>' +
+            '<span class="nt">' + escHtml(it.title || it.slug) + '</span>' +
+            '<span class="ar">&rarr;</span></a>';
+        }).join('');
+      })
+      .catch(function(err){
+        var hint = location.protocol === 'file:'
+          ? 'Browser blocks fetch() on file:// — open via http://localhost:8080/ (python3 preview.py)'
+          : ('Failed to load notes/index.json (' + (err && err.message ? err.message : 'network error') + ')');
+        listEl.innerHTML = '<p class="meta-stamp" style="padding:16px 0">' + escHtml(hint) + '</p>';
+      });
+  }
+
+  function loadMarkdownInto(elId, url){
+    var bodyEl = document.getElementById(elId);
+    if (!bodyEl || !window.fetch) return;
+    fetch(url, { cache: 'no-store' })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(function(raw){
+        function render(){
+          if (window.marked) bodyEl.innerHTML = marked.parse(raw);
+          else bodyEl.innerHTML = '<pre style="white-space:pre-wrap">' + escHtml(raw) + '</pre>';
+          if (window.renderMathInElement){
+            renderMathInElement(bodyEl, {
+              delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+              ],
+              throwOnError: false
+            });
+          }
+        }
+        var tries = 0, iv = setInterval(function(){
+          if (window.marked || ++tries > 30){ clearInterval(iv); render(); }
+        }, 60);
+      })
+      .catch(function(err){
+        var hint = location.protocol === 'file:'
+          ? 'Browser blocks fetch() on file:// — open via http://localhost:8080/ (python3 preview.py)'
+          : ('Failed to load ' + url + ' (' + (err && err.message ? err.message : 'network error') + ')');
+        bodyEl.innerHTML = '<p class="meta-stamp">' + escHtml(hint) + '</p>';
+      });
+  }
+  function loadMurmur(){ loadMarkdownInto('murmur-body', 'murmur.md'); }
+  function loadReading(){ loadMarkdownInto('reading-body', 'reading.md'); }
+
   function go(t){
     if (!views[t]) return;
     Object.keys(views).forEach(function(k){ views[k].classList.toggle('active', k===t); });
     navBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-v')===t); });
     nextFab.classList.toggle('hidden', t !== 'home');
     views[t].scrollTop = 0;
+    if (t === 'notes') loadNotesList();
+    if (t === 'reading') loadReading();
+    if (t === 'murmur') loadMurmur();
   }
+  loadNotesList();
+  loadReading();
+  loadMurmur();
   document.querySelectorAll('[data-v]').forEach(function(el){
     el.addEventListener('click', function(){ go(el.getAttribute('data-v')); });
   });

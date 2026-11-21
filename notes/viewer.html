@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note — Engelbert Miyasaka</title>
+<meta name="theme-color" content="#0B0B0D">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" crossorigin="anonymous"></script>
+<style>
+:root{
+  --bg:#F5F2EB; --fg:#181715; --soft:#5A564E; --dim:#918C83;
+  --hair:rgba(24,23,21,.09); --accent:#944533;
+  --serif:"Cormorant Garamond","Iowan Old Style",Georgia,serif;
+  --sans:"DM Sans",-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --pad:clamp(22px,6.5vw,96px);
+}
+[data-theme="dark"]{
+  --bg:#0B0B0D; --fg:#EFECE4; --soft:#A6A298; --dim:#5E5B55;
+  --hair:rgba(239,236,228,.09); --accent:#C8836B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:var(--fg);color:var(--bg)}
+body{
+  background:var(--bg);color:var(--fg);font-family:var(--sans);
+  font-size:15px;font-weight:300;line-height:1.85;
+  -webkit-font-smoothing:antialiased;padding:0 var(--pad) 96px;
+}
+nav{
+  max-width:740px;margin:0 auto;padding:28px 0 36px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  border-bottom:1px solid var(--hair);margin-bottom:44px;
+}
+nav a{color:var(--soft);text-decoration:none;font-size:13px;transition:color .2s}
+nav a:hover{color:var(--fg)}
+.nav-r{display:flex;align-items:center;gap:14px}
+.cat{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+.theme-btn{width:22px;height:22px;border-radius:50%;border:1px solid var(--hair);background:none;color:var(--dim);display:inline-flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;transition:color .2s,border-color .2s}
+.theme-btn:hover{color:var(--fg);border-color:var(--soft)}
+article{max-width:740px;margin:0 auto}
+.doc-title{font-family:var(--serif);font-weight:300;font-size:clamp(32px,5vw,52px);line-height:1.08;margin-bottom:34px}
+#content h1,#content h2,#content h3,#content h4{font-family:var(--serif);font-weight:400;color:var(--fg);margin:32px 0 14px;line-height:1.25}
+#content h1{font-size:30px} #content h2{font-size:25px} #content h3{font-size:21px}
+#content p{color:var(--soft);margin-bottom:16px}
+#content a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--hair)}
+#content a:hover{border-bottom-color:var(--accent)}
+#content ul,#content ol{margin:12px 0 18px 22px;color:var(--soft)}
+#content li{margin:5px 0}
+#content blockquote{border-left:1.5px solid var(--accent);padding-left:16px;margin:20px 0;color:var(--fg);font-family:var(--serif);font-style:italic;font-size:17px}
+#content pre{background:rgba(128,128,128,.08);border:1px solid var(--hair);padding:16px 18px;overflow-x:auto;margin:18px 0;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--fg)}
+#content code{font-family:var(--mono);font-size:.9em;color:var(--fg)}
+#content img{max-width:100%;height:auto;margin:18px 0}
+#content hr{border:none;border-top:1px solid var(--hair);margin:32px 0}
+#content table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px}
+#content th,#content td{border:1px solid var(--hair);padding:8px 10px;text-align:left;color:var(--soft)}
+#content th{color:var(--fg);font-weight:400}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:6px 0}
+.status{font-family:var(--mono);font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html#notes">&larr; Back to Notes</a>
+  <div class="nav-r">
+    <span class="cat" id="doc-cat">note</span>
+    <button class="theme-btn" id="theme-btn" title="Light / Dark">&#9680;</button>
+  </div>
+</nav>
+<article>
+  <h1 class="doc-title" id="doc-title">Loading&hellip;</h1>
+  <div id="content"><p class="status">Loading markdown&hellip;</p></div>
+</article>
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') document.documentElement.setAttribute('data-theme', saved);
+  } catch(e){}
+  document.getElementById('theme-btn').addEventListener('click', function(){
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch(e){}
+  });
+
+  var params = new URLSearchParams(location.search);
+  var slug = (params.get('note') || '').replace(/[^a-zA-Z0-9._-]/g, '');
+  var titleEl = document.getElementById('doc-title');
+  var catEl = document.getElementById('doc-cat');
+  var contentEl = document.getElementById('content');
+
+  if (!slug){
+    titleEl.textContent = 'Note not specified';
+    contentEl.innerHTML = '<p class="status">Missing <code>?note=...</code> parameter.</p>';
+    return;
+  }
+
+  function renderMarkdown(raw){
+    function doRender(){
+      if (window.marked) contentEl.innerHTML = marked.parse(raw);
+      else contentEl.innerHTML = '<pre style="white-space:pre-wrap">' + raw.replace(/</g,'&lt;') + '</pre>';
+      if (window.renderMathInElement){
+        renderMathInElement(contentEl, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError: false
+        });
+      }
+    }
+    var tries = 0, iv = setInterval(function(){
+      if ((window.marked && window.renderMathInElement) || ++tries > 30){ clearInterval(iv); doRender(); }
+    }, 80);
+  }
+
+  Promise.all([
+    fetch('index.json', { cache: 'no-store' }).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
+    fetch(slug.endsWith('.md') ? slug : (slug + '.md'), { cache: 'no-store' }).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+  ]).then(function(res){
+    var list = res[0], raw = res[1];
+    var meta = list.find(function(it){ return it.slug === slug || it.file === slug; });
+    var title = meta ? meta.title : slug;
+    var cat = meta ? meta.cat : 'note';
+    document.title = title + ' — Engelbert Miyasaka';
+    titleEl.textContent = title;
+    catEl.textContent = cat;
+    renderMarkdown(raw);
+  }).catch(function(err){
+    titleEl.textContent = 'Failed to load note';
+    var msg = location.protocol === 'file:'
+      ? 'Browser blocks fetch() on file:// — open via http://localhost:8080/ (python3 preview.py)'
+      : ('Could not load ' + slug + '.md (' + (err && err.message ? err.message : 'network error') + ').');
+    contentEl.innerHTML = '<p class="status">' + msg + '</p>';
+  });
+})();
+</script>
+</body>
+</html>
